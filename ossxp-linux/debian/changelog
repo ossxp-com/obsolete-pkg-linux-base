@@ -1,8 +1,9 @@
-ossxp-linux (1:1.26.204) unstable; urgency=low
+ossxp-linux (1:1.26.205) unstable; urgency=low
 
   * Bugfix: add -extension v3_ca when generate cacert.pem
     using CA.sh. Without these optoins, the cert can not
     be used as root CA cert for Internet Explorer.
+  * Add ossxp-ca.crt to /opt/ossxp/conf/
 
  -- Jiang Xin <jiangxin@foo.bar>  Sun, 30 Aug 2009 15:03:02 +0800
 
