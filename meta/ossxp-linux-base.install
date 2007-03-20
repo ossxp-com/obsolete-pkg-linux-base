@@ -1,0 +1,2 @@
+debian/kernel_config/*	opt/ossxp/kernel_config/
+debian/bin/*	opt/ossxp/bin/

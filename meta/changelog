@@ -1,0 +1,41 @@
+ossxp-linux (1.11) unstable; urgency=low
+
+  * add backup.sh, flexbackup; (1.10)
+  * add gq meld; (1.10)
+  * .postinst bugfix;
+  * install tor+privoxy;
+  * enable bash_completion;
+  * move depends to postinst;
+
+ -- Jiang Xin <jiangxin@foo.bar>  Mon, 15 Jan 2007 12:36:52 +0800
+
+ossxp-linux (2:1.3.1) unstable; urgency=low
+
+  * modify system config files;
+
+ -- Jiang Xin <jiangxin@foo.bar>  Mon, 08 Jan 2007 02:37:22 +0800
+
+meta-ossxp (2:1.3) unstable; urgency=low
+
+  * change package name;
+
+ -- Jiang Xin <jiangxin@foo.bar>  Mon, 08 Jan 2007 02:37:22 +0800
+
+meta-custom (2:1.2) unstable; urgency=low
+
+  * add custom-server-lamp package;
+
+ -- Jiang Xin <jiangxin@foo.bar>  Fri, 05 Jan 2007 10:39:02 +0800
+
+meta-custom (2:1.1) unstable; urgency=low
+
+  * Remove msttcorefonts, duplicated items;
+
+ -- Jiang Xin <jiangxin@foo.bar>  Fri, 03 Jan 2007 10:39:02 +0800
+
+meta-custom (1.0) unstable; urgency=low
+
+  * Initial version. debian custom installation meta-package.
+
+ -- Jiang Xin <jiangxin@foo.bar>  Wed, 10 May 2006 19:35:02 -0400
+

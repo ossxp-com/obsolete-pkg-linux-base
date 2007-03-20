@@ -1,0 +1,190 @@
+diff -ru /usr/share/python-support/rdiff-backup/rdiff_backup/fs_abilities.py ./rdiff_backup/fs_abilities.py
+--- a/usr/share/python-support/rdiff-backup/rdiff_backup/fs_abilities.py	2006-01-01 10:46:05.000000000 +0800
++++ b/usr/share/python-support/rdiff-backup/rdiff_backup/fs_abilities.py	2007-02-25 15:59:52.000000000 +0800
+@@ -110,6 +110,10 @@
+ 		assert rp.conn is Globals.local_connection
+ 		self.root_rp = rp
+ 		self.read_only = 1
++		
++		# OSSXP.COM: when sync between Windows and Linux, set this bit.
++		#if Globals.ignore_fs_abilities: return self
++		
+ 		self.set_eas(rp, 0)
+ 		self.set_acls(rp)
+ 		self.set_resource_fork_readonly(rp)
+@@ -134,6 +138,11 @@
+ 		subdir = TempFile.new_in_dir(rbdir)
+ 		subdir.mkdir()
+ 
++		# OSSXP.COM: when sync between Windows and Linux, set this bit.
++		#if Globals.ignore_fs_abilities:
++		#	subdir.delete()
++		#	return self
++		
+ 		self.set_extended_filenames(subdir)
+ 		self.set_case_sensitive_readwrite(subdir)
+ 		self.set_ownership(subdir)
+@@ -151,6 +160,11 @@
+ 
+ 	def set_ownership(self, testdir):
+ 		"""Set self.ownership to true iff testdir's ownership can be changed"""
++		# OSSXP.COM: ignore this ability
++		if Globals.ignore_fs_abilities:
++			self.ownership = 0
++			return
++		
+ 		tmp_rp = testdir.append("foo")
+ 		tmp_rp.touch()
+ 		uid, gid = tmp_rp.getuidgid()
+@@ -163,6 +177,11 @@
+ 
+ 	def set_hardlinks(self, testdir):
+ 		"""Set self.hardlinks to true iff hard linked files can be made"""
++		# OSSXP.COM: ignore this ability
++		if Globals.ignore_fs_abilities:
++			self.hardlinks = 0
++			return
++		
+ 		hl_source = testdir.append("hardlinked_file1")
+ 		hl_dir = testdir.append("hl")
+ 		hl_dir.mkdir()
+@@ -180,6 +199,11 @@
+ 
+ 	def set_fsync_dirs(self, testdir):
+ 		"""Set self.fsync_dirs if directories can be fsync'd"""
++		# OSSXP.COM: ignore this ability
++		if Globals.ignore_fs_abilities:
++			self.fsync_dirs = 0
++			return
++		
+ 		assert testdir.conn is Globals.local_connection
+ 		try: testdir.fsync()
+ 		except (IOError, OSError):
+@@ -192,6 +216,11 @@
+ 		"""Set self.extended_filenames by trying to write a path"""
+ 		assert not self.read_only
+ 
++		# OSSXP.COM: ignore this ability
++		if Globals.ignore_fs_abilities:
++			self.extended_filenames = 0
++			return
++		
+ 		# Make sure ordinary filenames ok
+ 		ordinary_filename = '5-_ a.'
+ 		ord_rp = subdir.append(ordinary_filename)
+@@ -214,6 +243,11 @@
+ 
+ 	def set_acls(self, rp):
+ 		"""Set self.acls based on rp.  Does not write.  Needs to be local"""
++		# OSSXP.COM: ignore this ability
++		if Globals.ignore_fs_abilities:
++			self.acls = 0
++			return
++		
+ 		assert Globals.local_connection is rp.conn
+ 		assert rp.lstat()
+ 		try: import posix1e
+@@ -232,6 +266,11 @@
+ 
+ 	def set_case_sensitive_readwrite(self, subdir):
+ 		"""Determine if directory at rp is case sensitive by writing"""
++		# OSSXP.COM: ignore this ability
++		if Globals.ignore_fs_abilities:
++			self.case_sensitive = 0
++			return
++		
+ 		assert not self.read_only
+ 		upper_a = subdir.append("A")
+ 		upper_a.touch()
+@@ -290,6 +329,11 @@
+ 
+ 	def set_eas(self, rp, write):
+ 		"""Set extended attributes from rp. Tests writing if write is true."""
++		# OSSXP.COM: ignore this ability
++		if Globals.ignore_fs_abilities:
++			self.eas = 0
++			return
++		
+ 		assert Globals.local_connection is rp.conn
+ 		assert rp.lstat()
+ 		try: import xattr
+@@ -312,6 +356,11 @@
+ 
+ 	def set_dir_inc_perms(self, rp):
+ 		"""See if increments can have full permissions like a directory"""
++		# OSSXP.COM: ignore this ability
++		if Globals.ignore_fs_abilities:
++			self.dir_inc_perms = 0
++			return
++		
+ 		test_rp = rp.append('dir_inc_check')
+ 		test_rp.touch()
+ 		try: test_rp.chmod(07777)
+@@ -328,6 +377,11 @@
+ 	def set_carbonfile(self):
+ 		"""Test for support of the Mac Carbon library.  This library
+ 		can be used to obtain Finder info (creator/type)."""
++		# OSSXP.COM: ignore this ability
++		if Globals.ignore_fs_abilities:
++			self.carbonfile = 0
++			return
++		
+ 		try:
+ 			import Carbon.File
+ 			import MacOS
+@@ -344,6 +398,11 @@
+ 
+ 	def set_resource_fork_readwrite(self, dir_rp):
+ 		"""Test for resource forks by writing to regular_file/..namedfork/rsrc"""
++		# OSSXP.COM: ignore this ability
++		if Globals.ignore_fs_abilities:
++			self.resource_forks = 0
++			return
++		
+ 		assert dir_rp.conn is Globals.local_connection
+ 		reg_rp = dir_rp.append('regfile')
+ 		reg_rp.touch()
+@@ -385,6 +444,11 @@
+ 
+ 	def set_high_perms_readwrite(self, dir_rp):
+ 		"""Test for writing high-bit permissions like suid"""
++		# OSSXP.COM: ignore this ability
++		if Globals.ignore_fs_abilities:
++			self.high_perms = 0
++			return
++		
+ 		tmp_rp = dir_rp.append("high_perms")
+ 		tmp_rp.touch()
+ 		try:
+diff -ru /usr/share/python-support/rdiff-backup/rdiff_backup/Globals.py ./rdiff_backup/Globals.py
+--- a/usr/share/python-support/rdiff-backup/rdiff_backup/Globals.py	2006-01-01 10:46:05.000000000 +0800
++++ b/usr/share/python-support/rdiff-backup/rdiff_backup/Globals.py	2007-02-25 15:59:52.000000000 +0800
+@@ -92,6 +92,9 @@
+ carbonfile_write = None
+ carbonfile_conn = None
+ 
++# OSSXP.COM: if sync between Windows and Linux, set this bit.
++ignore_fs_abilities = 0
++
+ # This will be set as soon as the LocalConnection class loads
+ local_connection = None
+ 
+diff -ru /usr/share/python-support/rdiff-backup/rdiff_backup/Main.py ./rdiff_backup/Main.py
+--- a/usr/share/python-support/rdiff-backup/rdiff_backup/Main.py	2006-01-01 10:46:05.000000000 +0800
++++ b/usr/share/python-support/rdiff-backup/rdiff_backup/Main.py	2007-02-25 15:59:52.000000000 +0800
+@@ -69,6 +69,7 @@
+ 		  "exclude-globbing-filelist-stdin", "exclude-mirror=",
+ 		  "exclude-other-filesystems", "exclude-regexp=",
+ 		  "exclude-special-files", "force", "group-mapping-file=",
++		  "ignore-fs-abilities",
+ 		  "include=", "include-filelist=", "include-filelist-stdin",
+ 		  "include-globbing-filelist=",
+ 		  "include-globbing-filelist-stdin", "include-regexp=",
+@@ -127,6 +128,7 @@
+ 			select_files.append(sys.stdin)
+ 		elif opt == "--force": force = 1
+ 		elif opt == "--group-mapping-file": group_mapping_filename = arg
++		elif opt == "--ignore-fs-abilities": Globals.set("ignore_fs_abilities", 1)
+ 		elif (opt == "--include" or
+ 			  opt == "--include-special-files" or
+ 			  opt == "--include-symbolic-links"):

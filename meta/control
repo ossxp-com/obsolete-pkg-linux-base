@@ -1,0 +1,69 @@
+Source: ossxp-linux
+Section: ossxp
+Priority: optional
+Maintainer: Jiang Xin <worldhello.net@gmail.com>
+Build-Depends: debhelper (>= 5.0)
+Standards-Version: 1.0.0
+
+Package: ossxp-linux-base
+Architecture: all
+Section: ossxp
+Priority: optional
+Depends: 
+Suggests: ossxp-linux-desktop-light, localepurge
+Description: basic linux tools.
+ Useful console tools, such as bzip2, p7zip, vim, ...
+
+Package: ossxp-linux-laptop
+Architecture: all
+Section: ossxp
+Priority: optional
+Depends: ossxp-linux-base
+Suggests: ossxp-linux-desktop-light
+Description: laptop utilis.
+ Useful laptop utilis, such as uswsusp, acpi, ...
+
+Package: ossxp-linux-desktop-core
+Architecture: all
+Section: ossxp
+Priority: optional
+Depends: ossxp-linux-base
+Suggests: ossxp-linux-desktop-light
+Description: Desktop Environment Core (zh_CN support)
+ X11 core with chinese support. add some utilities also.
+
+Package: ossxp-linux-desktop-light
+Architecture: all
+Section: ossxp
+Priority: optional
+Depends: ossxp-linux-desktop-core
+Suggests: ossxp-i18n (>= 4:3.4.3), ossxp-linux-fonts
+Description: Desktop Environment lightweight (xfce4)
+ Light-weight Desktop Environment, using xfce4 
+
+Package: ossxp-linux-desktop-heavy
+Architecture: all
+Section: ossxp
+Priority: optional
+Depends: ossxp-linux-desktop-core, ossxp-linux-desktop-light
+Suggests: ossxp-linux-fonts
+Description: Desktop Environment heavy (KDE)
+ Desktop Environment KDE
+
+Package: ossxp-linux-devel
+Architecture: all
+Section: ossxp
+Priority: optional
+Depends: ossxp-linux-base
+Suggests: 
+Description: Developer packages
+ Developer packages...
+
+Package: ossxp-linux-server
+Architecture: all
+Section: ossxp
+Priority: optional
+Depends: ossxp-linux-base
+Suggests: 
+Description: Ossxp servers
+ Ossxp servers, such as ossxp-apache2, php5, mailman, subversion...

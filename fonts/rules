@@ -1,0 +1,129 @@
+#!/usr/bin/make -f
+# Sample debian/rules that uses debhelper.
+# GNU copyright 1997 to 1999 by Joey Hess.
+#
+# Modified to make a template file for a multi-binary package with separated
+# build-arch and build-indep targets  by Bill Allombert 2001
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+# This has to be exported to make some magic below work.
+export DH_OPTIONS
+
+CFLAGS = -Wall -g
+
+REALCURDIR=$(CURDIR)
+
+ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+	CFLAGS += -O0
+else
+	CFLAGS += -O2
+endif
+ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
+	INSTALL_PROGRAM += -s
+endif
+
+configure: configure-stamp
+configure-stamp:
+	dh_testdir
+	# Add here commands to configure the package.
+
+	touch configure-stamp
+
+
+#Architecture 
+build: build-arch build-indep
+
+build-arch: build-arch-stamp
+build-arch-stamp: configure-stamp 
+	
+build-indep: build-indep-stamp
+build-indep-stamp: configure-stamp 
+	
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-arch-stamp build-indep-stamp configure-stamp
+
+	# Add here commands to clean up after the build process.
+	#-$(MAKE) clean
+	
+	dh_clean
+
+install: build install-indep install-arch
+
+install-indep:
+	dh_testdir
+	dh_testroot
+	dh_clean -k -i
+	dh_installdirs -i
+	
+	# Add here commands to install the indep part of the package into
+	# debian/<package>-doc.
+	#INSTALLDOC#
+	
+	dh_install -i
+
+install-arch:
+
+# Must not depend on anything. This is to be called by
+# binary-arch/binary-multi
+# in another 'make' thread.
+binary-common:
+	for pkg in `awk '/^Package:/ { print $$2 }' debian/control`; do \
+		find debian/$$pkg/ \( -name .svn -o -name "*~" \) -exec rm -rf {} + ; \
+	done
+
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs 
+	dh_installdocs
+#	dh_installexamples
+#	dh_installmenu
+#	dh_installdebconf	
+#	dh_installlogrotate	
+#	dh_installemacsen
+#	dh_installpam
+#	dh_installmime
+#	dh_installinit
+#	dh_installcron
+#	dh_installinfo
+#	dh_installman
+	dh_link
+	dh_strip
+	dh_compress 
+	dh_fixperms
+#	dh_perl
+#	dh_python
+	dh_makeshlibs
+	dh_installdeb
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+# Build architecture independant packages using the common target.
+binary-indep: build-indep install-indep
+	$(MAKE) -f debian/rules DH_OPTIONS=-i binary-common
+
+# Build architecture dependant packages using the common target.
+binary-arch: build-arch install-arch
+	$(MAKE) -f debian/rules DH_OPTIONS=-a binary-common
+
+#binary: binary-arch binary-indep
+binary: install binary-indep binary-arch
+
+.PHONY: build clean binary-indep binary-arch binary install install-indep install-arch configure
+
+install-ossxp: 
+	mkdir -p /wwwroot/htdocs/debian/pool/etch/i386/fonts
+	if [ ! -f /wwwroot/htdocs/debian/pool/etch/i386/fonts/ttf-arphic-newsung_1.3.0-1_all.deb ]; then \
+		cp debian/opensource/ttf-arphic-newsung_1.3.0-1_all.deb \
+			/wwwroot/htdocs/debian/pool/etch/i386/fonts/ ;\
+	fi
+	if [ ! -f /wwwroot/htdocs/debian/pool/etch/i386/fonts/wqy-bitmapfont_0.7.9-5_all.deb ]; then \
+		cp debian/opensource/wqy-bitmapfont_0.7.9-5_all.deb \
+			/wwwroot/htdocs/debian/pool/etch/i386/fonts/ ;\
+	fi
+	mv -f $(REALCURDIR)/../ossxp-linux-fonts_*.deb /wwwroot/htdocs/debian/pool/etch/i386/fonts || true
+
+	(cd /wwwroot/htdocs/debian ; make)

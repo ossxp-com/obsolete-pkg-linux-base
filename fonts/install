@@ -1,0 +1,7 @@
+debian/truetype/simsun.ttc  opt/ossxp/fonts/truetype/
+debian/truetype/simhei.ttf  opt/ossxp/fonts/truetype/
+debian/truetype/SIMLI.TTF   opt/ossxp/fonts/truetype/
+debian/truetype/arial.ttf   opt/ossxp/fonts/truetype/
+debian/truetype/comic.ttf   opt/ossxp/fonts/truetype/
+debian/local.conf           opt/ossxp/fonts/
+

@@ -1,0 +1,13 @@
+#!/bin/sh -e
+
+if [ "$1" != "configure" ]; then
+        exit 0
+fi
+
+cat <<EOF
+[1mrun this command as root:
+[1m[44m	/opt/ossxp/desktop-core.sh
+[0m
+EOF
+
+exit 0

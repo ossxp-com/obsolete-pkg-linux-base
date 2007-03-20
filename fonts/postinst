@@ -1,0 +1,35 @@
+#!/bin/sh -e
+
+if [ ! -f /etc/fonts/local.conf ]; then
+    cp /opt/ossxp/fonts/local.conf /etc/fonts/local.conf
+fi
+
+mkfontscale /opt/ossxp/fonts/truetype
+[ -f /opt/ossxp/fonts/truetype/fonts.scale ] && \
+    cp /opt/ossxp/fonts/truetype/fonts.scale /opt/ossxp/fonts/truetype/fonts.dir
+
+INSTALLPATH="/opt/ossxp/fonts/truetype"
+XORG_CONF="/etc/X11/xorg.conf"
+# locale.conf used instead
+#FONTCONFIG_CONF="/etc/fonts/fonts.conf" 
+#CONFPATH="/etc/fonts/conf.d/"
+
+if [ -f /usr/sbin/chkfontpath ]; then
+	/usr/sbin/chkfontpath -q -a /opt/ossxp/fonts/truetype/
+elif [ -f chkfontpath ]; then
+        chkfontpath -q -a /opt/ossxp/fonts/truetype/
+elif [ -f $XORG_CONF ]; then
+        #echo "prepare to modify $XORG_CONF"
+    if ! grep 'FontPath\t"/opt/ossxp/fonts/truetype/"' $XORG_CONF ; then
+        cp $XORG_CONF $INSTALLPATH/xorg.conf.backup
+        awk '/Section "Files"/ {doprint=1;} \
+       	     /EndSection/ {if(doprint==1) \
+               	   print "\tFontPath\t\"/opt/ossxp/fonts/truetype/\""; doprint=0;} \
+                /.*/ {print;}' $INSTALLPATH/xorg.conf.backup >  $XORG_CONF
+       	#echo "add FontPath line to xorg.conf"
+    #else
+       	#echo "$XORG_CONF was previously modified, skip"
+    fi
+fi
+
+exit 0

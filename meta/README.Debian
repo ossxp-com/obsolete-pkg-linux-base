@@ -1,0 +1,16 @@
+ossxp-linux-base		-- a metapackage for custom installation
+ossxp-linux-laptop		-- a metapackage for laptop custom installation
+ossxp-linux-desktop-light	-- a metapackage for lightweight desktop
+ossxp-linux-desktop-heavy	-- a metapackage for kde desktop
+ossxp-linux-devel		-- a metapackage for development
+----------------------------------------------------------------------------
+ 
+This package is a metapackage, meaning that its purpose is to contain
+dependencies for a custom debian installation.
+ 
+This package also carries optional 'Recommends' and/or 'Suggests'
+package suggestions.  The packages listed are suggested for
+installation, but not required.
+ 
+Please file a wishlist bug against the package if you feel there are
+additional packages that ought to be included with this meta-package.    

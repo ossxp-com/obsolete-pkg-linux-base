@@ -1,0 +1,15 @@
+Source: ossxp-linux-fonts
+Section: ossxp
+Priority: optional
+Maintainer: Jiang Xin <worldhello.net@gmail.com>
+Build-Depends: debhelper (>= 5.0)
+Standards-Version: 1.0.0
+
+Package: ossxp-linux-fonts
+Architecture: all
+Section: ossxp
+Priority: optional
+Depends: ossxp-linux-desktop-core
+Suggests: ossxp-linux-desktop-light
+Description: more ttf fonts
+ More fonts...
