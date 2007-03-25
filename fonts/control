@@ -9,7 +9,7 @@ Package: ossxp-linux-fonts
 Architecture: all
 Section: ossxp
 Priority: optional
-Depends: ossxp-linux-desktop-core
+Depends: xfonts-utils, ossxp-linux-desktop-core
 Suggests: ossxp-linux-desktop-light
 Description: more ttf fonts
  More fonts...
