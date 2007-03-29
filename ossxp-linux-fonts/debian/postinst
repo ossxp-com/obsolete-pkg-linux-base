@@ -4,7 +4,7 @@ if [ ! -f /etc/fonts/local.conf ]; then
     cp /opt/ossxp/fonts/local.conf /etc/fonts/local.conf
 fi
 
-mkfontscale /opt/ossxp/fonts/truetype
+mkfontscale /opt/ossxp/fonts/truetype || true
 [ -f /opt/ossxp/fonts/truetype/fonts.scale ] && \
     cp /opt/ossxp/fonts/truetype/fonts.scale /opt/ossxp/fonts/truetype/fonts.dir
 
@@ -14,9 +14,9 @@ XORG_CONF="/etc/X11/xorg.conf"
 #FONTCONFIG_CONF="/etc/fonts/fonts.conf" 
 #CONFPATH="/etc/fonts/conf.d/"
 
-if [ -f /usr/sbin/chkfontpath ]; then
+if [ -x /usr/sbin/chkfontpath ]; then
 	/usr/sbin/chkfontpath -q -a /opt/ossxp/fonts/truetype/
-elif [ -f chkfontpath ]; then
+elif [ -x chkfontpath ]; then
         chkfontpath -q -a /opt/ossxp/fonts/truetype/
 elif [ -f $XORG_CONF ]; then
         #echo "prepare to modify $XORG_CONF"

@@ -1,5 +1,6 @@
-ossxp-linux-fonts (1.3) unstable; urgency=low
+ossxp-linux-fonts (1.4) unstable; urgency=low
 
+  * add folder /etc/fonts;
   * depends on xfonts-utils;
 
  -- Jiang Xin <jiangxin@foo.bar>  Sun, 25 Mar 2007 10:32:02 +0800
