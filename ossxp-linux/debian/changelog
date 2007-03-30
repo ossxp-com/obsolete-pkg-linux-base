@@ -1,5 +1,6 @@
-ossxp-linux (1.11) unstable; urgency=low
+ossxp-linux (1.12) unstable; urgency=low
 
+  * move some pacakge to misc.sh; (1.12)
   * add backup.sh, flexbackup; (1.10)
   * add gq meld; (1.10)
   * .postinst bugfix;

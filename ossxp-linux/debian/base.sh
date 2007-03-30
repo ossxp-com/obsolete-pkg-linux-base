@@ -22,33 +22,29 @@ aptitude install -y ~pimportant || echo -e "[1m[44minstall ~pimportant failed!
 # install packages
 #------------------------------------------------------------
 # My already installed by tasksel standard package:
-apt-get install --force-yes -y less locales nfs-common portmap wget || true
+apt-get install --force-yes -y less locales wget || true
 
 for pkg in \
-    acl apt-show-versions ascii auto-apt bsdutils bzip2 \
-    curl ethtool eject fping flexbackup gpm \
-    lynx mc ntpdate \
-    openssl p7zip-full pciutils pdumpfs psmisc rdiff-backup \
-    screen shellutils smbfs ssh sshfs star sudo sysutils \
-    unison vim zhcon \
+    acl bsdutils bzip2 \
+    flexbackup \
+    ntpdate \
+    openssl p7zip-full pciutils psmisc rdiff-backup \
+    screen shellutils ssh star sudo sysutils \
+    unison vim \
 ; do
     echo -e "[1minstall $pkg :[0m"
     apt-get install --force-yes -y $pkg || echo -e "[1m[44minstall $pkg failed! [0m"
 done
 
 #------------------------------------------------------------
-# sshfs(fuse-utils) needs this special file
-[ -c /dev/fuse ] || mknod -m 666 /dev/fuse c 10 229
-
-#------------------------------------------------------------
 # set command line style to vi (/etc/inputrc, /etc/bash.bashrc)
 CONFFILE=/etc/inputrc
 if [ -f ${CONFFILE} ]; then
-    if ! grep -iq "ossxp.com settings:" ${CONFFILE}; then
+    if ! grep -iq "OSSXP.COM settings:" ${CONFFILE}; then
         echo -e "[1msetting ${CONFFILE}...	done[0m"
         cat >> ${CONFFILE} << EOF
 
-### ossxp.com settings:
+### OSSXP.COM settings:
 set bell-style visible
 set completion-ignore-case on
 set editing-mode vi
@@ -125,9 +121,19 @@ if [ -f ${CONFFILE} ]; then
 # Only allow login if users belong to these groups:
 #AllowGroups wheel
 EOF
-    echo -ne "[1m[44m"
-    echo -e "[/etc/ssh/sshd_config]: uncomment 'AllowGroups wheel' to secure you linux."
-    echo -ne "[0m"
+
+        echo -ne "[1m[44m"
+        echo -e "[/etc/ssh/sshd_config]: uncomment 'AllowGroups wheel' to secure you linux."
+        echo -ne "[0m"
+    fi
+
+    if ! grep -q "Specifies whether root can log in using ssh" ${CONFFILE}; then
+        sed -i -e "/PermitRootLogin/ d"  ${CONFFILE}
+        cat >> ${CONFFILE} << EOF
+
+# OSSXP.COM: Specifies whether root can log in using ssh
+PermitRootLogin no
+EOF
     fi
 fi
 
