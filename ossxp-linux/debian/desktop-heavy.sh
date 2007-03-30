@@ -17,6 +17,7 @@ for pkg in \
     kde kdm kde-i18n-zhcn kde-i18n-zhtw \
     mozilla-firefox mozilla-firefox-locale-zh-cn \
     mozilla-thunderbird mozilla-thunderbird-inspector mozilla-thunderbird-typeaheadfind thunderbird-locale-zh-cn \
+    nessusd nessus \
     kompare cervisia kdesvn kdevelop3 kdevelop \
     evince xchm gthumb gimp inkscape \
     wine wine-utils \

@@ -19,7 +19,7 @@ apt-get install --force-yes -y nfs-common portmap || true
 for pkg in \
     apt-show-versions ascii auto-apt curl \
     eject ethtool fping \
-    gpm lynx mc pdumpfs \
+    gpm indent lynx mc nmap pdumpfs \
     smbfs sshfs xprobe zhcon \
 ; do
     echo -e "[1minstall $pkg :[0m"
@@ -31,6 +31,17 @@ done
 [ -c /dev/fuse ] || mknod -m 666 /dev/fuse c 10 229
 
 #------------------------------------------------------------
+# .indent.pro
+CONFFILE=/etc/skel/.indent.pro
+if [ ! -f ${CONFFILE} ]; then
+    mkdir -p /etc/skel
+    cat >> ${CONFFILE} << EOF
+-bad -bap -bbb -bbo -nbc -bl -bli0 -bls -c33 -cd33 -ncdb -ncdw -nce
+-cli0 -cp33 -cs -d0 -nbfda -di2 -nfc1 -nfca -hnl -ip5 -l75 -lp -pcs -nprs
+-psl -saf -sai -saw -nsc -nsob -nss -i4 -ts4 -ut
+EOF
+fi
 
+#------------------------------------------------------------
 [ "$0" != "${0%.sh}" ] && mv -f $0 ${0%.sh}.done
 exit 0
