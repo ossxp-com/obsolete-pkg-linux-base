@@ -7,6 +7,27 @@ if [ `id -u` -ne 0 ]; then
   exit 1
 fi
 
+function set_config()
+{
+    [ $# -ne 2 ] && { echo "Wrong parameters: set_config KEY VAL"; exit 1; }
+    KEY=$1
+    VAL=$2
+    if ! grep -q "^$KEY $VAL$" ${CONFFILE}; then
+        echo -e -n "[1mSetting $KEY $VAL[0m...	"
+        grep -q "^$KEY\b" ${CONFFILE} && 
+	{
+          sed -i -e "s/^$KEY\b.*$/$KEY $VAL/" ${CONFFILE} 
+	} || {
+	  echo "" >> ${CONFFILE} 
+	  echo "$KEY $VAL" >> ${CONFFILE} 
+	}
+        echo -e "[1mdone[0m"
+	return 0
+    else
+        return 1
+    fi
+}
+
 # tasksel standard package
 #------------------------------------------------------------
 # aptitude search ~pstandard
@@ -111,8 +132,9 @@ fi
 # sshd_config
 CONFFILE=/etc/ssh/sshd_config
 if [ -f ${CONFFILE} ]; then
-    if ! id -g wheel > /dev/null 2>&1 ; then
-        addgroup --system wheel
+    RESTARTSSH="no"
+    if ! awk -F: '{print $1;}' /etc/group | grep -q wheel; then
+        /usr/sbin/addgroup --system wheel
     fi
     if ! grep -q "^[[:space:]]*[#]\?[[:space:]]*AllowGroups" ${CONFFILE}; then
         echo -e "[1msetting ${CONFFILE}...	done[0m"
@@ -123,17 +145,22 @@ if [ -f ${CONFFILE} ]; then
 EOF
 
         echo -ne "[1m[44m"
-        echo -e "[/etc/ssh/sshd_config]: uncomment 'AllowGroups wheel' to secure you linux."
+        echo -e "[/etc/ssh/sshd_config]: uncomment 'AllowGroups wheel' to secure your ssh."
         echo -ne "[0m"
     fi
 
-    if ! grep -q "Specifies whether root can log in using ssh" ${CONFFILE}; then
-        sed -i -e "/PermitRootLogin/ d"  ${CONFFILE}
-        cat >> ${CONFFILE} << EOF
+    set_config Protocol 2 && RESTARTSSH="yes"
+    set_config PermitRootLogin no && RESTARTSSH="yes"
+    set_config PermitEmptyPasswords no && RESTARTSSH="yes"
+    set_config UsePrivilegeSeparation yes && RESTARTSSH="yes"
 
-# OSSXP.COM: Specifies whether root can log in using ssh
-PermitRootLogin no
-EOF
+    # restart ssh daemon
+    if [ "$RESTARTSSH" = "yes" ]; then
+        if [ -x /etc/init.d/ssh ]; then
+            /etc/init.d/ssh restart
+        else
+            invoke-rc.d ssh restart 
+        fi
     fi
 fi
 

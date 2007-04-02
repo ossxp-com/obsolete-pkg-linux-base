@@ -20,7 +20,7 @@ for pkg in \
     apt-show-versions ascii auto-apt curl \
     eject ethtool fping \
     gpm indent lynx mc nmap pdumpfs \
-    smbfs sshfs xprobe zhcon \
+    smbfs sshfs tcpdump xprobe zhcon \
 ; do
     echo -e "[1minstall $pkg :[0m"
     apt-get install --force-yes -y $pkg || echo -e "[1m[44minstall $pkg failed! [0m"
