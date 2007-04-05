@@ -61,7 +61,7 @@ install: build install-indep install-arch
 	for pkg in `awk '/^Package:/ { print $$2 }' debian/control`; do \
 		script=$${pkg#ossxp-linux-}.sh ;\
 		if [ -f debian/$$script ]; then \
-			mkdir -P debian/$$script debian/$$pkg/opt/ossxp/install/ ;\
+			mkdir -p debian/$$pkg/opt/ossxp/install/ ;\
 			install -m 750 debian/$$script debian/$$pkg/opt/ossxp/install/ ;\
 		fi; \
 	done
