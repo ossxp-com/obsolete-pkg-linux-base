@@ -7,12 +7,12 @@ if [ `id -u` -ne 0 ]; then
   exit 1
 fi
 
-if [ -x /opt/ossxp/base.sh ]; then
-    sh /opt/ossxp/base.sh
+if [ -x /opt/ossxp/install/base.sh ]; then
+    sh /opt/ossxp/install/base.sh
 fi
 
-if [ -x /opt/ossxp/tor+privoxy.sh ]; then
-    sh /opt/ossxp/tor+privoxy.sh
+if [ -x /opt/ossxp/install/tor+privoxy.sh ]; then
+    sh /opt/ossxp/install/tor+privoxy.sh
 fi
 
 #------------------------------------------------------------

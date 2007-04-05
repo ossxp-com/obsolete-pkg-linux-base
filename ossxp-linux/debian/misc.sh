@@ -7,8 +7,8 @@ if [ `id -u` -ne 0 ]; then
   exit 1
 fi
 
-if [ -x /opt/ossxp/base.sh ]; then
-    sh /opt/ossxp/base.sh
+if [ -x /opt/ossxp/install/base.sh ]; then
+    sh /opt/ossxp/install/base.sh
 fi
 
 # install packages

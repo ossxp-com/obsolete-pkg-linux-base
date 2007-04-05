@@ -7,8 +7,8 @@ if [ `id -u` -ne 0 ]; then
   exit 1
 fi
 
-if [ -x /opt/ossxp/desktop-core.sh ]; then
-    sh /opt/ossxp/desktop-core.sh
+if [ -x /opt/ossxp/install/desktop-core.sh ]; then
+    sh /opt/ossxp/install/desktop-core.sh
 fi
 
 #------------------------------------------------------------

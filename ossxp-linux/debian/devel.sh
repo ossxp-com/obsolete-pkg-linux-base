@@ -7,8 +7,8 @@ if [ `id -u` -ne 0 ]; then
   exit 1
 fi
 
-if [ -x /opt/ossxp/misc.sh ]; then
-    sh /opt/ossxp/misc.sh
+if [ -x /opt/ossxp/install/misc.sh ]; then
+    sh /opt/ossxp/install/misc.sh
 fi
 
 #------------------------------------------------------------

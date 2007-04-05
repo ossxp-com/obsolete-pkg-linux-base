@@ -2,6 +2,6 @@
 
 cat <<EOF
 [1mrun this command as root:
-[1m[44m	/opt/ossxp/desktop-light.sh
+[1m[44m	/opt/ossxp/install/desktop-light.sh
 [0m
 EOF

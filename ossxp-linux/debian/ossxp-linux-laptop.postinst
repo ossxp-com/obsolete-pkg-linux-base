@@ -2,6 +2,6 @@
 
 cat <<EOF
 [1mrun this command as root:
-[1m[44m	/opt/ossxp/laptop.sh
+[1m[44m	/opt/ossxp/install/laptop.sh
 [0m
 EOF
