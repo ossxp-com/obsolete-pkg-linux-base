@@ -1,3 +1,3 @@
 debian/kernel_config/*	opt/ossxp/conf/linux_kernel/
 debian/bin/*	opt/ossxp/bin/
-debian/misc.sh  opt/ossxp/
+debian/misc.sh  opt/ossxp/install/
