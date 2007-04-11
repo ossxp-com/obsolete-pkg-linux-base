@@ -73,8 +73,8 @@ while [ $# -gt 0 ]; do
         do_config
     ;;
     *)
-        shift
         echo "Wrong params: $1"
+        shift
     ;;
     esac
 done
