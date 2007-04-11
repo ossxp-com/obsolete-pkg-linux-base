@@ -1,7 +1,25 @@
 #!/bin/sh -e
 
+PATH=/sbin:/bin:/usr/sbin:/usr/bin 
+
+case "$1" in
+    configure)
+    ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+SCRIPT=/opt/ossxp/install/base.sh
+[ -x $SCRIPT ] && $SCRIPT config
+
 cat <<EOF
 [1mrun this command as root:
-[1m[44m	/opt/ossxp/install/base.sh
+[1m[44m	/opt/ossxp/install/base.sh install config
 [0m
 EOF

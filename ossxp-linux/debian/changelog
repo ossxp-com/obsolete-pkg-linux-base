@@ -1,5 +1,6 @@
-ossxp-linux (1.14) unstable; urgency=low
+ossxp-linux (1.15) unstable; urgency=low
 
+  * run config in postinst;
   * new deployment in /opt/ossxp;
 
  -- Jiang Xin <jiangxin@foo.bar>  Mon, 15 Jan 2007 12:36:52 +0800
