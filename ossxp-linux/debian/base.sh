@@ -63,6 +63,13 @@ function do_install()
 
 function do_config()
 {
+
+    #------------------------------------------------------------
+    CONFFILE=/opt/ossxp/conf/public.key
+    if [ -f ${CONFFILE} ]; then
+        apt-key add ${CONFFILE} 
+    fi
+
     #------------------------------------------------------------
     # set command line style to vi (/etc/inputrc, /etc/bash.bashrc)
     CONFFILE=/etc/inputrc
