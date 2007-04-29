@@ -12,10 +12,15 @@ deb-src http://cudlug.cudenver.edu/debian/ etch main non-free contrib
 # local filesystem
 deb file:/wwwroot/htdocs/default/debian/ ./
 
-# http from cdimage mirror
-deb http://localhost/etch/cd1/ etch main contrib
-deb http://localhost/etch/cd2/ etch main contrib
-deb http://localhost/etch/cd3/ etch main contrib
+# local filesystem mirror from cdimage
+deb file:/ISO/cd1/ etch main contrib
+deb file:/ISO/cd2/ etch main contrib
+deb file:/ISO/cd3/ etch main contrib
+
+# http mirror from cdimage mirror
+deb http://localhost/etch_amd64/cd1/ etch main contrib
+deb http://localhost/etch_amd64/cd2/ etch main contrib
+deb http://localhost/etch_amd64/cd3/ etch main contrib
 
 # ossxp packages
 deb http://localhost/ossxp/ sid main
