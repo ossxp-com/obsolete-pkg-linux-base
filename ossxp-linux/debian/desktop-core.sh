@@ -11,10 +11,6 @@ if [ -x /opt/ossxp/install/base.sh ]; then
     sh /opt/ossxp/install/base.sh
 fi
 
-if [ -x /opt/ossxp/install/tor+privoxy.sh ]; then
-    sh /opt/ossxp/install/tor+privoxy.sh
-fi
-
 #------------------------------------------------------------
 # install packages
 for pkg in \

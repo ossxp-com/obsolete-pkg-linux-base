@@ -1,4 +1,4 @@
-debian/kernel_config/*	opt/ossxp/conf/linux_kernel/
-debian/bin/*	  opt/ossxp/bin/
+debian/base/kernel_config/*	opt/ossxp/conf/linux_kernel/
+debian/base/bin/*	  opt/ossxp/bin/
 debian/misc.sh    opt/ossxp/install/
-debian/public.key opt/ossxp/conf/
+debian/base/conf/public.key opt/ossxp/conf/
