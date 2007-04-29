@@ -1,0 +1,41 @@
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+# 1. The loopback network interface
+auto lo
+iface lo inet loopback
+
+# 2. another loopback
+auto lo:0
+iface lo:0 inet static
+	address 172.31.31.31
+	netmask 255.255.255.0
+
+# 3.1 static ip address
+auto eth0
+iface eth0 inet static
+	address 10.0.0.2
+	netmask 255.255.255.0
+	network 10.0.0.0
+	broadcast 10.0.0.255
+	gateway 10.0.0.1
+	# dns-* options are implemented by the resolvconf package, if installed
+	dns-nameservers 10.0.0.1 202.106.46.151 202.106.0.20 202.106.196.115
+	dns-search foo.bar
+
+# 3.2 dhcp
+auto eth0
+allow-hotplug eth0
+iface eth0 inet dhcp
+
+# 3.3 pppoe setup using `pppoeconf'
+auto dsl-provider
+iface dsl-provider inet ppp
+pre-up /sbin/ifconfig eth0 up # line maintained by pppoeconf
+provider dsl-provider
+
+# 3.4 alias
+#auto eth0:0
+#iface eth0:0 inet static
+#... ...
+
