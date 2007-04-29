@@ -17,7 +17,7 @@ for pkg in \
     gcc g++ make patch autoconf automake chrpath \
     dh-make debhelper dpkg-dev dpkg-repack dpatch quilt doxygen \
     java-package kernel-package fakeroot module-init-tools \
-    devscripts fakeroot file gnupg  \
+    devscripts fakeroot file gnupg hdparm \
     libtool libc6-dev libncurses5-dev \
     libssl-dev libldap2-dev libxml2-dev libexpat1-dev libperl-dev libbz2-dev \
     libc-client-dev libcurl3-dev libfreetype6-dev libgcrypt11-dev libgd2-xpm-dev \
