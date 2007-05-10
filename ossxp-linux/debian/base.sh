@@ -135,10 +135,10 @@ EOF
             echo -e "[1msetting ${CONFFILE}...	done[0m"
             cat >> ${CONFFILE} << EOF
 
+%wheel          ALL = (ALL) ALL
+
 #User_Alias      FULLTIMERS = admin1,admin2
 #FULLTIMERS      ALL = NOPASSWD: ALL
-
-%wheel          ALL = (ALL) ALL
 EOF
         fi
     else
