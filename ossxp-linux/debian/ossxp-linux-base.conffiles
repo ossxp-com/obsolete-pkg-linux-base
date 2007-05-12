@@ -1,0 +1,2 @@
+/etc/cron.d/ossxp-backup
+/opt/ossxp/conf/ssl/openssl.cnf
