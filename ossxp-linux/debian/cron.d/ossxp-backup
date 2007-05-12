@@ -1,0 +1,6 @@
+# m h  dom mon dow  user  command
+#30 5  *   * 1	    root  apt-get update > /dev/null
+#0  0  1-7 * *      root  /usr/bin/flexbackup -set all -full -wday 7
+#0  0  *   * 6      root  /usr/bin/flexbackup -set all -differential
+#0  0  *   * 1-5    root  /usr/bin/flexbackup -set all -incremental
+#10 2  *   * *      root  bash /opt/ossxp/bin/sync.sh

@@ -1,2 +1,3 @@
 debian/base/*   opt/ossxp/
 debian/misc.sh  opt/ossxp/install/
+debian/cron.d/ossxp-backup etc/cron.d/

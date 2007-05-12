@@ -5,7 +5,7 @@
 # Auther: Jiang Xin
 # $Id: backup.sh,v 1.17 2003/01/14 14:26:32 jiangxin Exp $
 # 2002/03/21 08:46:29
-# 1.28
+# Note: use flexbackup instead of this.
 #************************************************************
 
 set -e
