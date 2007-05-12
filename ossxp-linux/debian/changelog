@@ -1,3 +1,10 @@
+ossxp-linux (1.17) unstable; urgency=low
+
+  * add crontab backup script;
+  * add CA scripts;
+
+ -- Jiang Xin <jiangxin@foo.bar>  Sat, 12 May 2007 08:38:06 +0800
+
 ossxp-linux (1.16) unstable; urgency=low
 
   * run config in postinst;
