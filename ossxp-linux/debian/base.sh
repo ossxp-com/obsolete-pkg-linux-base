@@ -48,7 +48,7 @@ function do_install()
     apt-get install --force-yes -y less locales wget ssh sudo || true
     
     for pkg in \
-        acl bsdutils bzip2 \
+        acl bsdutils bzip2 curl \
         flexbackup \
         ntpdate \
         openssl p7zip-full pciutils psmisc rdiff-backup \
