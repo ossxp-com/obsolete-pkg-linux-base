@@ -1,7 +1,8 @@
-ossxp-linux (1.17) unstable; urgency=low
+ossxp-linux (1.18) unstable; urgency=low
 
   * add crontab backup script;
   * add CA scripts;
+  * add cabextract, curl;
 
  -- Jiang Xin <jiangxin@foo.bar>  Sat, 12 May 2007 08:38:06 +0800
 
