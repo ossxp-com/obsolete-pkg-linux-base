@@ -15,7 +15,7 @@ fi
 # install packages
 for pkg in \
     gcc g++ make patch autoconf automake chrpath \
-    dh-make debhelper dpkg-dev dpkg-repack dpatch quilt doxygen \
+    dh-make debhelper dh-buildinfo dpkg-dev dpkg-repack dpatch quilt doxygen \
     java-package kernel-package fakeroot module-init-tools \
     devscripts fakeroot file gnupg hdparm \
     libtool libc6-dev libncurses5-dev \

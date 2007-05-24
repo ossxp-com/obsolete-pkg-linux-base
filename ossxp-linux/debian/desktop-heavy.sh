@@ -19,7 +19,7 @@ for pkg in \
     mozilla-thunderbird mozilla-thunderbird-inspector mozilla-thunderbird-typeaheadfind thunderbird-locale-zh-cn \
     nessusd nessus nmapfe \
     kompare cervisia kdesvn kdevelop3 kdevelop \
-    evince xchm gthumb gimp inkscape \
+    evince kchmviewer gthumb gimp inkscape \
     wine wine-utils \
 ; do
     echo -e "[1minstall $pkg :[0m"
