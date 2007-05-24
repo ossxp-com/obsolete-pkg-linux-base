@@ -50,10 +50,10 @@ function do_install()
     for pkg in \
         acl bsdutils bzip2 curl cabextract \
         flexbackup \
-        ntpdate \
+        htop ntpdate \
         openssl p7zip-full pciutils psmisc rdiff-backup \
-        screen shellutils ssh star sudo sysutils \
-        unison vim \
+        saidar screen shellutils ssh star sudo sysutils sysstat \
+        unison vim vnstat \
     ; do
         echo -e "[1minstall $pkg :[0m"
         apt-get install --force-yes -y $pkg || echo -e "[1m[44minstall $pkg failed! [0m"
