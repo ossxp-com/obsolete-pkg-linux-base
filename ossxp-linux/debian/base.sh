@@ -48,9 +48,9 @@ function do_install()
     apt-get install --force-yes -y less locales wget ssh sudo || true
     
     for pkg in \
-        acl bsdutils bzip2 curl cabextract dstat \
+        acl ascii bsdutils bzip2 curl cabextract dstat \
         flexbackup \
-        htop ntpdate \
+        htop ntpdate ia32-libs \
         openssl p7zip-full pciutils psmisc rdiff-backup \
         saidar screen shellutils ssh star sudo sysutils sysstat \
         unison vim vnstat \
