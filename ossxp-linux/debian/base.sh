@@ -48,12 +48,12 @@ function do_install()
     apt-get install --force-yes -y less locales wget ssh sudo || true
     
     for pkg in \
-        acl ascii bsdutils bzip2 curl cabextract dstat \
-        flexbackup \
-        htop ntpdate ia32-libs \
+        acl apt-show-versions ascii bsdutils bzip2 curl cabextract \
+        dstat ethtool fping flexbackup \
+        htop ia32-libs indent lynx ntpdate nmap \
         openssl p7zip-full pciutils psmisc rdiff-backup \
         saidar screen shellutils ssh star sudo sysutils sysstat \
-        unison vim vnstat \
+        tcpdump unison vim vnstat zhcon \
     ; do
         echo -e "[1minstall $pkg :[0m"
         apt-get install --force-yes -y $pkg || echo -e "[1m[44minstall $pkg failed! [0m"
@@ -241,7 +241,23 @@ EOF
             echo -ne "[0m"
         fi
     fi
-    
+
+    #------------------------------------------------------------
+    # .indent.pro
+    CONFFILE=/etc/skel/.indent.pro
+    if [ ! -f ${CONFFILE} ]; then
+        mkdir -p /etc/skel
+        cat >> ${CONFFILE} << EOF
+-bad -bap -bbb -bbo -nbc -bl -bli0 -bls -c33 -cd33 -ncdb -ncdw -nce
+-cli0 -cp33 -cs -d0 -nbfda -di2 -nfc1 -nfca -hnl -ip5 -l75 -lp -pcs -nprs
+-psl -saf -sai -saw -nsc -nsob -nss -i4 -ts4 -ut
+EOF
+    fi
+
+    if [ ! -f /root/.indent.pro ]; then
+        ln -s ${CONFFILE} /root/.indent.pro
+    fi
+   
     #------------------------------------------------------------
     echo -ne "[1m[44m"
     cat << EOF

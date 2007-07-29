@@ -19,10 +19,10 @@ function do_install()
     apt-get install --force-yes -y nfs-common portmap || true
 
     for pkg in \
-        apt-show-versions ascii auto-apt curl \
-        eject ethtool fping \
-        gpm indent lynx mc nmap pdumpfs \
-        smbfs sshfs tcpdump xprobe zhcon \
+        auto-apt \
+        eject \
+        gpm mc pdumpfs \
+        smbfs sshfs fuse-utils xprobe \
     ; do
         echo -e "[1minstall $pkg :[0m"
         apt-get install --force-yes -y $pkg || echo -e "[1m[44minstall $pkg failed! [0m"
@@ -33,22 +33,17 @@ function do_config()
 {
     #------------------------------------------------------------
     # sshfs(fuse-utils) needs this special file
-    [ -c /dev/fuse ] || mknod -m 666 /dev/fuse c 10 229
-    
-    #------------------------------------------------------------
-    # .indent.pro
-    CONFFILE=/etc/skel/.indent.pro
-    if [ ! -f ${CONFFILE} ]; then
-        mkdir -p /etc/skel
-        cat >> ${CONFFILE} << EOF
--bad -bap -bbb -bbo -nbc -bl -bli0 -bls -c33 -cd33 -ncdb -ncdw -nce
--cli0 -cp33 -cs -d0 -nbfda -di2 -nfc1 -nfca -hnl -ip5 -l75 -lp -pcs -nprs
--psl -saf -sai -saw -nsc -nsob -nss -i4 -ts4 -ut
-EOF
-    fi
+    if [ ! -c /dev/fuse ]; then
+        echo -ne "[1m[44m"
+        cat << EOF
 
-    if [ ! -f /root/.indent.pro ]; then
-        ln -s ${CONFFILE} /root/.indent.pro
+==================================================
+* FUSE and/or SSHFS is installed but fuse not built-in kernel.
+  You can load fuse at runtime: 'modprobe fuse'
+  Or add 'fuse' to /etc/modules to load it when kernel restart.
+
+EOF
+        echo -ne "[0m"
     fi
 }
 
