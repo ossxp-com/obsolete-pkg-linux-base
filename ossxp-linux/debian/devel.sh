@@ -14,7 +14,7 @@ fi
 #------------------------------------------------------------
 # install packages
 for pkg in \
-    gcc g++ make patch autoconf automake chrpath \
+    gcc g++ make patch autoconf automake chrpath cdbs \
     dh-make debhelper dh-buildinfo dpkg-dev dpkg-repack dpatch quilt doxygen \
     java-package kernel-package fakeroot module-init-tools \
     devscripts fakeroot hdparm \
@@ -24,7 +24,7 @@ for pkg in \
     libjpeg62-dev libmcrypt-dev libmhash-dev libmysqlclient-dev libpng12-dev libsnmp-dev \
     lintian linda lsb-release pkg-config \
     module-assistant \
-    pbuilder python-dev swig \
+    patchutils pbuilder python-dev swig \
     uuid-dev xutils zlib1g-dev \
 ; do
     echo -e "[1minstall $pkg :[0m"
