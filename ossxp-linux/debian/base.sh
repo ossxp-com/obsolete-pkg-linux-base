@@ -50,7 +50,7 @@ function do_install()
     for pkg in \
         acl apt-show-versions ascii bsdutils bzip2 curl cabextract \
         dstat ethtool file fping flexbackup gnupg \
-        htop ia32-libs indent lynx ntpdate nmap \
+        htop ia32-libs ia32-libs-gtk indent lynx ntpdate nmap \
         openssl p7zip-full pciutils perl psmisc rdiff-backup \
         saidar screen shellutils ssh star sudo sysutils sysstat \
         tcpdump unison vim vnstat zhcon \
