@@ -1,0 +1,135 @@
+//
+// Do any local configuration here
+//
+
+// Consider adding the 1918 zones here, if they are not used in your
+// organization
+//include "/etc/bind/zones.rfc1918";
+
+acl our-inner-nets { 127.0.0.1/32; };
+
+view "internal" {
+        match-clients { our-inner-nets; };
+        recursion yes;
+
+	include "/etc/bind/zones.rfc1918";
+
+	// prime the server with knowledge of the root servers
+	zone "." {
+		type hint;
+		file "/etc/bind/db.root";
+	};
+
+	// be authoritative for the localhost forward and reverse zones, and for
+	// broadcast zones as per RFC 1912
+
+	zone "localhost" {
+		type master;
+		file "/etc/bind/db.local";
+	};
+
+	zone "127.in-addr.arpa" {
+		type master;
+		file "/etc/bind/db.127";
+	};
+
+	zone "0.in-addr.arpa" {
+		type master;
+		file "/etc/bind/db.0";
+	};
+
+	zone "255.in-addr.arpa" {
+		type master;
+		file "/etc/bind/db.255";
+	};
+
+	// 自定义 ZONE
+	zone "10.in-addr.arpa" {
+		type master;
+		file "/etc/bind/db.10";
+	};
+
+	zone "31.31.172.in-addr.arpa" {
+		type master;
+		file "/etc/bind/db.172.31.31";
+	};
+
+	zone "foo.bar" {
+		type master;
+		file "/etc/bind/db.foo.bar.local";
+	};
+
+	zone "foo1.bar" {
+		type master;
+		file "/etc/bind/db.foo.bar.local";
+	};
+
+	zone "foo2.bar" {
+		type master;
+		file "/etc/bind/db.foo.bar.local";
+	};
+};
+
+view "external" {
+        match-clients { any; };
+        recursion yes;
+
+	include "/etc/bind/zones.rfc1918";
+
+	// prime the server with knowledge of the root servers
+	zone "." {
+		type hint;
+		file "/etc/bind/db.root";
+	};
+
+	// be authoritative for the localhost forward and reverse zones, and for
+	// broadcast zones as per RFC 1912
+
+	zone "localhost" {
+		type master;
+		file "/etc/bind/db.local";
+	};
+
+	zone "127.in-addr.arpa" {
+		type master;
+		file "/etc/bind/db.127";
+	};
+
+	zone "0.in-addr.arpa" {
+		type master;
+		file "/etc/bind/db.0";
+	};
+
+	zone "255.in-addr.arpa" {
+		type master;
+		file "/etc/bind/db.255";
+	};
+
+	// 自定义 ZONE
+	zone "10.in-addr.arpa" {
+		type master;
+		file "/etc/bind/db.10";
+	};
+
+	zone "31.31.172.in-addr.arpa" {
+		type master;
+		file "/etc/bind/db.172.31.31";
+	};
+
+	zone "foo.bar" {
+		type master;
+		file "/etc/bind/db.foo.bar";
+	};
+
+	zone "foo1.bar" {
+		type master;
+		file "/etc/bind/db.foo.bar";
+	};
+
+	zone "foo2.bar" {
+		type master;
+		file "/etc/bind/db.foo.bar";
+	};
+};
+
+
