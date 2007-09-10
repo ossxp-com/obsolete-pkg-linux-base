@@ -21,7 +21,7 @@ function do_install()
     for pkg in \
         auto-apt \
         eject \
-        gpm mc pdumpfs \
+        gpm mc pdumpfs resolvconf \
         smbfs sshfs fuse-utils xprobe \
     ; do
         echo -e "[1minstall $pkg :[0m"

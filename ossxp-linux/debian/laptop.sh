@@ -15,6 +15,7 @@ fi
 # install packages
 for pkg in \
     acpi acpid acpi-support acpitool anacron cpufrequtils \
+    hdparm sdparm hotkeys laptop-mode-tools \
     pcmciautils powersaved hotkey-setup hibernate uswsusp\
 ; do
     echo -e "[1minstall $pkg :[0m"

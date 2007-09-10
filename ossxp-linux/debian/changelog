@@ -1,3 +1,9 @@
+ossxp-linux (1.20) unstable; urgency=low
+
+  * add qemu, mkisofs, and laptop acpi/keyboards custum scripts.
+
+ -- Jiang Xin <jiangxin@foo.bar>  Mon, 10 Sep 2007 12:37:03 +0800
+
 ossxp-linux (1.19) unstable; urgency=low
 
   * add ascii,ia32-libs,dstat,htop,saidar,vnstat,kchmviewer 

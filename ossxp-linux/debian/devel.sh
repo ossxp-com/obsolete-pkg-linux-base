@@ -23,8 +23,8 @@ for pkg in \
     libc-client-dev libcurl3-dev libfreetype6-dev libgcrypt11-dev libgd2-xpm-dev \
     libjpeg62-dev libmcrypt-dev libmhash-dev libmysqlclient-dev libpng12-dev libsnmp-dev \
     lintian linda lsb-release pkg-config \
-    module-assistant \
-    patchutils pbuilder python-dev swig \
+    mkisofs module-assistant \
+    patchutils pbuilder python-dev qemu swig \
     uuid-dev xutils zlib1g-dev \
 ; do
     echo -e "[1minstall $pkg :[0m"
