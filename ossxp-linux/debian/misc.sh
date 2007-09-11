@@ -22,7 +22,7 @@ function do_install()
         auto-apt \
         eject \
         gpm mc pdumpfs resolvconf \
-        smbfs sshfs fuse-utils xprobe \
+        smbfs sshfs xprobe \
     ; do
         echo -e "[1minstall $pkg :[0m"
         apt-get install --force-yes -y $pkg || echo -e "[1m[44minstall $pkg failed! [0m"
