@@ -1,0 +1,12 @@
+#
+# $Id$
+#
+# This is an automounter map and it has the following format
+# key [ -mount-options-separated-by-comma ] location
+# Details may be found in the autofs(5) manpage
+
+#windows share
+win_d		-fstype=cifs,soft,iocharset=utf8,uid=jiangxin,gid=wheel,umask=002,username=jiangxin,password=hidden	://10.0.0.5/d\$
+win_e		-fstype=cifs,soft,iocharset=utf8,uid=jiangxin,gid=wheel,umask=002,username=jiangxin,password=hidden	://10.0.0.5/e\$
+win_f		-fstype=cifs,soft,iocharset=utf8,uid=jiangxin,gid=wheel,umask=002,username=jiangxin,password=hidden	://10.0.0.5/f\$
+

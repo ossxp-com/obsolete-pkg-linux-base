@@ -48,7 +48,7 @@ function do_install()
     apt-get install --force-yes -y less locales wget ssh sudo || true
     
     for pkg in \
-        acl apt-show-versions ascii bsdutils bzip2 curl cabextract \
+        acl apt-show-versions ascii autofs bsdutils bzip2 curl cabextract \
         dstat ethtool file fping flexbackup fuse-utils gnupg \
         htop ia32-libs ia32-libs-gtk indent lynx ntfs-3g ntpdate nmap \
         openssl p7zip-full pciutils perl psmisc rdiff-backup \

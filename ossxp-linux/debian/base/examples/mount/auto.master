@@ -10,4 +10,5 @@
 #/misc	/etc/auto.misc
 #/net	/etc/auto.net
 
+/netmnt	/etc/auto.network --ghost
 /isomnt	/etc/auto.iso --timeout=300 --ghost
