@@ -53,7 +53,7 @@ function do_install()
         htop ia32-libs ia32-libs-gtk indent lynx ntfs-3g ntpdate nmap \
         openssl p7zip-full pciutils perl psmisc rdiff-backup \
         saidar screen shellutils ssh star sudo sysutils sysstat \
-        tcpdump unison vim vnstat zhcon \
+        ngrep tcpdump unison vim vnstat zhcon \
     ; do
         echo -e "[1minstall $pkg :[0m"
         apt-get install --force-yes -y $pkg || echo -e "[1m[44minstall $pkg failed! [0m"
