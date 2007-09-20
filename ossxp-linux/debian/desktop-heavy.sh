@@ -20,6 +20,10 @@ for pkg in \
     nessusd nessus nmapfe flashplugin-nonfree \
     kompare cervisia kdesvn kdevelop3 kdevelop \
     evince kchmviewer gthumb gimp inkscape \
+    gspca-source ndiswrapper-source ndiswrapper-utils module-assistant \
+    gtkam kphotoalbum gphoto2 \
+    kino kinoplugs \
+    pidgin ekiga v4l-config libsdl1.2debian-all \
     wine wine-utils \
 ; do
     echo -e "[1minstall $pkg :[0m"

@@ -22,6 +22,7 @@ for pkg in \
     libssl-dev libldap2-dev libxml2-dev libexpat1-dev libperl-dev libbz2-dev \
     libc-client-dev libcurl3-dev libfreetype6-dev libgcrypt11-dev libgd2-xpm-dev \
     libjpeg62-dev libmcrypt-dev libmhash-dev libmysqlclient-dev libpng12-dev libsnmp-dev \
+    libsdl1.2-dev libsdl-image1.2-dev \
     lintian linda lsb-release pkg-config \
     mkisofs module-assistant \
     patchutils pbuilder python-dev qemu swig \
