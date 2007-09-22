@@ -206,6 +206,7 @@ EOF
     #------------------------------------------------------------
     # locales
     CONFFILE=/etc/locale.gen
+    touch ${CONFFILE}
     if [ -f ${CONFFILE} ]; then
         GENLOCALE=no
         i="en_US.UTF-8 UTF-8"
