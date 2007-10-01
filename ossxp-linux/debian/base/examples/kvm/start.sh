@@ -5,7 +5,7 @@
 CWD=$(cd `dirname $0`; pwd)
 LOCK_FILE=$CWD/LOCK_FILE
 
-DISK_C=$CWD/ossxp-working.img
+DISK_C=$CWD/ossxp-server-base.img
 DISK_D=$CWD/swap.img
 #CDROM=/data/_iso/debian/debian-etch4.0r0_i386/debian-40r0-i386-DVD-1.iso
 
@@ -35,6 +35,11 @@ if [ ! -z "$CDROM" ]; then
 else
     opt_cdrom=
     opt_boot="-boot c"
+fi
+
+if [ ! -z $DISK_C ] && [ -f $DISK_C ] && [ ! -w $DISK_C ]  ; then
+    echo "Disk c image is readonly, using snapshot mode"
+    opt_snapshot="-snapshot"
 fi
 
 [ -x $VNCPORTCMD ] && $VNCPORTCMD -aq
@@ -153,6 +158,7 @@ CMD="sudo kvm \
     $opt_acpi \
     $opt_others \
     $opt_net \
+    $opt_snapshot \
     $*"
 
 fn_create_lock
