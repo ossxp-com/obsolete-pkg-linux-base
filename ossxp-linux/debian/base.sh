@@ -48,12 +48,12 @@ function do_install()
     apt-get install --force-yes -y less locales wget ssh sudo || true
     
     for pkg in \
-        acl apt-show-versions ascii autofs bsdutils bzip2 curl cabextract \
+        acl apt-show-versions ascii autofs bsdutils bridge-utils bzip2 curl cabextract \
         dstat ethtool file fping flexbackup fuse-utils gnupg \
-        htop ia32-libs ia32-libs-gtk indent lynx ntfs-3g ntpdate nmap \
+        htop ia32-libs ia32-libs-gtk indent iproute lynx ntfs-3g ntpdate nmap \
         openssl p7zip-full pciutils perl psmisc rdiff-backup \
         saidar screen shellutils ssh star sudo sysutils sysstat \
-        ngrep tcpdump unison vim vnstat zhcon \
+        ngrep tcpdump udev unison vim vnstat zhcon \
     ; do
         echo -e "[1minstall $pkg :[0m"
         apt-get install --force-yes -y $pkg || echo -e "[1m[44minstall $pkg failed! [0m"

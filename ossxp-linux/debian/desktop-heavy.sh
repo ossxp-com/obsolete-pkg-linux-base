@@ -23,6 +23,7 @@ for pkg in \
     gspca-source ndiswrapper-source ndiswrapper-utils module-assistant \
     gtkam kphotoalbum gphoto2 \
     kino kinoplugs \
+    tightvncserver \
     pidgin ekiga v4l-config libsdl1.2debian-all \
     wine wine-utils \
 ; do

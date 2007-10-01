@@ -22,7 +22,7 @@ for pkg in \
     cupsys-client cupsys-driver-gutenprint cupsys cups-pdf cupsys-bsd printconf \
     foomatic-gui foomatic-filters-ppds foomatic-db-hpijs foomatic-db-gutenprint \
     discover1 hal-device-manager \
-    azureus amule d4x ossxp-freemind firestarter kate quanta tsclient \
+    azureus amule d4x ossxp-freemind firestarter kate quanta tsclient krdc \
     gq meld \
 ; do
     echo -e "[1minstall $pkg :[0m"

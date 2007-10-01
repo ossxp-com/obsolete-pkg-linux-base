@@ -15,7 +15,7 @@ fi
 # install packages
 # install packages
 for pkg in \
-    xfce4 xdm \
+    xfce4 xdm xscreensaver \
 ; do
     echo -e "[1minstall $pkg :[0m"
     apt-get install --force-yes -y $pkg || echo -e "[1m[44minstall $pkg failed! [0m"
