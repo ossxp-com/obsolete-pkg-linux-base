@@ -8,6 +8,9 @@ DISK_D=swap.img
 
 opt_mem="-m 512"
 opt_localtime="--localtime"
+opt_net="-net nic,vlan=0 -net tap,vlan=0,script=/etc/kvm/kvm-ifup"
+opt_acpi="-no-acpi"
+opt_others="-soundhw sb16 -usb -usbdevice tablet"  # -no-quit
 
 VNCPORTCMD=/opt/ossxp/bin/vncport.py
 
@@ -60,7 +63,10 @@ Options:
         emulate one cpu
     -m|-mem <Num>
         set memery size: <Num> MB
-
+    -acpi
+        enable acpi
+    -utc|-localtime
+        bios time is utc or loaltiom
 
 EOF
 }
@@ -96,16 +102,21 @@ while [ $# -gt 0 ]; do
        shift
        opt_mem="-m $1"
        ;;
+    -acpi)
+       opt_acpi=
+       ;;
     *)
-       usage
-       exit 1
+       break
        ;;
   esac
   shift
 done
 
+if echo $*|grep -q "-net"; then
+    opt_net=
+fi
 
-sudo kvm \
+CMD="sudo kvm \
     $opt_localtime \
     $opt_smp \
     $opt_mem \
@@ -114,12 +125,14 @@ sudo kvm \
     $opt_cdrom \
     $opt_boot \
     $opt_display \
-    -no-acpi \
-    -soundhw sb16 \
-    -usb -usbdevice tablet \
-    -net nic,vlan=0 -net tap,vlan=0,script=/etc/kvm/kvm-ifup \
-    &
+    $opt_acpi \
+    $opt_others \
+    $opt_net \
+    $* &"
 
+echo "==========================================================================="
+echo $CMD
+echo "==========================================================================="
 
-#    -net nic -net user \
-#    -no-quit  \
+eval "$CMD"
+
