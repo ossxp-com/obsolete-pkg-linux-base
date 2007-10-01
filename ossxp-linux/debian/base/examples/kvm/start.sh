@@ -2,8 +2,11 @@
 
 [ -c /dev/kvm ] || sudo modprobe kvm kvm-amd kvm-intel
 
-DISK_C=ossxp-working.img
-DISK_D=swap.img
+CWD=$(cd `dirname $0`; pwd)
+LOCK_FILE=$CWD/LOCK_FILE
+
+DISK_C=$CWD/ossxp-working.img
+DISK_D=$CWD/swap.img
 #CDROM=/data/_iso/debian/debian-etch4.0r0_i386/debian-40r0-i386-DVD-1.iso
 
 opt_mem="-m 512"
@@ -48,6 +51,8 @@ fi
 
 function usage()
 {
+trap - 0 1 2 13 15
+
 cat <<EOF
 
 Usage $0 [options...]
@@ -69,6 +74,26 @@ Options:
         bios time is utc or loaltiom
 
 EOF
+}
+
+
+
+fn_rm_lock()
+{
+  trap - 0 1 2 13 15
+  rm $LOCK_FILE
+}
+
+fn_create_lock()
+{
+  trap - 0 1 2 13 15
+  if [ -f $LOCK_FILE ]; then
+    echo "Error: VM already start!"
+    exit 1
+  fi
+
+  touch $LOCK_FILE
+  trap 'fn_rm_lock' 0 1 2 13 15
 }
 
 
@@ -128,11 +153,13 @@ CMD="sudo kvm \
     $opt_acpi \
     $opt_others \
     $opt_net \
-    $* &"
+    $*"
 
-echo "==========================================================================="
+fn_create_lock
+
+echo "======================================================================"
 echo $CMD
-echo "==========================================================================="
+echo "======================================================================"
 
 eval "$CMD"
 
