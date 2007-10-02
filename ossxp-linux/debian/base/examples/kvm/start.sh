@@ -143,7 +143,7 @@ if echo $UTC|egrep -iq "^no"; then
 fi
 
 if echo $VNC|egrep -iq "^yes"; then
-    opt_display="-vnc 0.0.0.0:$DISPNUM -k en-us"
+    opt_display="-vnc :$DISPNUM -k en-us"
 else
     opt_display=
 fi
@@ -181,7 +181,7 @@ while [ $# -gt 0 ]; do
        exit 0
        ;;
     -vnc|-no-sdl)
-       opt_display="-vnc 0.0.0.0:$DISPNUM -k en-us"
+       opt_display="-vnc :$DISPNUM -k en-us"
        ;;
     -sdl|-no-vnc)
        opt_display=
