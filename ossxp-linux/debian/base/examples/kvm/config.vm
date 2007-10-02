@@ -6,6 +6,7 @@ DISK_D=swap.img
 
 ACPI=no
 MEMORY=512
+MACADDR=52:54:00:12:34:01
 MOUSE=usb
 NET=bridge
 SMP=yes

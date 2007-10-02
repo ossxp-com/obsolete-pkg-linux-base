@@ -18,6 +18,7 @@ DISK_D=swap.img
 #CDROM=/data/_iso/cdrom.iso
 
 ACPI=no
+MACADDR=52:54:00:12:34:00
 MEMORY=512
 MOUSE=usb
 NET=bridge
@@ -54,6 +55,10 @@ Options:
 EOF
 }
 
+function GetMacAddr()
+{
+    printf "52:54:00:12:34:%02x" $((255-$DISPNUM))
+}
 
 fn_rm_lock()
 {
@@ -95,8 +100,7 @@ if [ ! -z "$CDROM" ]; then
     fi
 fi
 
-if echo $ACPI|egrep -iq "^no"; then
-    opt_acpi="-no-acpi"
+if echo $ACPI|egrep -iq "^no"; then opt_acpi="-no-acpi"
 fi
 
 if [ ! -z "$MEMORY" ] && [ "$MEMORY" -gt 128 ]; then
@@ -109,12 +113,16 @@ if echo $MOUSE|egrep -iq "^usb"; then
     opt_others="$opt_others -usb -usbdevice tablet"
 fi
 
+if [ -z "$MACADDR" ]; then
+    MACADDR=$(GetMacAddr)
+fi
+
 if echo $NET|egrep -iq "^bridge"; then
-    opt_net="-net nic,vlan=0 -net tap,vlan=0,script=/etc/kvm/kvm-ifup"
+    opt_net="-net nic,vlan=0,macaddr=$MACADDR -net tap,vlan=0,script=/etc/kvm/kvm-ifup"
 elif echo $NET|egrep -iq "^nat"; then
-    opt_net="-net nic -net user"
+    opt_net="-net nic,macaddr=$MACADDR -net user"
 elif echo $NET|egrep -iq "^standalone"; then
-    opt_net="-net nic -net tap"
+    opt_net="-net nic,macaddr=$MACADDR -net tap"
 else
     opt_net="-net none"
 fi
