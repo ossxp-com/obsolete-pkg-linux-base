@@ -4,6 +4,7 @@
 
 CWD=$(cd `dirname $0`; pwd)
 LOCK_FILE=$CWD/LOCK_FILE
+KVMCMD=kvm
 
 VNCPORTCMD=/opt/ossxp/bin/vncport.py
 [ -x $VNCPORTCMD ] && $VNCPORTCMD -aq
@@ -13,19 +14,21 @@ if [ -f $CWD/config.vm ]; then
     . $CWD/config.vm
 else
 
-DISK_C=disk.img
+DISK_C=base.img
 DISK_D=swap.img
-#CDROM=/data/_iso/cdrom.iso
+CDROM=/data/_iso/ubuntu/dvd/kubuntu-7.04-dvd-i386.iso
 
-ACPI=no
-MACADDR=52:54:00:12:34:00
+ACPI=yes
+BOOT=c
 MEMORY=512
+MACADDR=52:54:00:12:34:04
 MOUSE=usb
 NET=bridge
 SMP=yes
 SOUNDHW=sb16
+STDVGA=yes
 UTC=no
-VNC=yes   
+VNC=yes
 
 fi
 
@@ -123,14 +126,16 @@ elif echo $NET|egrep -iq "^nat"; then
     opt_net="-net nic,macaddr=$MACADDR -net user"
 elif echo $NET|egrep -iq "^standalone"; then
     opt_net="-net nic,macaddr=$MACADDR -net tap"
+elif [ ! -z "$NET" ]; then
+    opt_net=$(echo "$NET"|sed -e "s/MACADDR/${MACADDR}/g")
 else
-    opt_net="-net none"
+    opt_net="-net nic,macaddr=$MACADDR -net user"
 fi
 
 if echo $SMP|egrep -iq "^yes"; then
     cpus=`grep "^processor" /proc/cpuinfo|wc -l`
     if [ $cpus -gt 1 ]; then
-        opt_smp="-smp 2"
+        opt_smp="-smp $cpus"
     fi
 fi
 
@@ -139,13 +144,17 @@ if [ ! -z $SOUNDHW ]; then
 fi
 
 if echo $UTC|egrep -iq "^no"; then
-    opt_localtime="--localtime"
+    opt_localtime="-localtime"
 fi
 
 if echo $VNC|egrep -iq "^yes"; then
     opt_display="-vnc :$DISPNUM -k en-us"
 else
     opt_display=
+fi
+
+if echo $STDVGA|egrep -iq "^yes"; then
+    opt_std_vga=-std-vga
 fi
 
 if [ ! -z "$DISK_C" ]; then
@@ -162,10 +171,14 @@ fi
 
 if [ ! -z "$CDROM" ]; then
     opt_cdrom="-cdrom $CDROM"
-    opt_boot="-boot d"
+    [ -z "$BOOT" ] && BOOT=d
 else
     opt_cdrom=
-    opt_boot="-boot c"
+    [ -z "$BOOT" ] && BOOT=c
+fi
+
+if [ ! -z "$BOOT" ]; then
+    opt_boot="-boot $BOOT"
 fi
 
 if [ ! -z $DISK_C ] && [ -f $DISK_C ] && [ ! -w $DISK_C ]  ; then
@@ -180,6 +193,13 @@ while [ $# -gt 0 ]; do
        usage
        exit 0
        ;;
+    -std-vga)
+       opt_std_vga=-std-vga
+       ;;
+    -cmd)
+       shift
+       KVMCMD=$1
+       ;;
     -vnc|-no-sdl)
        opt_display="-vnc :$DISPNUM -k en-us"
        ;;
@@ -187,7 +207,6 @@ while [ $# -gt 0 ]; do
        opt_display=
        ;;
     -no-smp)
-       shift
        opt_smp=
        ;;
     -smp)
@@ -195,7 +214,7 @@ while [ $# -gt 0 ]; do
        opt_smp="-smp $1"
        ;;
     -localtime|-no-utc)
-       opt_localtime="--localtime"
+       opt_localtime="-localtime"
        ;;
     -utc)
        opt_localtime=
@@ -206,6 +225,13 @@ while [ $# -gt 0 ]; do
        ;;
     -acpi)
        opt_acpi=
+       ;;
+    -boot)
+       shift
+       opt_boot="-boot $1"
+       ;;
+    -n)
+       opt_dryrun=yes
        ;;
     *)
        break
@@ -218,7 +244,7 @@ if echo $*|grep -q "-net"; then
     opt_net=
 fi
 
-CMD="sudo kvm \
+CMD="sudo $KVMCMD \
     $opt_localtime \
     $opt_smp \
     $opt_mem \
@@ -227,6 +253,7 @@ CMD="sudo kvm \
     $opt_cdrom \
     $opt_boot \
     $opt_display \
+    $opt_std_vga \
     $opt_acpi \
     $opt_others \
     $opt_net \
@@ -238,9 +265,10 @@ echo "======================================================================"
 echo $CMD
 echo "======================================================================"
 
-[ -t ] && (echo "press any key..."; read x; )
+#[ -t ] && (echo "press any key..."; read x; )
 
 fn_create_lock
 
-eval "$CMD"
-
+if [ "$opt_dryrun" != "yes" ]; then
+    eval "$CMD"
+fi
