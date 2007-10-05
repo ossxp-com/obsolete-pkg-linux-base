@@ -1,5 +1,17 @@
 #!/bin/sh -e
 
+# include apt maintainance functions
+. ./apt.inc
+
+########################################
+# User defined packages list
+########################################
+PKG_LIST="
+    acpi acpid acpi-support acpitool anacron cpufrequtils 
+    hdparm sdparm hotkeys laptop-mode-tools 
+    pcmciautils powersaved hotkey-setup hibernate uswsusp
+    "
+
 [ -x /bin/echo ] && alias echo=/bin/echo
 
 if [ `id -u` -ne 0 ]; then
@@ -13,14 +25,8 @@ fi
 
 #------------------------------------------------------------
 # install packages
-for pkg in \
-    acpi acpid acpi-support acpitool anacron cpufrequtils \
-    hdparm sdparm hotkeys laptop-mode-tools \
-    pcmciautils powersaved hotkey-setup hibernate uswsusp\
-; do
-    echo -e "[1minstall $pkg :[0m"
-    apt-get install --force-yes -y $pkg || echo -e "[1m[44minstall $pkg failed! [0m"
-done
+echo "[1m========== Install user defined packages ==========[0m"
+install_packages $PKG_LIST
 
 [ "$0" != "${0%.sh}" ] && mv -f $0 ${0%.sh}.done
 #exit 0

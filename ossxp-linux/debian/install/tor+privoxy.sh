@@ -1,5 +1,14 @@
 #!/bin/sh -e
 
+# include apt maintainance functions
+. ./apt.inc
+
+########################################
+# User defined packages list
+########################################
+PKG_LIST="
+    "
+
 [ -x /bin/echo ] && alias echo=/bin/echo
 
 if [ `id -u` -ne 0 ]; then

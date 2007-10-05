@@ -1,5 +1,8 @@
 #!/bin/sh -e
 
+# include apt maintainance functions
+. ./apt.inc
+
 [ -x /bin/echo ] && alias echo=/bin/echo
 
 if [ `id -u` -ne 0 ]; then
@@ -26,86 +29,54 @@ function usage()
 function inst_apache
 {
     if [ "$TYPE" = "--prefork" ]; then
-        for pkg in \
+        install_packages \
             ossxp-apache2-mpm-prefork ossxp-apache2-doc \
-            ossxp-apache2 \
-        ; do
-            echo -e "[1minstall $pkg :[0m"
-            apt-get install --force-yes -y $pkg || echo -e "[1m[44minstall $pkg failed! [0m"
-        done
+            ossxp-apache2 
     else
-        for pkg in \
+        install_packages \
             ossxp-apache2-mpm-worker ossxp-apache2-doc \
-            ossxp-apache2 \
-        ; do
-            echo -e "[1minstall $pkg :[0m"
-            apt-get install --force-yes -y $pkg || echo -e "[1m[44minstall $pkg failed! [0m"
-        done
+            ossxp-apache2 
     fi
 }
 
 function inst_php
 {
     if [ "$TYPE" = "--prefork" ]; then
-        for pkg in \
+        install_packages \
             ossxp-php5-common ossxp-libapache2-mod-php5 \
             ossxp-php5-cgi ossxp-php5-cli ossxp-php5 \
-            ossxp-php5-gd ossxp-php5-mysql \
-        ; do
-            echo -e "[1minstall $pkg :[0m"
-            apt-get install --force-yes -y $pkg || echo -e "[1m[44minstall $pkg failed! [0m"
-        done
+            ossxp-php5-gd ossxp-php5-mysql 
     else
-        for pkg in \
+        install_packages \
             ossxp-php5-common-mt ossxp-libapache2-mod-php5-mt \
             ossxp-php5-cgi-mt ossxp-php5-cli-mt ossxp-php5-mt \
-            ossxp-php5-gd-mt ossxp-php5-mysql-mt \
-        ; do
-            echo -e "[1minstall $pkg :[0m"
-            apt-get install --force-yes -y $pkg || echo -e "[1m[44minstall $pkg failed! [0m"
-        done
+            ossxp-php5-gd-mt ossxp-php5-mysql-mt 
     fi
 }
 
 function inst_svn
 {
     if [ "$TYPE" = "--prefork" ]; then
-        for pkg in \
+        install_packages \
             ossxp-libsvn1 ossxp-libapache2-svn ossxp-libsvn-doc \
-            ossxp-subversion ossxp-subversion-tools ossxp-python-subversion \
-        ; do
-            echo -e "[1minstall $pkg :[0m"
-            apt-get install --force-yes -y $pkg || echo -e "[1m[44minstall $pkg failed! [0m"
-        done
+            ossxp-subversion ossxp-subversion-tools ossxp-python-subversion 
     else
-        for pkg in \
+        install_packages \
             ossxp-libsvn1 ossxp-libapache2-svn ossxp-libsvn-doc \
-            ossxp-subversion ossxp-subversion-tools ossxp-python-subversion \
-        ; do
-            echo -e "[1minstall $pkg :[0m"
-            apt-get install --force-yes -y $pkg || echo -e "[1m[44minstall $pkg failed! [0m"
-        done
+            ossxp-subversion ossxp-subversion-tools ossxp-python-subversion 
     fi
 }
 
 function inst_mailman
 {
-    for pkg in \
-        ossxp-mailman \
-    ; do
-            echo -e "[1minstall $pkg :[0m"
-            apt-get install --force-yes -y $pkg || echo -e "[1m[44minstall $pkg failed! [0m"
-    done
+    install_packages \
+        ossxp-mailman 
 }
 
 function inst_mantis
 {
-    for pkg in \
-        ossxp-mantis \
-    ; do
-            echo -e "[1minstall $pkg :[0m"
-            apt-get install --force-yes -y $pkg || echo -e "[1m[44minstall $pkg failed! [0m"
-    done
+    install_packages \
+        ossxp-mantis 
 }
 
 ########################################

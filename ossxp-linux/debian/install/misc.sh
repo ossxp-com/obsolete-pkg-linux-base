@@ -1,5 +1,19 @@
 #!/bin/sh -e
 
+# include apt maintainance functions
+. ./apt.inc
+
+########################################
+# User defined packages list
+########################################
+PKG_LIST="
+    nfs-common portmap
+    auto-apt 
+    eject 
+    gpm mc pdumpfs resolvconf 
+    smbfs sshfs xprobe 
+    "
+
 [ -x /bin/echo ] && alias echo=/bin/echo
 
 if [ `id -u` -ne 0 ]; then
@@ -15,18 +29,8 @@ function do_install()
 {
     # install packages
     #------------------------------------------------------------
-    # My already installed by tasksel standard package:
-    apt-get install --force-yes -y nfs-common portmap || true
-
-    for pkg in \
-        auto-apt \
-        eject \
-        gpm mc pdumpfs resolvconf \
-        smbfs sshfs xprobe \
-    ; do
-        echo -e "[1minstall $pkg :[0m"
-        apt-get install --force-yes -y $pkg || echo -e "[1m[44minstall $pkg failed! [0m"
-    done
+    echo "[1m========== Install user defined packages ==========[0m"
+    install_packages $PKG_LIST
 }
 
 function do_config()
