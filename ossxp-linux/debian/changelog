@@ -1,3 +1,9 @@
+ossxp-linux (1.21) unstable; urgency=low
+
+  * new install scripts: use apt-cache policy to check package version;
+
+ -- Jiang Xin <jiangxin@foo.bar>  Fri, 05 Oct 2007 14:18:15 +0800
+
 ossxp-linux (1.20) unstable; urgency=low
 
   * add qemu, mkisofs, and laptop acpi/keyboards custum scripts.
