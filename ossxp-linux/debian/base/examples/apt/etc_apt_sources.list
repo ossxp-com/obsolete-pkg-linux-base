@@ -35,6 +35,9 @@ deb http://localhost/ossxp/ sid main
 #deb http://localhost/etch_amd64/cd2/ etch main contrib
 #deb http://localhost/etch_amd64/cd3/ etch main contrib
 
+# beryl 3d desktop
+#deb http://debian.beryl-project.org/ etch main
+
 # ftp
 #deb ftp://ftp.jp.debian.org/debian sid main contrib
 
