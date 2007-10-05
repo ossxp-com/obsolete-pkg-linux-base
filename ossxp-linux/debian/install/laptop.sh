@@ -1,7 +1,7 @@
 #!/bin/sh -e
 
 # include apt maintainance functions
-. ./apt.inc
+. /opt/ossxp/install/apt.inc
 
 ########################################
 # User defined packages list
