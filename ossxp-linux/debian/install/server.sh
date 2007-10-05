@@ -67,12 +67,12 @@ function inst_php
         $INSTALLCMD \
             ossxp-php5-common ossxp-libapache2-mod-php5 \
             ossxp-php5-cgi ossxp-php5-cli ossxp-php5 \
-            ossxp-php5-gd ossxp-php5-mysql 
+            ossxp-php5-gd ossxp-php5-mysql ossxp-php-pear
     else
         $INSTALLCMD \
             ossxp-php5-common-mt ossxp-libapache2-mod-php5-mt \
             ossxp-php5-cgi-mt ossxp-php5-cli-mt ossxp-php5-mt \
-            ossxp-php5-gd-mt ossxp-php5-mysql-mt 
+            ossxp-php5-gd-mt ossxp-php5-mysql-mt ossxp-php-pear-mt
     fi
 }
 
