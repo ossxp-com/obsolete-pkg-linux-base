@@ -7,6 +7,77 @@ if [ `id -u` -ne 0 ]; then
   exit 1
 fi
 
+########################################
+# User defined packages list
+########################################
+PKG_LIST="
+    acl apt-show-versions ascii autofs bsdutils bridge-utils bzip2 curl cabextract 
+    dstat ethtool file fping flexbackup fuse-utils 
+    gnupg htop ia32-libs ia32-libs-gtk indent iproute 
+    less locales lynx ntfs-3g ntpdate nmap ngrep 
+    openssl p7zip-full pciutils perl psmisc 
+    rdiff-backup saidar screen shellutils ssh star sudo sysstat sysutils tcpdump 
+    udev unison vim vnstat wget zhcon 
+    "
+
+
+########################################
+# install packages only necessary
+########################################
+function install_packages()
+{
+    unknown_list=
+    upgrade_list=
+    ignore_list=
+
+    if [ $# -eq 1 ] && [ "$1" = "-" ] ; then
+        packages=
+        while read item; do
+	    if [ "$item" != "-" ]; then
+	        packages="$packages $item"
+	    fi
+	done
+	install_packages $packages
+	return 
+    elif [ $# -gt 0 ]; then
+        while [ $# -gt 0 ]; do
+		INSTALLED=$(LC_ALL=C apt-cache policy $1 2>/dev/null | grep Installed  -n | cut -d":" -f3)
+		CANDIDATE=$(LC_ALL=C apt-cache policy $1 2>/dev/null | grep Candidate  -n | cut -d":" -f3)
+		if [ -z "$CANDIDATE" ]; then
+		    unknown_list="$unknown_list $1"
+		elif [ "$CANDIDATE" != "$INSTALLED" ]; then
+		    upgrade_list="$upgrade_list $1"
+		else
+		    ignore_list="$ignore_list $1"
+		fi
+		shift
+        done
+    fi
+
+    if [ ! -z "$ignore_list" ]; then
+        echo -e "[1mAlready installed packages :[0m"
+        echo $ignore_list
+        echo ""
+    fi
+    if [ ! -z "$unknown_list" ]; then
+        echo -e "[1mWarning: Not exist packages found : [0m"
+        echo $unknown_list
+        echo ""
+    fi
+    if [ -z "$upgrade_list" ]; then
+        echo -e "[1mNothing will be installed or upgraded.[0m"
+        echo ""
+    else
+        echo -e "[1mFollowing packages will be installed :[0m"
+        echo $upgrade_list
+        read -p "Press any key ..." -s -n1
+        echo ""
+        apt-get install --force-yes -y $upgrade_list || echo -e "[1m[44minstall failed! [0m"
+        echo ""
+    fi
+}
+
+
 function set_config()
 {
     [ $# -ne 2 ] && { echo "Wrong parameters: set_config KEY VAL"; exit 1; }
@@ -33,32 +104,22 @@ function do_install()
     # tasksel standard package
     #------------------------------------------------------------
     # aptitude search ~pstandard
-    echo -e "[1minstall ~pstandard :[0m"
-    aptitude install -y ~pstandard || echo -e "[1m[44minstall ~pstandard failed! [0m"
-    # aptitude search ~prequired
-    echo -e "[1minstall ~prequired :[0m"
-    aptitude install -y ~prequired || echo -e "[1m[44minstall ~prequired failed! [0m"
-    # aptitude search ~pimportant:
-    echo -e "[1minstall ~pimportant :[0m"
-    aptitude install -y ~pimportant || echo -e "[1m[44minstall ~pimportant failed! [0m"
+    echo -e "[1m========== Install debian standard packages ==========[0m"
+    aptitude search -F "%p" ~pstandard | install_packages -
 
-    # install packages
+    # aptitude search ~prequired
+    echo -e "[1m========== Install debian required packages ==========[0m"
+    aptitude search -F "%p" ~prequired | install_packages -
+
+    # aptitude search ~pimportant:
+    echo -e "[1m========== Install debian important packages ==========[0m"
+    aptitude search -F "%p" ~pimportant | install_packages -
+
+    # install custom packages
     #------------------------------------------------------------
-    # My already installed by tasksel standard package:
-    apt-get install --force-yes -y less locales wget ssh sudo || true
-    
-    for pkg in \
-        acl apt-show-versions ascii autofs bsdutils bridge-utils bzip2 curl cabextract \
-        dstat ethtool file fping flexbackup fuse-utils gnupg \
-        htop ia32-libs ia32-libs-gtk indent iproute lynx ntfs-3g ntpdate nmap \
-        openssl p7zip-full pciutils perl psmisc rdiff-backup \
-        saidar screen shellutils ssh star sudo sysutils sysstat \
-        ngrep tcpdump udev unison vim vnstat zhcon \
-    ; do
-        echo -e "[1minstall $pkg :[0m"
-        apt-get install --force-yes -y $pkg || echo -e "[1m[44minstall $pkg failed! [0m"
-    done
-    }
+    echo "[1m========== Install user defined packages ==========[0m"
+    install_packages $PKG_LIST
+}
 
 
 function do_config()
