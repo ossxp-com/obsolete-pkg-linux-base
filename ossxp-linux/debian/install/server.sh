@@ -11,72 +11,119 @@ if [ `id -u` -ne 0 ]; then
 fi
 
 SCRIPTNAME=`basename $0`
-TYPE="--prefork"
+TYPE="--thread"
+INSTALLCMD="install_packages -i"
 
 function usage()
 {
     echo "Usage:"
     echo "    $SCRIPTNAME [--prefork|--thread] <server> ..."
     echo "Available Servers:"
+    echo "    lamp --- mysql & apache & php"
     echo "    apache"
     echo "    php"
-    echo "    subversion|svn"
+    echo "    svn"
     echo "    mailman"
     echo "    mantis"
+    echo "    mwiki"
+    echo "    gosa"
+    echo "    docbook"
+    echo "    phpbb"
     exit 1
 }
+
 
 function inst_apache
 {
     if [ "$TYPE" = "--prefork" ]; then
-        install_packages \
+        $INSTALLCMD \
             ossxp-apache2-mpm-prefork ossxp-apache2-doc \
             ossxp-apache2 
     else
-        install_packages \
+        $INSTALLCMD \
             ossxp-apache2-mpm-worker ossxp-apache2-doc \
             ossxp-apache2 
     fi
 }
 
+
+function inst_gosa
+{
+    $INSTALLCMD \
+            ossxp-gosa ossxp-gosa-schema ossxp-ldap
+}
+
+
+function inst_docbook
+{
+    $INSTALLCMD \
+            ossxp-docbook
+}
+
+
 function inst_php
 {
     if [ "$TYPE" = "--prefork" ]; then
-        install_packages \
+        $INSTALLCMD \
             ossxp-php5-common ossxp-libapache2-mod-php5 \
             ossxp-php5-cgi ossxp-php5-cli ossxp-php5 \
             ossxp-php5-gd ossxp-php5-mysql 
     else
-        install_packages \
+        $INSTALLCMD \
             ossxp-php5-common-mt ossxp-libapache2-mod-php5-mt \
             ossxp-php5-cgi-mt ossxp-php5-cli-mt ossxp-php5-mt \
             ossxp-php5-gd-mt ossxp-php5-mysql-mt 
     fi
 }
 
+
 function inst_svn
 {
-    if [ "$TYPE" = "--prefork" ]; then
-        install_packages \
+    $INSTALLCMD \
             ossxp-libsvn1 ossxp-libapache2-svn ossxp-libsvn-doc \
-            ossxp-subversion ossxp-subversion-tools ossxp-python-subversion 
-    else
-        install_packages \
-            ossxp-libsvn1 ossxp-libapache2-svn ossxp-libsvn-doc \
-            ossxp-subversion ossxp-subversion-tools ossxp-python-subversion 
-    fi
+            ossxp-subversion ossxp-subversion-tools ossxp-python-subversion \
+            ossxp-svn-client ossxp-svn-server
 }
+
 
 function inst_mailman
 {
-    install_packages \
+    $INSTALLCMD \
         ossxp-mailman 
 }
 
+
+function inst_mysql
+{
+    $INSTALLCMD \
+        mysql-server
+}
+
+
+function inst_mwiki
+{
+    $INSTALLCMD \
+        ossxp-mediawiki ossxp-mediawiki-math
+        # ossxp-mediawiki-style-worldhello
+}
+
+
 function inst_mantis
 {
-    install_packages \
-        ossxp-mantis 
+    $INSTALLCMD \
+        ossxp-mantis ossxp-linux-fonts 
+	# ossxp-mantis-theme-worldhello
+}
+
+
+function inst_phpbb
+{
+    $INSTALLCMD \
+        ossxp-phpbb \
+	ossxp-phpbb-avatars \
+        ossxp-phpbb-language-zh \
+        ossxp-phpbb-smiles 
+        # ossxp-phpbb-style-worldhello
 }
 
 ########################################
@@ -94,43 +141,68 @@ while [ $# -gt 0 ]; do
         TYPE=$1
         ;;
     -*)
+        echo -e "[1mError: unknown option: $1[0m"
         usage
         ;;
+
+    lamp)
+        cmd_mysql=1
+        cmd_apache=1
+        cmd_php=1
+        ;;
+
+    apache)
+        cmd_apache=1
+        ;;
+
+    php)
+        cmd_php=1
+        ;;
+
+    subversion|svn)
+        cmd_svn=1
+        ;;
+
+    mailman)
+	cmd_mailman=1
+        ;;
+
+    mantis)
+        cmd_mantis=1
+        ;;
+
+    mwiki)
+        cmd_mwiki=1
+        ;;
+
+    gosa)
+        cmd_gosa=1
+        ;;
+
+    docbook)
+        cmd_docbook=1
+        ;;
+
+    phpbb)
+        cmd_phpbb=1
+        ;;
+
     *)
-        SERVERS="$SERVERS $1"
+        echo -e "[1mError: unknown command: $1[0m"
+        usage
+        ;;
     esac
     shift
 done
 
-for srv in $SERVERS; do
-    case $srv in
-    apache)
-        inst_apache
-        ;;
-
-    php)
-        sh $0 $TYPE apache
-        inst_php
-        ;;
-
-    subversion|svn)
-        sh $0 $TYPE apache
-        inst_svn
-        ;;
-
-    mailman)
-        sh $0 $TYPE apache
-        inst_mailman
-        ;;
-
-    mantis)
-        sh $0 $TYPE php
-        inst_mantis
-        ;;
-
-    *)
-        usage
-        ;;
-    esac
-done
+[ ! -z $cmd_mysql   ] && inst_mysql
+[ ! -z $cmd_apache  ] && inst_apache
+[ ! -z $cmd_php     ] && inst_php
+[ ! -z $cmd_svn     ] && inst_svn
+[ ! -z $cmd_mailman ] && inst_mailman
+[ ! -z $cmd_mantis  ] && inst_mantis
+[ ! -z $cmd_mwiki   ] && inst_mwiki
+[ ! -z $cmd_phpbb   ] && inst_phpbb
+[ ! -z $cmd_docbook ] && inst_docbook
+[ ! -z $cmd_gosa    ] && inst_gosa
 
