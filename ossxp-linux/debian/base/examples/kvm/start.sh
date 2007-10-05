@@ -14,8 +14,10 @@ if [ -f $CWD/config.vm ]; then
     . $CWD/config.vm
 else
 
-DISK_C=base.img
-DISK_D=swap.img
+HDA=base.img
+HDB=swap.img
+HDC=
+HDD=
 CDROM=/data/_iso/ubuntu/dvd/kubuntu-7.04-dvd-i386.iso
 
 ACPI=yes
@@ -85,15 +87,27 @@ fn_create_lock()
 # Main Function
 ############################################################
 
-if [ ! -z "$DISK_C" ]; then
-    if echo "$DISK_C" | egrep -qv "^/"; then
-        DISK_C=$CWD/$DISK_C
+if [ ! -z "$HDA" ]; then
+    if echo "$HDA" | egrep -qv "^/"; then
+        HDA=$CWD/$HDA
     fi
 fi
 
-if [ ! -z "$DISK_D" ]; then
-    if echo "$DISK_D" | egrep -qv "^/"; then
-        DISK_D=$CWD/$DISK_D
+if [ ! -z "$HDB" ]; then
+    if echo "$HDB" | egrep -qv "^/"; then
+        HDB=$CWD/$HDB
+    fi
+fi
+
+if [ ! -z "$HDC" ]; then
+    if echo "$HDC" | egrep -qv "^/"; then
+        HDC=$CWD/$HDC
+    fi
+fi
+
+if [ ! -z "$HDD" ]; then
+    if echo "$HDD" | egrep -qv "^/"; then
+        HDD=$CWD/$HDD
     fi
 fi
 
@@ -103,7 +117,8 @@ if [ ! -z "$CDROM" ]; then
     fi
 fi
 
-if echo $ACPI|egrep -iq "^no"; then opt_acpi="-no-acpi"
+if echo $ACPI|egrep -iq "^no"; then 
+    opt_acpi="-no-acpi"
 fi
 
 if [ ! -z "$MEMORY" ] && [ "$MEMORY" -gt 128 ]; then
@@ -157,16 +172,28 @@ if echo $STDVGA|egrep -iq "^yes"; then
     opt_std_vga=-std-vga
 fi
 
-if [ ! -z "$DISK_C" ]; then
-    opt_disk_c="-hda $DISK_C"
+if [ ! -z "$HDA" ]; then
+    opt_hda="-hda $HDA"
 else
-    opt_disk_c=
+    opt_hda=
 fi
 
-if [ ! -z "$DISK_D" ]; then
-    opt_disk_d="-hdb $DISK_D"
+if [ ! -z "$HDB" ]; then
+    opt_hdb="-hdb $HDB"
 else
-    opt_disk_d=
+    opt_hdb=
+fi
+
+if [ ! -z "$HDC" ]; then
+    opt_hdc="-hdc $HDC"
+else
+    opt_hdc=
+fi
+
+if [ ! -z "$HDD" ]; then
+    opt_hdd="-hdd $HDD"
+else
+    opt_hdd=
 fi
 
 if [ ! -z "$CDROM" ]; then
@@ -181,11 +208,12 @@ if [ ! -z "$BOOT" ]; then
     opt_boot="-boot $BOOT"
 fi
 
-if [ ! -z $DISK_C ] && [ -f $DISK_C ] && [ ! -w $DISK_C ]  ; then
-    echo "Disk c image is readonly, using snapshot mode"
-    opt_snapshot="-snapshot"
-fi
-
+for disk in $HDA $HDB $HDC $HDD; do
+    if [ ! -z $disk ] && lsattr $disk | cut -d" " -f1 | grep -q "i" ; then
+      echo -e "[1mImage($(basename $disk)) is readonly, using snapshot mode![0m"
+      opt_snapshot="-snapshot"
+  fi
+done
 
 while [ $# -gt 0 ]; do
   case $1 in
@@ -223,6 +251,9 @@ while [ $# -gt 0 ]; do
        shift
        opt_mem="-m $1"
        ;;
+    -no-acpi)
+       opt_acpi="-no-acpi"
+       ;;
     -acpi)
        opt_acpi=
        ;;
@@ -248,8 +279,7 @@ CMD="sudo $KVMCMD \
     $opt_localtime \
     $opt_smp \
     $opt_mem \
-    $opt_disk_c \
-    $opt_disk_d \
+    $opt_hda $opt_hdb $opt_hdc $opt_hdd \
     $opt_cdrom \
     $opt_boot \
     $opt_display \
@@ -264,6 +294,12 @@ CMD="sudo $KVMCMD \
 echo "======================================================================"
 echo $CMD
 echo "======================================================================"
+
+if [ ! -z "$opt_snapshot" ]; then
+    echo ""
+    echo -e "[1mWarning: Running VM in 'snapshot' mode!!![0m"
+    echo -e "[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m"
+fi
 
 #[ -t ] && (echo "press any key..."; read x; )
 
