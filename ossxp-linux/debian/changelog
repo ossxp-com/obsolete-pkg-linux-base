@@ -1,6 +1,7 @@
-ossxp-linux (1.21) unstable; urgency=low
+ossxp-linux (1.22) unstable; urgency=low
 
   * new install scripts: use apt-cache policy to check package version;
+  * add interactive install mode in apt.inc;
 
  -- Jiang Xin <jiangxin@foo.bar>  Fri, 05 Oct 2007 14:18:15 +0800
 
