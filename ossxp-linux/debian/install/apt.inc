@@ -64,4 +64,66 @@ function install_packages()
     fi
 }
 
+########################################
+# uninstall packages only necessary
+########################################
+function uninstall_packages()
+{
+    delete_list=
+    ignore_list=
+    interactive="no"
+    dryrun="no"
+    packages=
+
+    while [ $# -gt 0 ]; do
+        if [ "$1" = "-" ] ; then
+		while read item; do
+		    if [ "$item" != "-" ]; then
+			packages="$packages $item"
+		    fi
+		done
+	elif [ "$1" = "-n" ]; then
+        	dryrun="yes"
+	elif [ "$1" = "-i" ]; then
+        	interactive="yes"
+	else
+		packages="$packages $1"
+	fi
+        shift
+    done
+
+    for item in $packages; do
+	INSTALLED=$(LC_ALL=C apt-cache policy $item 2>/dev/null | grep Installed  -n | cut -d":" -f3 | sed -e "s/ //g")
+	#CANDIDATE=$(LC_ALL=C apt-cache policy $item 2>/dev/null | grep Candidate  -n | cut -d":" -f3)
+	if [ -z "$INSTALLED" ]; then
+	    ignore_list="$ignore_list $item"
+	elif [ "$INSTALLED" = "(none)" ]; then
+	    ignore_list="$ignore_list $item"
+	else
+	    delete_list="$delete_list $item"
+	fi
+    done
+
+    if [ ! -z "$ignore_list" ]; then
+        echo -e "Packages not yet installed :"
+        echo $ignore_list
+        echo ""
+    fi
+    if [ -z "$delete_list" ]; then
+        echo -e "Nothing will be uninstalled."
+        echo ""
+    else
+        echo -e "[1mFollowing packages will be uninstalled:[0m"
+        echo $delete_list
+        read -p "Press any key ..." -s -n1
+        echo ""
+	if [ "$dryrun" = "yes" ]; then
+            dpkg --dry-run --remove $delete_list
+	else
+            dpkg --remove $delete_list || echo -e "[1m[44minstall failed! [0m"
+	fi
+        echo ""
+    fi
+}
+
 

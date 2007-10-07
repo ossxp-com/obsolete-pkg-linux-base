@@ -13,11 +13,12 @@ fi
 SCRIPTNAME=`basename $0`
 TYPE="--thread"
 INSTALLCMD="install_packages -i"
+UNINSTALL=
 
 function usage()
 {
     echo "Usage:"
-    echo "    $SCRIPTNAME [--prefork|--thread] <server> ..."
+    echo "    $SCRIPTNAME [--prefork|--thread] [--install|--uninstall] <server> ..."
     echo "Available Servers:"
     echo "    lamp --- mysql & apache & php"
     echo "    apache"
@@ -137,6 +138,14 @@ while [ $# -gt 0 ]; do
         TYPE=$1
         ;;
 
+    --install)
+        UNINSTALL=
+        ;;
+
+    --uninstall)
+        UNINSTALL="yes"
+        ;;
+
     --thread|--mpm|--worker)
         TYPE=$1
         ;;
@@ -195,14 +204,40 @@ while [ $# -gt 0 ]; do
     shift
 done
 
-[ ! -z $cmd_mysql   ] && inst_mysql
-[ ! -z $cmd_apache  ] && inst_apache
-[ ! -z $cmd_php     ] && inst_php
-[ ! -z $cmd_svn     ] && inst_svn
-[ ! -z $cmd_mailman ] && inst_mailman
-[ ! -z $cmd_mantis  ] && inst_mantis
-[ ! -z $cmd_mwiki   ] && inst_mwiki
-[ ! -z $cmd_phpbb   ] && inst_phpbb
-[ ! -z $cmd_docbook ] && inst_docbook
-[ ! -z $cmd_gosa    ] && inst_gosa
+if [ "$UNINSTALL" != "yes" ]; then
+	[ ! -z $cmd_mysql   ] && inst_mysql
+	[ ! -z $cmd_apache  ] && inst_apache
+	[ ! -z $cmd_php     ] && inst_php
+	[ ! -z $cmd_svn     ] && inst_svn
+	[ ! -z $cmd_mailman ] && inst_mailman
+	[ ! -z $cmd_mantis  ] && inst_mantis
+	[ ! -z $cmd_mwiki   ] && inst_mwiki
+	[ ! -z $cmd_phpbb   ] && inst_phpbb
+	[ ! -z $cmd_docbook ] && inst_docbook
+	[ ! -z $cmd_gosa    ] && inst_gosa
+elif [ "$UNINSTALL" = "yes" ]; then
+	INSTALLCMD="uninstall_packages "
 
+	if [ ! -z $cmd_apache ]; then
+		cmd_php=1
+		cmd_svn=1
+		cmd_mailman=1
+	fi
+	if [ ! -z $cmd_php ]; then
+		cmd_mantis=1
+		cmd_mwiki=1
+		cmd_phpbb=1
+		cmd_gosa=1
+	fi
+
+	[ ! -z $cmd_docbook ] && inst_docbook
+	[ ! -z $cmd_gosa    ] && inst_gosa
+	[ ! -z $cmd_mantis  ] && inst_mantis
+	[ ! -z $cmd_mwiki   ] && inst_mwiki
+	[ ! -z $cmd_phpbb   ] && inst_phpbb
+	[ ! -z $cmd_svn     ] && inst_svn
+	[ ! -z $cmd_mailman ] && inst_mailman
+	[ ! -z $cmd_php     ] && inst_php
+	[ ! -z $cmd_apache  ] && inst_apache
+	[ ! -z $cmd_mysql   ] && inst_mysql
+fi
