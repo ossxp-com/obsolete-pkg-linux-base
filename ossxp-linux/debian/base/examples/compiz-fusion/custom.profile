@@ -187,11 +187,11 @@ as_alldesktop_sticky_match = any
 
 [annotate]
 as_initiate_button = <Alt><Super>Button1
-as_draw_button = Disabled
+as_draw_button = <Alt><Super>Button2
 as_erase = <Alt><Super>Button3
 as_clear_key = <Alt><Super>k
 as_fill_color = #ff0000ff
-as_stroke_color = #00ff00ff
+as_stroke_color = #ffffffff
 
 [vpswitch]
 as_begin_key = Disabled
@@ -361,7 +361,7 @@ as_mipmaps = false
 as_bounce = true
 
 [scale]
-as_initiate_edge = TopRight
+as_initiate_edge = BottomRight
 as_initiate_key = <Shift><Alt>Up
 as_initiate_button = Disabled
 as_initiate_all_edge = 
@@ -523,9 +523,9 @@ s0_edgeflip_dnd = false
 
 [switcher]
 as_next_button = Disabled
-as_next_key = <Alt>Tab
+as_next_key = <Super>Tab
 as_prev_button = Disabled
-as_prev_key = <Shift><Alt>Tab
+as_prev_key = <Shift><Super>Tab
 as_next_all_button = Disabled
 as_next_all_key = Disabled
 as_prev_all_button = Disabled
@@ -561,9 +561,9 @@ as_initiate_all_key = Disabled
 as_initiate_all_button = Disabled
 as_initiate_all_edge = 
 as_terminate_button = Button3
-as_next_key = <Super>Tab
+as_next_key = <Alt>Tab
 as_next_button = Disabled
-as_prev_key = <Shift><Super>Tab
+as_prev_key = <Shift><Alt>Tab
 as_prev_button = Disabled
 as_next_all_key = <Alt><Super>Tab
 as_next_all_button = Disabled
@@ -692,7 +692,7 @@ s0_default_icon = icon
 s0_sync_to_vblank = true
 s0_number_of_desktops = 1
 s0_detect_outputs = true
-s0_outputs = 640x480+0+0
+s0_outputs = 1280x800+0+0
 s0_focus_prevention_match = any
 s0_opacity_matches = 
 s0_opacity_values = 
