@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import os, sys, re
+import os, sys, re, string
 
 VERSION_EQUAL=0
 VERSION_DIFF=1
@@ -25,6 +25,9 @@ def get_pkg_status(pkg):
 		if inst_version == '(none)':
 			inst_version = None
 			return VERSION_NOTINST
+	else:
+		return VERSION_UNKNOWN
+		
 
 	match=re.search('^[\s]*Candidate:[\s]*(.*)$', policy, re.M)
 	if match:
@@ -32,6 +35,9 @@ def get_pkg_status(pkg):
 		if cand_version == '(none)':
 			cand_version = None
 			return VERSION_UNKNOWN
+	else:
+		return VERSION_UNKNOWN
+
 
 	if inst_version != cand_version:
 		print "Package %s should be upgrade." % pkg    
@@ -42,9 +48,9 @@ def get_pkg_status(pkg):
 
 def check_package(pkg):
 	pkg = pkg.strip()
-	for pkgs in alike_pkgs:
-		if pkg in pkgs:
-			for item in pkgs:
+	for items in alike_pkgs:
+		if pkg in items:
+			for item in items:
 				status = get_pkg_status(item) 
 				if status == VERSION_EQUAL or status == VERSION_DIFF:
 					return (item, status)
@@ -59,7 +65,7 @@ def pre_check(packages):
 	notinst_list=[]
 	unknown_list=[]
 	for item in list:
-		print "check %s..." % item
+		# pkg_a | pkg_b means install one of them
 		split = item.split('|')
 		if len(split) > 1:
 			found = 0
@@ -99,8 +105,63 @@ def pre_check(packages):
 		VERSION_NOTINST: notinst_list }
 	return r
 
+def install_packages(list, interactive=1, dryrun=0):
+	lists = pre_check(list)
+	if lists[VERSION_UNKNOWN]:
+		print "These packages are not found for this distrabution:"
+		print lists[VERSION_UNKNOWN]
+	if lists[VERSION_EQUAL]:
+		print "Already installed packages:"
+		print lists[VERSION_EQUAL]
+	if lists[VERSION_NOTINST]:
+		print "[1mThese packages will be installed as new:[0m"
+		print lists[VERSION_NOTINST]
+	if lists[VERSION_DIFF]:
+		print "[1mThese packages will be upgrade:[0m"
+		print lists[VERSION_DIFF]
+
+	if interactive:
+		cmd = "apt-get install %s" % string.join(lists[VERSION_NOTINST] + lists[VERSION_DIFF], " ")
+	else:
+		#os.system("apt-get install --force-yes -y %" % )
+		cmd = "apt-get install --force-yes -y %s" % string.join(lists[VERSION_NOTINST] + lists[VERSION_DIFF], " ")
+
+	print "Will running: [1m%s[0m" % cmd
+	if interactive:
+		raw_input ("Press any key...")
+	if not dryrun:
+		pass
+		#os.system(cmd)
+		
+
+def uninstall_packages(list, interactive=1, dryrun=0):
+	lists = pre_check(list)
+	if lists[VERSION_UNKNOWN]:
+		print "These packages are not found for this distrabution:"
+		print lists[VERSION_UNKNOWN]
+	if lists[VERSION_NOTINST]:
+		print "[1mThese packages not installed yet:[0m"
+		print lists[VERSION_NOTINST]
+	if lists[VERSION_EQUAL] or lists[VERSION_DIFF]:
+		print "These packages will be REMOVED!!!:"
+		print lists[VERSION_EQUAL]
+		print lists[VERSION_DIFF]
+
+	if dryrun:
+		cmd = "dpkg --dry-run --remove %s" % string.join(lists[VERSION_EQUAL] + lists[VERSION_DIFF], " ")
+	else:
+		cmd = "dpkg --remove %s" % string.join(lists[VERSION_EQUAL] + lists[VERSION_DIFF], " ")
+
+	print "Will running: [1m%s[0m" % cmd
+	if interactive:
+		raw_input ("Press any key...")
+	#os.system(cmd)
+		
+
 #print "%s return %s" % ('acl', check_package('acl'))
 #print "%s return %s" % ('xxx', check_package('xxx'))
 #print "%s return %s" % ('apache', check_package('apache2-mpm-prefork'))
 
-pre_check("a, b, c, d | e, acl, kde, hal, libhal-storage1, libhal1, exim4-daemon-light , gnome") 
+#pre_check("a, b, c, d | e, acl, kde, hal, libhal-storage1, libhal1, exim4-daemon-light , gnome") 
+install_packages ("a, b, c, d | e, acl, kde, hal, libhal-storage1, libhal1, exim4-daemon-light , gnome") 
+uninstall_packages ("a, b, c, d | e, acl, libhal1, gnome") 
