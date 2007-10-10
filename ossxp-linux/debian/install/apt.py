@@ -1,11 +1,99 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
-import os, sys, re, string
+'''PROGRAM INTRODUCTION
+
+Usage: %(PROGRAM)s [options]
+
+Options:
+
+    -h|--help
+        Print this message and exit.
+    -i|--interactive
+        Run in interactive mode
+    -b|--batch
+        Run in batch mode
+    -n|--dryrun
+        Dryrun mode: acturally, do not run
+'''
+
+
+import os, sys, re, string, getopt
+
 
 VERSION_EQUAL=0
 VERSION_DIFF=1
 VERSION_UNKNOWN=2
 VERSION_NOTINST=3
+
+
+def usage(code, msg=''):
+	if code:
+		fd = sys.stderr
+	else:
+		fd = sys.stdout
+	print >> fd, __doc__
+	if msg:
+		print >> fd, msg
+	sys.exit(code)
+
+def run(*argv):
+	interactive = 1
+	dryrun = 1
+	list = ""
+	install = 1
+
+	# if argv passed from sys.argv, argv[0] should pass to getopt
+	if len(argv) == 1:
+		argv=argv[0]
+
+	try:
+		opts, args = getopt.getopt(
+			argv, "hiIbn", 
+			["help", "install", "remove", "interactive", "batch", "no-interactive", "dryrun"])
+	except getopt.error, msg:
+		return usage(1, msg)
+
+	for opt, arg in opts:
+		if opt in ('-h', '--help'):
+			return usage(0)
+		elif opt in ('-i', '--interactive'):
+			interactive = 1
+		elif opt in ('-I', '-b', '--batch', '--no-interactive'):
+			interactive = 0
+		elif opt in ('-n', '--dryrun'):
+			dryrun = 1
+		elif opt in ('--install'):
+			install = 1
+		elif opt in ('--remove'):
+			install = 0
+	print "interactive: %d" % interactive
+	print "dryrun: %d" % dryrun
+
+	if len(args) == 0:
+		return usage(1)
+
+	for item in args:
+		if item == '-':
+			item = ''
+			while 1:
+				try:
+					line = raw_input()
+					if item == '':
+						item = line
+					else:
+						item = "%s, %s" % (item, line)
+				except EOFError:
+					break
+		if list == '':
+			list = item
+		else:
+			list = "%s, %s" % (list, item)
+
+	print "list is : %s" % list
+	if install:
+		process_packages(list, install_mode=1, interactive=interactive, dryrun=dryrun)
+	else:
+		process_packages(list, install_mode=0, interactive=interactive, dryrun=dryrun)
 
 alike_pkgs = (
 	( 'exim4-daemon-light', 'exim4-daemon-heavy', 'exim4-daemon-custom', ),
@@ -81,7 +169,6 @@ def pre_check(packages):
 					found = 1
 					break
 			if found:
-				found = 0
 				continue
 
 		pkg = split[0]
@@ -105,63 +192,76 @@ def pre_check(packages):
 		VERSION_NOTINST: notinst_list }
 	return r
 
-def install_packages(list, interactive=1, dryrun=0):
+def process_packages(list, install_mode=1, interactive=1, dryrun=1):
 	lists = pre_check(list)
-	if lists[VERSION_UNKNOWN]:
-		print "These packages are not found for this distrabution:"
-		print lists[VERSION_UNKNOWN]
-	if lists[VERSION_EQUAL]:
-		print "Already installed packages:"
-		print lists[VERSION_EQUAL]
-	if lists[VERSION_NOTINST]:
-		print "[1mThese packages will be installed as new:[0m"
-		print lists[VERSION_NOTINST]
-	if lists[VERSION_DIFF]:
-		print "[1mThese packages will be upgrade:[0m"
-		print lists[VERSION_DIFF]
+	if install_mode:
+		if lists[VERSION_UNKNOWN]:
+			print "These packages are not found for this distrabution:"
+			print lists[VERSION_UNKNOWN]
+		if lists[VERSION_EQUAL]:
+			print "Already installed packages:"
+			print lists[VERSION_EQUAL]
+		if lists[VERSION_NOTINST]:
+			print "[1mThese packages will be installed as new:[0m"
+			print lists[VERSION_NOTINST]
+		if lists[VERSION_DIFF]:
+			print "[1mThese packages will be upgrade:[0m"
+			print lists[VERSION_DIFF]
 
-	if interactive:
-		cmd = "apt-get install %s" % string.join(lists[VERSION_NOTINST] + lists[VERSION_DIFF], " ")
+		if not lists[VERSION_NOTINST] and not lists[VERSION_DIFF]:
+			print "No packages will be install."
+			return
 	else:
-		#os.system("apt-get install --force-yes -y %" % )
-		cmd = "apt-get install --force-yes -y %s" % string.join(lists[VERSION_NOTINST] + lists[VERSION_DIFF], " ")
+		if lists[VERSION_UNKNOWN]:
+			print "These packages are not found for this distrabution:"
+			print lists[VERSION_UNKNOWN]
+		if lists[VERSION_NOTINST]:
+			print "[1mThese packages not installed yet:[0m"
+			print lists[VERSION_NOTINST]
+		if lists[VERSION_EQUAL] or lists[VERSION_DIFF]:
+			print "These packages will be REMOVED!!!:"
+			print lists[VERSION_EQUAL]
+			print lists[VERSION_DIFF]
+
+		if not lists[VERSION_EQUAL] and not lists[VERSION_DIFF]:
+			print "No packages will be removed."
+			return
+
+	if install_mode:
+		if interactive:
+			cmd = "apt-get install %s" % string.join(lists[VERSION_NOTINST] + lists[VERSION_DIFF], " ")
+		else:
+			#os.system("apt-get install --force-yes -y %" % )
+			cmd = "apt-get install --force-yes -y %s" % string.join(lists[VERSION_NOTINST] + lists[VERSION_DIFF], " ")
+	else:
+		if dryrun:
+			cmd = "dpkg --dry-run --remove %s" % string.join(lists[VERSION_EQUAL] + lists[VERSION_DIFF], " ")
+		else:
+			cmd = "dpkg --remove %s" % string.join(lists[VERSION_EQUAL] + lists[VERSION_DIFF], " ")
+
 
 	print "Will running: [1m%s[0m" % cmd
 	if interactive:
 		raw_input ("Press any key...")
-	if not dryrun:
-		pass
-		#os.system(cmd)
-		
 
-def uninstall_packages(list, interactive=1, dryrun=0):
-	lists = pre_check(list)
-	if lists[VERSION_UNKNOWN]:
-		print "These packages are not found for this distrabution:"
-		print lists[VERSION_UNKNOWN]
-	if lists[VERSION_NOTINST]:
-		print "[1mThese packages not installed yet:[0m"
-		print lists[VERSION_NOTINST]
-	if lists[VERSION_EQUAL] or lists[VERSION_DIFF]:
-		print "These packages will be REMOVED!!!:"
-		print lists[VERSION_EQUAL]
-		print lists[VERSION_DIFF]
-
-	if dryrun:
-		cmd = "dpkg --dry-run --remove %s" % string.join(lists[VERSION_EQUAL] + lists[VERSION_DIFF], " ")
+	if install_mode:
+		if not dryrun:
+			pass
+			os.system(cmd)
 	else:
-		cmd = "dpkg --remove %s" % string.join(lists[VERSION_EQUAL] + lists[VERSION_DIFF], " ")
-
-	print "Will running: [1m%s[0m" % cmd
-	if interactive:
-		raw_input ("Press any key...")
-	#os.system(cmd)
+		os.system(cmd)
 		
 
-#print "%s return %s" % ('acl', check_package('acl'))
-#print "%s return %s" % ('xxx', check_package('xxx'))
-#print "%s return %s" % ('apache', check_package('apache2-mpm-prefork'))
+def main(argv=None):
+	if argv is None:
+		argv = sys.argv
+	run(argv[1:])
 
-#pre_check("a, b, c, d | e, acl, kde, hal, libhal-storage1, libhal1, exim4-daemon-light , gnome") 
-install_packages ("a, b, c, d | e, acl, kde, hal, libhal-storage1, libhal1, exim4-daemon-light , gnome") 
-uninstall_packages ("a, b, c, d | e, acl, libhal1, gnome") 
+if __name__ == "__main__":
+	#pre_check("a, b, c, d | e, acl, kde, hal, libhal-storage1, libhal1, exim4-daemon-light , gnome") 
+
+	#process_packages ("a, b, c, d | e, acl, kde, hal, libhal-storage1, libhal1, exim4-daemon-light , gnome") 
+	#process_packages ("a, b, c, d | e, acl, libhal1, gnome", '--remove') 
+
+	sys.exit(main())
+
