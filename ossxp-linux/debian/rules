@@ -59,7 +59,7 @@ clean:
 
 install: build install-indep install-arch
 	for pkg in `awk '/^Package:/ { print $$2 }' debian/control`; do \
-		script=$${pkg#ossxp-linux-}.sh ;\
+		script=$${pkg#ossxp-linux-}.py ;\
 		if [ -f debian/install/$$script ]; then \
 			mkdir -p debian/$$pkg/opt/ossxp/install/ ;\
 			install -m 750 debian/install/$$script debian/$$pkg/opt/ossxp/install/ ;\

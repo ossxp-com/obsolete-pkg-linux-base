@@ -57,7 +57,7 @@ def usage(code, msg=''):
 def run(*argv):
 	global verbose
 	interactive = 1
-	dryrun = 1
+	dryrun = 0
 	list = ""
 	install = 1
 
@@ -89,8 +89,6 @@ def run(*argv):
 			install = 1
 		elif opt in ('--remove'):
 			install = 0
-	vprint ("interactive: %d" % interactive)
-	vprint ("dryrun: %d" % dryrun)
 
 	if len(args) == 0:
 		return usage(1)
@@ -112,7 +110,6 @@ def run(*argv):
 		else:
 			list = "%s, %s" % (list, item)
 
-	vprint ("list is : %s" % list)
 	if install:
 		process_packages(list, install_mode=1, interactive=interactive, dryrun=dryrun)
 	else:
@@ -333,11 +330,13 @@ def process_packages(list, install_mode=1, interactive=1, dryrun=1):
 	print "Will running: [1m%s[0m" % cmd
 	if interactive:
 		raw_input ("Press any key...")
-
+	print "install_mod: %d, dryrun:%d" % (install_mode, dryrun)
 	if install_mode:
 		if not dryrun:
+			vprint ( "Running: %s" % cmd)
 			os.system(cmd)
 	else:
+		vprint ( "Running: %s" % cmd)
 		os.system(cmd)
 		
 

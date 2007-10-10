@@ -115,8 +115,10 @@ def main(argv=None):
 			dryrun = 1
 		elif opt in ('-v', '--verbose'):
 			verbose = 1
+			apt.verbose = 1
 		elif opt in ('-q', '--quiet'):
 			verbose = 0
+			apt.verbose = 0
 		else:
 			return usage(1, "Wrong options: %s %s", (opt,arg))
 
@@ -129,7 +131,7 @@ def main(argv=None):
 				print "%s already installed." % os.path.basename(sys.argv[0])
 				return(0)
 
-			depends=["desktop-core.py"]
+			depends=["desktop-light.py"]
 			for pkg in depends:
 				cmd="python %s %s" % (pkg, string.join(argv[1:]," "))
 				print "[1mDepends on %s, run: %s[0m" % (pkg, cmd)

@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-#
+#!/usr/bin/env python #
 '''PROGRAM INTRODUCTION
 
 Usage: %(PROGRAM)s [options] [install] [config]
@@ -99,8 +98,10 @@ def main(argv=None):
 			dryrun = 1
 		elif opt in ('-v', '--verbose'):
 			verbose = 1
+			apt.verbose = 1
 		elif opt in ('-q', '--quiet'):
 			verbose = 0
+			apt.verbose = 0
 		else:
 			return usage(1, "Wrong options: %s %s", (opt,arg))
 
