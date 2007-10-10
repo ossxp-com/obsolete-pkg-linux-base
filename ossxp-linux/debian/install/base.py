@@ -202,6 +202,10 @@ caption always "%{= kw}%-Lw%{= BW}%n %t%{-}%+w %-= @%H - %Y/%m/%d, %C"
 
 def main(argv=None):
 	global interactive, dryrun, verbose
+
+	if os.getuid() != 0:
+		return usage(1, "Error: not try this, only root user can!")
+
 	if argv is None:
 		argv = sys.argv
 	try:
