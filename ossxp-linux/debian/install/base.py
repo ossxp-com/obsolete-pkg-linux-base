@@ -39,12 +39,13 @@ PKG_LIST='''
 ############################################################
 
 
-import apt, os, sys, getopt
+import apt, os, sys, re, string, getopt
 
 
 interactive = 1
 dryrun  = 0
 verbose = 1
+STAMPFILE = ".base.done"
 
 
 def usage(code, msg=''):
@@ -123,7 +124,13 @@ def main(argv=None):
 
 	for arg in args:
 		if arg in ('install'):
+			if os.path.exists(STAMPFILE):
+				print "%s already installed." % os.path.basename(sys.argv[0])
+				return(0)
+
 			do_install()
+
+			os.system('touch %s' % STAMPFILE)
 		if arg in ('config'):
 			do_config()
 

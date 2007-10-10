@@ -46,12 +46,13 @@ PKG_LIST='''
 ############################################################
 
 
-import apt, os, sys, getopt
+import apt, os, sys, getopt, string
 
 
 interactive = 1
 dryrun  = 0
 verbose = 1
+STAMPFILE = ".devel.done"
 
 
 def usage(code, msg=''):
@@ -115,7 +116,19 @@ def main(argv=None):
 
 	for arg in args:
 		if arg in ('install'):
+			if os.path.exists(STAMPFILE):
+				print "%s already installed." % os.path.basename(sys.argv[0])
+				return(0)
+
+			depends=["base.py"]
+			for pkg in depends:
+				cmd="python %s %s" % (pkg, string.join(argv[1:]," "))
+				print "[1mDepends on %s, run: %s[0m" % (pkg, cmd)
+				os.system(cmd)
+
 			do_install()
+
+			os.system('touch %s' % STAMPFILE)
 		if arg in ('config'):
 			do_config()
 
