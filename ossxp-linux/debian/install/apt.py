@@ -145,22 +145,22 @@ def get_pkg_status(pkg):
 	match=re.search('^[\s]*Installed:[\s]*(.*)$', policy, re.M)
 	if match:
 		inst_version = match.group(1)
-		if inst_version == '(none)':
-			inst_version = None
-			return VERSION_NOTINST
 	else:
 		return VERSION_UNKNOWN
-		
-
+	
 	match=re.search('^[\s]*Candidate:[\s]*(.*)$', policy, re.M)
 	if match:
 		cand_version = match.group(1)
-		if cand_version == '(none)':
-			cand_version = None
-			return VERSION_UNKNOWN
 	else:
 		return VERSION_UNKNOWN
 
+	if cand_version == '(none)':
+		cand_version = None
+		return VERSION_UNKNOWN
+
+	if inst_version == '(none)':
+		inst_version = None
+		return VERSION_NOTINST
 
 	if inst_version != cand_version:
 		vprint ("Package %s should be upgrade." % pkg)
@@ -168,6 +168,7 @@ def get_pkg_status(pkg):
 	else:
 		vprint ("Package %s already installed." % pkg)
 		return VERSION_EQUAL
+
 
 def check_package(pkg):
 	pkg = pkg.strip()
