@@ -28,7 +28,7 @@ list
 '''
 
 
-import os, sys, re, string, getopt
+import os, sys, re, string, getopt, tempfile, shutil
 
 
 VERSION_EQUAL=0
@@ -232,6 +232,56 @@ def pre_check(packages):
 		VERSION_UNKNOWN: unknown_list,
 		VERSION_NOTINST: notinst_list }
 	return r
+
+
+def config_file_append(conffile, patch):
+	if not os.path.exists(conffile):
+		return 1
+	if not patch.has_key('stamp_before') or not patch['stamp_before'] or not patch.has_key('stamp_end') or not patch['stamp_end']:
+		return 2
+
+	buff = open(conffile).read()
+
+	if patch.has_key('precheck_deny') and patch['precheck_deny']:
+		if re.match(patch['precheck_deny'], buff, re.DOTALL):
+			vprint ("Match %s, not modify config file %s" % (patch['precheck_deny'], conffile) )
+			return 0
+	if patch.has_key('precheck_pass') and patch['precheck_pass']:
+		if not re.match(patch['precheck_pass'], buff, re.DOTALL):
+			vprint ("Not match %s, not modify config file %s" % (patch['precheck_deny'], conffile) )
+			return 0
+
+	p = re.compile('^(.*)%s.*%s(.*)$' % (patch['stamp_before'],patch['stamp_end']), re.DOTALL)
+	m = p.match(buff)
+
+	if m:
+		vprint ("Find stamp_before and stamp_end in %s" % conffile)
+		buff=m.group(1) + patch['stamp_before'] + patch['append'] + patch['stamp_end'] + m.group(2)
+	else:
+		vprint ("Not find stamp tag, append to file %s" % conffile)
+		buff=buff + patch['stamp_before'] + patch['append'] + patch['stamp_end'] + '\n'
+	
+	fd, tmpfile = tempfile.mkstemp(suffix=".tmp", text=True)
+	os.write(fd,buff)
+	os.close(fd)
+	diff=os.popen('diff -u %s %s' % (conffile, tmpfile)).read()
+	if len(diff) > 0:
+		print "[1m%s will be modified:[0m" % conffile
+		print diff
+		while 1:
+			choice = raw_input('Change config file ? (y/n)')[:1]
+			if choice in ['n', 'N']:
+				os.unlink(tmpfile)
+				vprint ("%s not modified." % conffile)
+				break
+			elif choice in ['y', 'Y']:
+				shutil.move(tmpfile, conffile)
+				if patch.has_key('filemod') and patch['filemod']:
+					os.chmod( conffile, int(patch['filemod'],8) )
+					vprint ("change filemode to %d" % int(patch['filemod']) )
+				vprint ("[1m%s modified successful.[0m" % conffile)
+				break
+
 
 def process_packages(list, install_mode=1, interactive=1, dryrun=1):
 	lists = pre_check(list)
