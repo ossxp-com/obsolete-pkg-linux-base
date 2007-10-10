@@ -15,11 +15,11 @@ case "$1" in
     ;;
 esac
 
-SCRIPT=/opt/ossxp/install/base.sh
+SCRIPT=/opt/ossxp/install/base.py
 [ -x $SCRIPT ] && $SCRIPT config
 
 cat <<EOF
 [1mrun this command as root:
-[1m[44m	/opt/ossxp/install/base.sh install config
+[1m[44m	/opt/ossxp/install/base.py install config
 [0m
 EOF

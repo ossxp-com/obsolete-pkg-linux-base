@@ -2,6 +2,6 @@
 
 cat <<EOF
 [1mrun this command as root:
-[1m[44m	/opt/ossxp/install/desktop-heavy.sh
+[1m[44m	/opt/ossxp/install/desktop-heavy.py
 [0m
 EOF

@@ -6,7 +6,7 @@ fi
 
 cat <<EOF
 [1mrun this command as root:
-[1m[44m	/opt/ossxp/install/desktop-core.sh
+[1m[44m	/opt/ossxp/install/desktop-core.py
 [0m
 EOF
 
