@@ -28,8 +28,15 @@ Actions:
 
 ############################################################
 PKG_LIST='''
-	xfce4, xdm, xscreensaver,
+	xfce4, xdm, xscreensaver, 
+	epiphany-browser, konsole, 
+	firestarter | shorewall | guarddog | guidedog | kmyfirewall, 
+	alsa-base, alsa-oss, 
+	tsclient, xvncviewer, 
+	d4x, ossxp-freemind, 
 	'''
+
+# foomatic-gui, foomatic-filters-ppds, foomatic-db-hpijs, foomatic-db-gutenprint, 
 ############################################################
 
 

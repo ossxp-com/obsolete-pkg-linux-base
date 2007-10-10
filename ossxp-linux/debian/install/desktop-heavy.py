@@ -29,18 +29,25 @@ Actions:
 ############################################################
 PKG_LIST='''
 	kde, kdm, kde-i18n-zhcn, kde-i18n-zhtw, 
-	amarok, mozilla-firefox, mozilla-firefox-locale-zh-cn, 
+	mozilla-firefox, mozilla-firefox-locale-zh-cn, 
 	mozilla-thunderbird, mozilla-thunderbird-inspector, mozilla-thunderbird-typeaheadfind, thunderbird-locale-zh-cn, 
+	cupsys-client, cupsys-driver-gutenprint, cupsys, cups-pdf, cupsys-bsd, printconf, xsane, 
+	kate, quanta, 
+	amarok, mplayer, 
 	nessusd, nessus, nmapfe, flashplugin-nonfree, 
+	gq, meld, azureus, amule, 
 	kompare, cervisia, kdesvn, kdevelop3, kdevelop, 
 	evince, kchmviewer, gthumb, gimp, inkscape, 
 	gspca-source, ndiswrapper-source, ndiswrapper-utils, module-assistant, 
 	gtkam, kphotoalbum, gphoto2, 
 	kino, kinoplugs, 
-	tightvncserver, 
+	tightvncserver, krfb, krdc, 
 	pidgin, ekiga, v4l-config, libsdl1.2debian-all, 
-	wine, wine-utils, 
+	wine, wine-utils,
+	kvm, qemu, 
 	'''
+
+# Games: pingus, lbreakout2, supertux,
 ############################################################
 
 
