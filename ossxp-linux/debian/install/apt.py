@@ -272,7 +272,6 @@ def process_packages(list, install_mode=1, interactive=1, dryrun=1):
 		if interactive:
 			cmd = "apt-get install %s" % string.join(lists[VERSION_NOTINST] + lists[VERSION_DIFF], " ")
 		else:
-			#os.system("apt-get install --force-yes -y %" % )
 			cmd = "apt-get install --force-yes -y %s" % string.join(lists[VERSION_NOTINST] + lists[VERSION_DIFF], " ")
 	else:
 		if dryrun:
@@ -287,7 +286,6 @@ def process_packages(list, install_mode=1, interactive=1, dryrun=1):
 
 	if install_mode:
 		if not dryrun:
-			pass
 			os.system(cmd)
 	else:
 		os.system(cmd)

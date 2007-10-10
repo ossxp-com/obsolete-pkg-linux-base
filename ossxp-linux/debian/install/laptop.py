@@ -28,13 +28,9 @@ Actions:
 
 ############################################################
 PKG_LIST='''
-	acl, apt-show-versions, ascii, autofs, bsdutils, bridge-utils, bzip2, curl, cabextract, 
-	dstat, ethtool, file, fping, flexbackup, fuse-utils, 
-	gnupg, htop, ia32-libs, ia32-libs-gtk, indent, iproute, 
-	less, locales, lynx, ntfs-3g, ntpdate, nmap, ngrep, 
-	openssl, p7zip-full, pciutils, perl, psmisc, 
-	rdiff-backup, saidar, screen, shellutils, ssh, star, sudo, sysstat, sysutils, tcpdump, 
-	udev, unison, vim, vnstat, wget, zhcon, 
+	acpi, acpid, acpi-support, acpitool, anacron, cpufrequtils, 
+	hdparm, sdparm, hotkeys, laptop-mode-tools, 
+	pcmciautils, powersaved, hotkey-setup, hibernate, uswsusp, 
 	'''
 ############################################################
 
@@ -44,8 +40,8 @@ import apt, os, sys, re, string, getopt
 
 interactive = 1
 dryrun  = 0
-verbose = 0
-STAMPFILE = ".base.done"
+verbose = 1
+STAMPFILE = ".laptop.done"
 
 
 def usage(code, msg=''):
@@ -73,21 +69,6 @@ def do_install():
 		args.append('-q')
 	args.append('--install')
 		
-	print "[1m========== Install debian standard packages ==========[0m"
-	cmd = 'aptitude search -F "%p" ~pstandard'
-	list = apt.get_list(cmd)
-	apt.run( args+ [list] )
-
-	print "[1m========== Install debian required packages ==========[0m"
-	cmd = 'aptitude search -F "%p" ~prequired'
-	list = apt.get_list(cmd)
-	apt.run( args+ [list] )
-
-	print "[1m========== Install debian important packages ==========[0m"
-	cmd = 'aptitude search -F "%p" ~pimportant'
-	list = apt.get_list(cmd)
-	apt.run( args+ [list] )
-
 	print "[1m========== Install ossxp custom packages ==========[0m"
 	apt.run( args+ [PKG_LIST] )
 
@@ -128,12 +109,17 @@ def main(argv=None):
 				print "%s already installed." % os.path.basename(sys.argv[0])
 				return(0)
 
+			depends=["base.py"]
+			for pkg in depends:
+				cmd="python %s %s" % (pkg, string.join(argv[1:]," "))
+				print "[1mDepends on %s, run: %s[0m" % (pkg, cmd)
+				os.system(cmd)
+
 			do_install()
 
 			os.system('touch %s' % STAMPFILE)
 		if arg in ('config'):
 			do_config()
-
 
 if __name__ == "__main__":
 	sys.exit(main())
