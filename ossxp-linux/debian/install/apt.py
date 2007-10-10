@@ -2,7 +2,7 @@
 
 '''PROGRAM INTRODUCTION
 
-Usage: %(PROGRAM)s [options]
+Usage: %(PROGRAM)s [options] [list]
 
 Options:
 
@@ -14,6 +14,17 @@ Options:
         Run in batch mode
     -n|--dryrun
         Dryrun mode: acturally, do not run
+    -v|--verbose
+        Verbose mode: more debug message
+    -q|--quiet
+        Quiet mode: less message
+    --install
+        Install packages
+    --remove
+        Remove packages
+
+list
+    Comma seperated packages list
 '''
 
 
@@ -24,6 +35,13 @@ VERSION_EQUAL=0
 VERSION_DIFF=1
 VERSION_UNKNOWN=2
 VERSION_NOTINST=3
+verbose=0
+
+
+def vprint(str):
+	global verbose
+	if verbose:
+		print str
 
 
 def usage(code, msg=''):
@@ -37,6 +55,7 @@ def usage(code, msg=''):
 	sys.exit(code)
 
 def run(*argv):
+	global verbose
 	interactive = 1
 	dryrun = 1
 	list = ""
@@ -48,8 +67,8 @@ def run(*argv):
 
 	try:
 		opts, args = getopt.getopt(
-			argv, "hiIbn", 
-			["help", "install", "remove", "interactive", "batch", "no-interactive", "dryrun"])
+			argv, "hivbnq", 
+			["help", "verbose", "quiet", "install", "remove", "interactive", "batch", "dryrun"])
 	except getopt.error, msg:
 		return usage(1, msg)
 
@@ -58,16 +77,20 @@ def run(*argv):
 			return usage(0)
 		elif opt in ('-i', '--interactive'):
 			interactive = 1
-		elif opt in ('-I', '-b', '--batch', '--no-interactive'):
+		elif opt in ('-b', '--batch'):
 			interactive = 0
 		elif opt in ('-n', '--dryrun'):
 			dryrun = 1
+		elif opt in ('-v', '--verbose'):
+			verbose = 1
+		elif opt in ('-q', '--quiet'):
+			verbose = 0
 		elif opt in ('--install'):
 			install = 1
 		elif opt in ('--remove'):
 			install = 0
-	print "interactive: %d" % interactive
-	print "dryrun: %d" % dryrun
+	vprint ("interactive: %d" % interactive)
+	vprint ("dryrun: %d" % dryrun)
 
 	if len(args) == 0:
 		return usage(1)
@@ -89,7 +112,7 @@ def run(*argv):
 		else:
 			list = "%s, %s" % (list, item)
 
-	print "list is : %s" % list
+	vprint ("list is : %s" % list)
 	if install:
 		process_packages(list, install_mode=1, interactive=interactive, dryrun=dryrun)
 	else:
@@ -101,10 +124,25 @@ alike_pkgs = (
 	)
 
 
+def get_list(cmd):
+	list=""
+	policy = os.popen(cmd, 'r')
+	while 1:
+		line=policy.readline()
+		if not line:
+			break
+		line=line.strip()
+		if list == '':
+			list = line
+		else:
+			list = "%s, %s" % (list, line)
+	return list
+
+
 def get_pkg_status(pkg):
 	policy = os.popen('LANG=C apt-cache policy %s 2>/dev/null' % pkg, 'r').read()
 	if len(policy) == 0:
-		print "Package %s does not exist!" % pkg    
+		vprint ("Package %s does not exist!" % pkg)
 		return VERSION_UNKNOWN
 
 	match=re.search('^[\s]*Installed:[\s]*(.*)$', policy, re.M)
@@ -128,10 +166,10 @@ def get_pkg_status(pkg):
 
 
 	if inst_version != cand_version:
-		print "Package %s should be upgrade." % pkg    
+		vprint ("Package %s should be upgrade." % pkg)
 		return VERSION_DIFF
 	else:
-		print "Package %s already installed." % pkg    
+		vprint ("Package %s already installed." % pkg)
 		return VERSION_EQUAL
 
 def check_package(pkg):
@@ -153,6 +191,9 @@ def pre_check(packages):
 	notinst_list=[]
 	unknown_list=[]
 	for item in list:
+		item = item.strip()
+		if len(item) == 0:
+			continue
 		# pkg_a | pkg_b means install one of them
 		split = item.split('|')
 		if len(split) > 1:
@@ -182,10 +223,10 @@ def pre_check(packages):
 		else:
 			unknown_list.append(pkg)
 
-	print "unknown_list: %s" % unknown_list
-	print "upgrade_list: %s" % upgrade_list
-	print "uptodate_list: %s" % uptodate_list
-	print "notinst_list: %s" % notinst_list
+	vprint ("unknown_list: %s" % unknown_list)
+	vprint ("upgrade_list: %s" % upgrade_list)
+	vprint ("uptodate_list: %s" % uptodate_list)
+	vprint ("notinst_list: %s" % notinst_list)
 	r = {   VERSION_EQUAL: uptodate_list,
 		VERSION_DIFF: upgrade_list,
 		VERSION_UNKNOWN: unknown_list,
@@ -209,7 +250,7 @@ def process_packages(list, install_mode=1, interactive=1, dryrun=1):
 			print lists[VERSION_DIFF]
 
 		if not lists[VERSION_NOTINST] and not lists[VERSION_DIFF]:
-			print "No packages will be install."
+			print "No packages will be installed."
 			return
 	else:
 		if lists[VERSION_UNKNOWN]:
