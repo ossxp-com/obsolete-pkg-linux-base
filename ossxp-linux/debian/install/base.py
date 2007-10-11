@@ -202,6 +202,14 @@ caption always "%{= kw}%-Lw%{= BW}%n %t%{-}%+w %-= @%H - %Y/%m/%d, %C"
 		file.write(content)
 		file.close()
 
+	#------------------------------------------------------------
+	CONFFILE='/etc/apt/apt.conf.d/01defaultrelease'
+	if os.path.exists(os.path.dirname(CONFFILE)) and not os.path.exists(CONFFILE):
+		content = '''// APT::Default-Release "stable";\n'''
+		file = open(CONFFILE, 'w')
+		file.write(content)
+		file.close()
+
 
 
 def main(argv=None):
