@@ -103,6 +103,7 @@ def do_config():
 	CONFFILE='/etc/inputrc'
 	if os.path.exists(CONFFILE):
 		patch = {}
+		patch['filemod'] = "644"
 		#patch['precheck_deny'] = "set completion-ignore-case on"
 		patch['stamp_before'] = "##### ossxp_config_begin #####"
 		patch['stamp_end']    = "##### ossxp_config_end #####"
@@ -119,6 +120,7 @@ set editing-mode vi
 		CONFFILE='/etc/profile'
 	if os.path.exists(CONFFILE):
 		patch = {}
+		patch['filemod'] = "644"
 		#patch['precheck_deny'] = "set -o vi"
 		patch['stamp_before'] = "##### ossxp_config_begin #####"
 		patch['stamp_end']    = "##### ossxp_config_end #####"
@@ -156,6 +158,7 @@ set -o vi
 	CONFFILE='/etc/ssh/sshd_config'
 	if os.path.exists(CONFFILE):
 		patch = {}
+		patch['filemod'] = "644"
 		patch['precheck_deny'] = "AllowGroups wheel"
 		patch['stamp_before'] = "##### ossxp_config_begin #####"
 		patch['stamp_end']    = "##### ossxp_config_end #####"
@@ -172,6 +175,7 @@ set -o vi
 	CONFFILE='/etc/screenrc'
 	if os.path.exists(CONFFILE):
 		patch = {}
+		patch['filemod'] = "644"
 		#patch['precheck_deny'] = "caption always"
 		patch['stamp_before'] = "##### ossxp_config_begin #####"
 		patch['stamp_end']    = "##### ossxp_config_end #####"
