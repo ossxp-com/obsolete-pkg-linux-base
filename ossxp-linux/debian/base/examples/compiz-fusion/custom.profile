@@ -523,9 +523,9 @@ s0_edgeflip_dnd = false
 
 [switcher]
 as_next_button = Disabled
-as_next_key = <Super>Tab
+as_next_key = <Alt>Tab
 as_prev_button = Disabled
-as_prev_key = <Shift><Super>Tab
+as_prev_key = <Shift><Alt>Tab
 as_next_all_button = Disabled
 as_next_all_key = Disabled
 as_prev_all_button = Disabled
@@ -561,9 +561,9 @@ as_initiate_all_key = Disabled
 as_initiate_all_button = Disabled
 as_initiate_all_edge = 
 as_terminate_button = Button3
-as_next_key = <Alt>Tab
+as_next_key = <Super>Tab
 as_next_button = Disabled
-as_prev_key = <Shift><Alt>Tab
+as_prev_key = <Shift><Super>Tab
 as_prev_button = Disabled
 as_next_all_key = <Alt><Super>Tab
 as_next_all_button = Disabled
