@@ -277,6 +277,10 @@ def config_file_append(conffile, patch):
 				if patch.has_key('filemod') and patch['filemod']:
 					os.chmod( conffile, int(patch['filemod'],8) )
 					vprint ("change filemode to %d" % int(patch['filemod']) )
+				else:
+					os.chmod( conffile, 0644 )
+					vprint ("change filemode to 0664")
+
 				vprint ("[1m%s modified successful.[0m" % conffile)
 				break
 

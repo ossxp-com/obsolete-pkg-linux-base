@@ -1,7 +1,8 @@
-ossxp-linux (1.25) unstable; urgency=low
+ossxp-linux (1.25+) unstable; urgency=low
 
   * rewrite in python.
   * add similar package test, exim4-daemon-heavy will not removed.
+  * bugfix: set proper config file mode.
 
  -- Jiang Xin <jiangxin@foo.bar>  Wed, 10 Oct 2007 23:37:30 +0800
 
