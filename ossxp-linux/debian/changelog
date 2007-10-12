@@ -1,6 +1,6 @@
-ossxp-linux (1.25+2) unstable; urgency=low
+ossxp-linux (1.25+3) unstable; urgency=low
 
-  * add flexbackup.conf samples: backup in a 3-way cycle.
+  * remove flexbackup, use ossxp-backup instead;
 
  -- Jiang Xin <jiangxin@foo.bar>  Fri, 12 Oct 2007 01:19:08 +0800
 
