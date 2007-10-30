@@ -329,7 +329,7 @@ as_mipmaps = false
 as_bounce = true
 
 [scale]
-as_initiate = <Shift><Alt>Up,Button0,TopRight,0,false
+as_initiate = <Shift><Alt>Up,Button0,BottomRight,0,false
 as_initiate_all = ,Button0,,0,false
 as_initiate_group = ,Button0,,0,false
 as_initiate_output = ,Button0,,0,false
