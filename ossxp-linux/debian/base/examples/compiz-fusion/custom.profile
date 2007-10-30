@@ -13,7 +13,7 @@ as_use_textures = true
 as_toggle = <Super>F3,Button0,,0,false
 
 [expo]
-as_expo = <Super>e,Button0,TopLeft,0,false
+as_expo = <Super>e,Button0,BottomLeft,0,false
 as_double_click_time = 500
 as_rotate = false
 as_expo_immediate_move = false
@@ -316,7 +316,7 @@ as_logo = splash_logo.png
 
 [wallpaper]
 s0_images = 
-s0_tile = false
+s0_tile = true
 
 [screensaver]
 as_initiate_key = false
@@ -553,7 +553,7 @@ s0_top_images = fusioncap.png
 s0_bottom_images = compizcap.png
 
 [core]
-as_active_plugins = water;workarounds;annotate;dbus;ezoom;resize;text;svg;shift;move;thumbnail;firepaint;regex;decoration;png;place;imgjpeg;fade;cube;rotate;scale;switcher;cubecaps;cubereflex
+as_active_plugins = water;workarounds;annotate;vpswitch;dbus;resize;text;minimize;svg;shift;move;thumbnail;showdesktop;firepaint;regex;decoration;png;place;imgjpeg;wobbly;fade;cube;rotate;scale;switcher;cubecaps;cubereflex;expo;ezoom
 as_texture_filter = 1
 as_click_to_focus = true
 as_autoraise = false
