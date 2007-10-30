@@ -205,7 +205,7 @@ caption always "%{= kw}%-Lw%{= BW}%n %t%{-}%+w %-= @%H - %Y/%m/%d, %C"
 	#------------------------------------------------------------
 	CONFFILE='/etc/apt/apt.conf.d/01defaultrelease'
 	if os.path.exists(os.path.dirname(CONFFILE)) and not os.path.exists(CONFFILE):
-		content = '''// APT::Default-Release "stable";\n'''
+		content = '''// APT::Default-Release "stable";\n// APT::Cache-Limit "141943904";\n'''
 		file = open(CONFFILE, 'w')
 		file.write(content)
 		file.close()
