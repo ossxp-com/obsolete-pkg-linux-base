@@ -10,25 +10,11 @@ as_snow_direction = 0
 as_snow_textures = snowflake.png
 as_use_blending = true
 as_use_textures = true
-as_toggle_key = <Super>F3
-
-[atlantis]
-s0_num_fish = 20
-s0_colors = true
-s0_fish_size = 1500
-s0_shark_size = 5000
-s0_dolphin_size = 5000
-s0_whale_size = 8000
+as_toggle = <Super>F3,Button0,,0,false
 
 [expo]
-as_expo_key = <Super>e
-as_expo_button = Disabled
-as_expo_edge = TopLeft
+as_expo = <Super>e,Button0,TopLeft,0,false
 as_double_click_time = 500
-as_dnd_button = Button1
-as_exit_button = Button3
-as_next_vp_button = Button5
-as_prev_vp_button = Button4
 as_rotate = false
 as_expo_immediate_move = false
 as_expo_animation = 0
@@ -40,44 +26,35 @@ as_multioutput_mode = 0
 as_hide_docks = true
 
 [put]
-as_put_viewport_1_key = Disabled
-as_put_viewport_2_key = Disabled
-as_put_viewport_3_key = Disabled
-as_put_viewport_4_key = Disabled
-as_put_viewport_5_key = Disabled
-as_put_viewport_6_key = Disabled
-as_put_viewport_7_key = Disabled
-as_put_viewport_8_key = Disabled
-as_put_viewport_9_key = Disabled
-as_put_viewport_10_key = Disabled
-as_put_viewport_11_key = Disabled
-as_put_viewport_12_key = Disabled
-as_put_viewport_left_key = Disabled
-as_put_viewport_right_key = Disabled
-as_put_viewport_up_key = Disabled
-as_put_viewport_down_key = Disabled
-as_put_center_key = <Super>KP_Begin
-as_put_center_button = Disabled
-as_put_left_key = <Super>KP_Left
-as_put_left_button = Disabled
-as_put_right_key = <Super>KP_Right
-as_put_right_button = Disabled
-as_put_top_key = <Super>KP_Up
-as_put_top_button = Disabled
-as_put_bottom_key = <Super>KP_Down
-as_put_bottom_button = Disabled
-as_put_topleft_key = <Super>KP_Home
-as_put_topleft_button = Disabled
-as_put_topright_key = <Super>KP_Prior
-as_put_topright_button = Disabled
-as_put_bottomleft_key = <Super>KP_End
-as_put_bottomleft_button = Disabled
-as_put_bottomright_key = <Super>KP_Next
-as_put_bottomright_button = Disabled
-as_put_restore_key = <Super>KP_Insert
-as_put_restore_button = Disabled
-as_put_pointer_key = <Super>z
-as_put_pointer_button = Disabled
+as_put_viewport = ,Button0,,0,false
+as_put_viewport_1 = ,Button0,,0,false
+as_put_viewport_2 = ,Button0,,0,false
+as_put_viewport_3 = ,Button0,,0,false
+as_put_viewport_4 = ,Button0,,0,false
+as_put_viewport_5 = ,Button0,,0,false
+as_put_viewport_6 = ,Button0,,0,false
+as_put_viewport_7 = ,Button0,,0,false
+as_put_viewport_8 = ,Button0,,0,false
+as_put_viewport_9 = ,Button0,,0,false
+as_put_viewport_10 = ,Button0,,0,false
+as_put_viewport_11 = ,Button0,,0,false
+as_put_viewport_12 = ,Button0,,0,false
+as_put_viewport_left = ,Button0,,0,false
+as_put_viewport_right = ,Button0,,0,false
+as_put_viewport_up = ,Button0,,0,false
+as_put_viewport_down = ,Button0,,0,false
+as_put_center = <Super>KP_Begin,Button0,,0,false
+as_put_left = <Super>KP_Left,Button0,,0,false
+as_put_right = <Super>KP_Right,Button0,,0,false
+as_put_top = <Super>KP_Up,Button0,,0,false
+as_put_bottom = <Super>KP_Down,Button0,,0,false
+as_put_topleft = <Super>KP_Home,Button0,,0,false
+as_put_topright = <Super>KP_Prior,Button0,,0,false
+as_put_bottomleft = <Super>KP_End,Button0,,0,false
+as_put_bottomright = <Super>KP_Next,Button0,,0,false
+as_put_restore = <Super>KP_Insert,Button0,,0,false
+as_put_pointer = <Super>z,Button0,,0,false
+as_put_exact = ,Button0,,0,false
 s0_pad_left = 0
 s0_pad_right = 0
 s0_pad_top = 0
@@ -87,7 +64,7 @@ s0_window_center = false
 s0_avoid_offscreen = false
 
 [mblur]
-as_initiate_key = <Control>F12
+as_initiate = <Control>F12,Button0,,0,false
 s0_mode = 0
 s0_on_transformed_screen = false
 
@@ -98,7 +75,6 @@ as_yv12 = true
 s0_window_match = any
 s0_visual_bell = false
 s0_fullscreen_visual_bell = false
-s0_minimize_open_close = true
 
 [resizeinfo]
 as_fade_time = 500
@@ -109,28 +85,26 @@ as_gradient_2 = #f3f3f3cc
 as_gradient_3 = #d9d9d9cc
 
 [plane]
-as_plane_left_key = <Control><Alt>Left
-as_plane_right_key = <Control><Alt>Right
-as_plane_down_key = <Control><Alt>Down
-as_plane_up_key = <Control><Alt>Up
-as_plane_to_1_key = <Control>F1
-as_plane_to_2_key = <Control>F2
-as_plane_to_3_key = <Control>F3
-as_plane_to_4_key = <Control>F4
-as_plane_to_5_key = <Control>F5
-as_plane_to_6_key = <Control>F6
-as_plane_to_7_key = <Control>F7
-as_plane_to_8_key = <Control>F8
-as_plane_to_9_key = <Control>F9
-as_plane_to_10_key = <Control>F10
-as_plane_to_11_key = <Control>F11
-as_plane_to_12_key = <Control>F12
+as_plane_left = <Control><Alt>Left,Button0,,0,false
+as_plane_right = <Control><Alt>Right,Button0,,0,false
+as_plane_down = <Control><Alt>Down,Button0,,0,false
+as_plane_up = <Control><Alt>Up,Button0,,0,false
+as_plane_to_1 = <Control>F1,Button0,,0,false
+as_plane_to_2 = <Control>F2,Button0,,0,false
+as_plane_to_3 = <Control>F3,Button0,,0,false
+as_plane_to_4 = <Control>F4,Button0,,0,false
+as_plane_to_5 = <Control>F5,Button0,,0,false
+as_plane_to_6 = <Control>F6,Button0,,0,false
+as_plane_to_7 = <Control>F7,Button0,,0,false
+as_plane_to_8 = <Control>F8,Button0,,0,false
+as_plane_to_9 = <Control>F9,Button0,,0,false
+as_plane_to_10 = <Control>F10,Button0,,0,false
+as_plane_to_11 = <Control>F11,Button0,,0,false
+as_plane_to_12 = <Control>F12,Button0,,0,false
 
 [scaleaddon]
-as_close_key = Disabled
-as_close_button = Button2
-as_zoom_key = Disabled
-as_zoom_button = Button3
+as_close = ,Button2,,0,false
+as_zoom = ,Button3,,0,false
 s0_window_title = true
 s0_title_bold = false
 s0_title_size = 10
@@ -142,9 +116,9 @@ s0_highlight_color = #ffffff96
 s0_layout_mode = 0
 
 [cube]
-as_unfold_key = <Control><Alt>Down
-as_next_slide_key = space
-as_prev_slide_key = Disabled
+as_unfold = <Control><Alt>Down,Button0,,0,false
+as_next_slide = space,Button0,,0,false
+as_prev_slide = ,Button0,,0,false
 s0_color = #feffc7ff
 s0_in = false
 s0_scale_image = false
@@ -161,16 +135,16 @@ s0_transparent_manual_only = true
 s0_multioutput_mode = 0
 
 [water]
-as_initiate_key = <Control><Super>
-as_toggle_rain_key = <Shift>F9
-as_toggle_wiper_key = <Shift>F8
+as_initiate = <Control><Super>,Button0,,0,false
+as_toggle_rain = <Shift>F9,Button0,,0,false
+as_toggle_wiper = <Shift>F8,Button0,,0,false
 as_rain_delay = 250
-as_title_wave = false
+as_title_wave = ,Button0,,0,false
+as_point = ,Button0,,0,false
+as_line = ,Button0,,0,false
 
 [widget]
-as_toggle_key = F9
-as_toggle_button = Disabled
-as_toggle_edge = 
+as_toggle = F9,Button0,,0,false
 s0_match = 
 s0_end_on_click = true
 s0_bg_brightness = 50
@@ -186,64 +160,63 @@ as_sticky_alldesktops = false
 as_alldesktop_sticky_match = any
 
 [annotate]
-as_initiate_button = <Alt><Super>Button1
-as_draw_button = <Alt><Super>Button2
-as_erase = <Alt><Super>Button3
-as_clear_key = <Alt><Super>k
+as_initiate = ,<Alt><Super>Button1,,0,false
+as_draw = ,Button0,,0,false
+as_erase = ,Button0,,0,false
+as_clear = <Alt><Super>k,<Alt><Super>Button3,,0,false
 as_fill_color = #ff0000ff
 as_stroke_color = #ffffffff
 
 [vpswitch]
-as_begin_key = Disabled
-as_switch_to_1_key = <Control>F1
-as_switch_to_2_key = <Control>F2
-as_switch_to_3_key = <Control>F3
-as_switch_to_4_key = <Control>F4
-as_switch_to_5_key = <Control>F5
-as_switch_to_6_key = <Control>F6
-as_switch_to_7_key = <Control>F7
-as_switch_to_8_key = <Control>F8
-as_switch_to_9_key = <Control>F9
-as_switch_to_10_key = <Control>F10
-as_switch_to_11_key = <Control>F11
-as_switch_to_12_key = <Control>F12
-as_left_button = Disabled
-as_right_button = Disabled
-as_up_button = Disabled
-as_down_button = Disabled
-as_next_button = Button5
-as_prev_button = Button4
-as_initiate_button = Button2
+as_begin = ,Button0,,0,false
+as_switch_to_1 = <Control>F1,Button0,,0,false
+as_switch_to_2 = <Control>F2,Button0,,0,false
+as_switch_to_3 = <Control>F3,Button0,,0,false
+as_switch_to_4 = <Control>F4,Button0,,0,false
+as_switch_to_5 = <Control>F5,Button0,,0,false
+as_switch_to_6 = <Control>F6,Button0,,0,false
+as_switch_to_7 = <Control>F7,Button0,,0,false
+as_switch_to_8 = <Control>F8,Button0,,0,false
+as_switch_to_9 = <Control>F9,Button0,,0,false
+as_switch_to_10 = <Control>F10,Button0,,0,false
+as_switch_to_11 = <Control>F11,Button0,,0,false
+as_switch_to_12 = <Control>F12,Button0,,0,false
+as_left = ,Button0,,0,false
+as_right = ,Button0,,0,false
+as_up = ,Button0,,0,false
+as_down = ,Button0,,0,false
+as_next = ,Button5,,0,false
+as_prev = ,Button4,,0,false
+as_initiate = ,Button2,,0,false
 as_init_plugin = rotate
 as_init_action = initiate_button
 
 [extrawm]
-as_toggle_redirect_key = Disabled
-as_toggle_fullscreen_key = Disabled
-as_toggle_always_on_top_key = Disabled
-as_toggle_sticky_key = Disabled
+as_activate = ,Button0,,0,false
+as_toggle_redirect = ,Button0,,0,false
+as_toggle_fullscreen = ,Button0,,0,false
+as_toggle_always_on_top = ,Button0,,0,false
+as_toggle_sticky = ,Button0,,0,false
 
 [ezoom]
-as_initiate = <Super>Button3
-as_zoom_in = <Super>Button4
-as_zoom_in_key = Disabled
-as_lock_zoom = <Super>l
-as_zoom_specific_1 = <Super>1
-as_zoom_specific_2 = <Super>2
-as_zoom_specific_3 = <Super>3
-as_fit_to_window = <Super>r
-as_pan_left = Disabled
-as_pan_right = Disabled
-as_pan_up = Disabled
-as_pan_down = Disabled
-as_zoom_out_key = Disabled
-as_zoom_out = <Super>Button5
+as_initiate = ,<Super>Button3,,0,false
+as_zoom_in = ,<Super>Button4,,0,false
+as_lock_zoom = <Super>l,Button0,,0,false
+as_zoom_specific_1 = <Super>1,Button0,,0,false
+as_zoom_specific_2 = <Super>2,Button0,,0,false
+as_zoom_specific_3 = <Super>3,Button0,,0,false
+as_fit_to_window = <Super>r,Button0,,0,false
+as_pan_left = ,Button0,,0,false
+as_pan_right = ,Button0,,0,false
+as_pan_up = ,Button0,,0,false
+as_pan_down = ,Button0,,0,false
+as_zoom_out = ,<Super>Button5,,0,false
 as_spec_target_focus = true
-as_fit_to_zoom = <Super>v
-as_center_mouse = <Super>c
+as_fit_to_zoom = <Super>v,Button0,,0,false
+as_center_mouse = <Super>c,Button0,,0,false
 s0_follow_focus = true
 s0_focus_fit_window = false
-s0_always_focus_fit_window = false
+s0_allways_focus_fit_window = false
 s0_follow_focus_delay = 1
 s0_sync_mouse = true
 s0_scale_mouse = false
@@ -255,12 +228,11 @@ s0_mouse_poll_interval = 10
 s0_filter_linear = true
 
 [resize]
-as_initiate_normal_key = Disabled
-as_initiate_outline_key = Disabled
-as_initiate_rectangle_key = Disabled
-as_initiate_stretch_key = Disabled
-as_initiate_button = <Alt>Button2
-as_initiate_key = <Alt>F8
+as_initiate_normal = ,Button0,,0,false
+as_initiate_outline = ,Button0,,0,false
+as_initiate_rectangle = ,Button0,,0,false
+as_initiate_stretch = ,Button0,,0,false
+as_initiate = <Alt>F8,<Alt>Button2,,0,false
 as_mode = 0
 as_border_color = #2f2f4f9f
 as_fill_color = #2f2f4f4f
@@ -276,7 +248,7 @@ s0_above_match =
 s0_below_match = 
 s0_sticky_match = 
 s0_fullscreen_match = 
-s0_no_argb_match = 
+s0_widget_match = 
 s0_no_move_match = 
 s0_no_resize_match = 
 s0_no_minimize_match = 
@@ -288,60 +260,56 @@ s0_size_width_values =
 s0_size_height_values = 
 
 [zoom]
-as_initiate_button = <Super>Button3
-as_zoom_in_button = <Super>Button4
-as_zoom_out_button = <Super>Button5
-as_zoom_pan_button = <Super>Button2
+as_initiate = ,<Super>Button3,,0,false
+as_zoom_in = ,<Super>Button4,,0,false
+as_zoom_out = ,<Super>Button5,,0,false
+as_zoom_pan = ,<Super>Button2,,0,false
 s0_filter_linear = false
 
 [rotate]
-as_initiate_button = <Control><Alt>Button1
-as_rotate_left_key = <Control><Alt>Left
-as_rotate_left_button = Disabled
-as_rotate_right_key = <Control><Alt>Right
-as_rotate_right_button = Disabled
-as_rotate_left_window_key = <Shift><Control><Alt>Left
-as_rotate_left_window_button = Disabled
-as_rotate_right_window_key = <Shift><Control><Alt>Right
-as_rotate_right_window_button = Disabled
+as_initiate = ,<Control><Alt>Button1,,0,false
+as_rotate_left = <Control><Alt>Prior,Button0,,0,false
+as_rotate_right = <Control><Alt>Next,Button0,,0,false
+as_rotate_left_window = <Shift><Control><Alt>Left,Button0,,0,false
+as_rotate_right_window = <Shift><Control><Alt>Right,Button0,,0,false
 as_edge_flip_pointer = false
 as_edge_flip_window = true
 as_edge_flip_dnd = true
 as_flip_time = 150
-as_rotate_to_1_key = <Control>F1
-as_rotate_to_2_key = <Control>F2
-as_rotate_to_3_key = <Control>F3
-as_rotate_to_4_key = <Control>F4
-as_rotate_to_5_key = <Control>F5
-as_rotate_to_6_key = <Control>F6
-as_rotate_to_7_key = <Control>F7
-as_rotate_to_8_key = <Control>F8
-as_rotate_to_9_key = <Control>F9
-as_rotate_to_10_key = <Control>F10
-as_rotate_to_11_key = <Control>F11
-as_rotate_to_12_key = <Control>F12
-as_rotate_to_1_window_key = Disabled
-as_rotate_to_2_window_key = Disabled
-as_rotate_to_3_window_key = Disabled
-as_rotate_to_4_window_key = Disabled
-as_rotate_to_5_window_key = Disabled
-as_rotate_to_6_window_key = Disabled
-as_rotate_to_7_window_key = Disabled
-as_rotate_to_8_window_key = Disabled
-as_rotate_to_9_window_key = Disabled
-as_rotate_to_10_window_key = Disabled
-as_rotate_to_11_window_key = Disabled
-as_rotate_to_12_window_key = Disabled
-as_rotate_to_key = Disabled
-as_rotate_window_key = Disabled
-as_rotate_flip_left_edge = Left
-as_rotate_flip_right_edge = Right
+as_rotate_to_1 = <Control>F1,Button0,,0,false
+as_rotate_to_2 = <Control>F2,Button0,,0,false
+as_rotate_to_3 = <Control>F3,Button0,,0,false
+as_rotate_to_4 = <Control>F4,Button0,,0,false
+as_rotate_to_5 = <Control>F5,Button0,,0,false
+as_rotate_to_6 = <Control>F6,Button0,,0,false
+as_rotate_to_7 = <Control>F7,Button0,,0,false
+as_rotate_to_8 = <Control>F8,Button0,,0,false
+as_rotate_to_9 = <Control>F9,Button0,,0,false
+as_rotate_to_10 = <Control>F10,Button0,,0,false
+as_rotate_to_11 = <Control>F11,Button0,,0,false
+as_rotate_to_12 = <Control>F12,Button0,,0,false
+as_rotate_to_1_window = ,Button0,,0,false
+as_rotate_to_2_window = ,Button0,,0,false
+as_rotate_to_3_window = ,Button0,,0,false
+as_rotate_to_4_window = ,Button0,,0,false
+as_rotate_to_5_window = ,Button0,,0,false
+as_rotate_to_6_window = ,Button0,,0,false
+as_rotate_to_7_window = ,Button0,,0,false
+as_rotate_to_8_window = ,Button0,,0,false
+as_rotate_to_9_window = ,Button0,,0,false
+as_rotate_to_10_window = ,Button0,,0,false
+as_rotate_to_11_window = ,Button0,,0,false
+as_rotate_to_12_window = ,Button0,,0,false
+as_rotate_to = ,Button0,,0,false
+as_rotate_window = ,Button0,,0,false
+as_rotate_flip_left = ,Button0,Left,0,false
+as_rotate_flip_right = ,Button0,Right,0,false
 as_raise_on_rotate = false
 s0_invert_y = false
 s0_snap_top = false
 
 [splash]
-as_initiate_key = <Control>F11
+as_initiate = <Control>F11,Button0,,0,false
 as_firststart = true
 as_background = splash_background.png
 as_logo = splash_logo.png
@@ -351,9 +319,9 @@ s0_images =
 s0_tile = false
 
 [screensaver]
-as_initiate_key = Disabled
-as_initiate_button = Disabled
-as_initiate_edge = 
+as_initiate_key = false
+as_initiate_button = false
+as_initiate_edge = false
 as_mode = 0
 as_start_automatically = true
 as_window_match = type=Normal | Dialog | ModalDialog | Utility | Unknown
@@ -361,18 +329,10 @@ as_mipmaps = false
 as_bounce = true
 
 [scale]
-as_initiate_edge = BottomRight
-as_initiate_key = <Shift><Alt>Up
-as_initiate_button = Disabled
-as_initiate_all_edge = 
-as_initiate_all_button = Disabled
-as_initiate_all_key = Disabled
-as_initiate_group_edge = 
-as_initiate_group_button = Disabled
-as_initiate_group_key = Disabled
-as_initiate_output_edge = 
-as_initiate_output_button = Disabled
-as_initiate_output_key = Disabled
+as_initiate = <Shift><Alt>Up,Button0,TopRight,0,false
+as_initiate_all = ,Button0,,0,false
+as_initiate_group = ,Button0,,0,false
+as_initiate_output = ,Button0,,0,false
 as_show_desktop = true
 s0_spacing = 10
 s0_window_match = Toolbar | Utility | Dialog | Normal | Unknown
@@ -383,7 +343,7 @@ s0_hover_time = 750
 s0_multioutput_mode = 0
 
 [screenshot]
-as_initiate_button = <Super>Button1
+as_initiate = ,<Super>Button1,,0,false
 as_directory = Desktop
 as_launch_app = 
 
@@ -466,10 +426,10 @@ s0_time_step = 10
 s0_time_step_intense = 30
 
 [bs]
-as_saturation_increase_button = <Control><Alt>Button4
-as_saturation_decrease_button = <Control><Alt>Button5
-as_brightness_increase_button = <Shift><Alt>Button4
-as_brightness_decrease_button = <Shift><Alt>Button5
+as_saturation_increase_button = false
+as_saturation_decrease_button = false
+as_brightness_increase_button = false
+as_brightness_decrease_button = false
 s0_brightness_step = 5
 s0_saturation_step = 5
 s0_saturation_matches = 
@@ -496,44 +456,32 @@ as_thumb_highlight_gradient_shadow_color = #dfdfdfa6
 as_arrow_base_color = #e6e6e6d9
 as_arrow_shadow_color = #dcdcdcd9
 as_allow_wraparound = true
-as_left_key = <Control><Alt>Left
-as_left_button = Disabled
-as_right_key = <Control><Alt>Right
-as_right_button = Disabled
-as_up_key = <Control><Alt>Up
-as_up_button = Disabled
-as_down_key = <Control><Alt>Down
-as_down_button = Disabled
-as_next_key = <Control><Alt>Next
-as_next_button = Disabled
-as_prev_key = Disabled
-as_prev_button = Disabled
-as_left_window_key = <Shift><Control><Alt>Left
-as_right_window_key = <Shift><Control><Alt>Right
-as_up_window_key = <Shift><Control><Alt>Up
-as_down_window_key = <Shift><Control><Alt>Down
-as_flip_left_edge = Left
-as_flip_right_edge = Right
-as_flip_up_edge = Top
-as_flip_down_edge = Bottom
+as_left = <Control><Alt>Left,Button0,,0,false
+as_right = <Control><Alt>Right,Button0,,0,false
+as_up = <Control><Alt>Up,Button0,,0,false
+as_down = <Control><Alt>Down,Button0,,0,false
+as_next = <Control><Alt>Next,Button0,,0,false
+as_prev = <Control><Alt>Prior,Button0,,0,false
+as_left_window = <Shift><Control><Alt>Left,Button0,,0,false
+as_right_window = <Shift><Control><Alt>Right,Button0,,0,false
+as_up_window = <Shift><Control><Alt>Up,Button0,,0,false
+as_down_window = <Shift><Control><Alt>Down,Button0,,0,false
+as_flip_left = ,Button0,Left,0,false
+as_flip_right = ,Button0,Right,0,false
+as_flip_up = ,Button0,Top,0,false
+as_flip_down = ,Button0,Bottom,0,false
 s0_mmmode = 0
 s0_edgeflip_pointer = false
 s0_edgeflip_move = true
 s0_edgeflip_dnd = false
 
 [switcher]
-as_next_button = Disabled
-as_next_key = <Alt>Tab
-as_prev_button = Disabled
-as_prev_key = <Shift><Alt>Tab
-as_next_all_button = Disabled
-as_next_all_key = Disabled
-as_prev_all_button = Disabled
-as_prev_all_key = Disabled
-as_next_no_popup_button = Disabled
-as_next_no_popup_key = Disabled
-as_prev_no_popup_button = Disabled
-as_prev_no_popup_key = Disabled
+as_next = <Alt>Tab,Button0,,0,false
+as_prev = <Shift><Alt>Tab,Button0,,0,false
+as_next_all = ,Button0,,0,false
+as_prev_all = ,Button0,,0,false
+as_next_no_popup = ,Button0,,0,false
+as_prev_no_popup = ,Button0,,0,false
 s0_window_match = Toolbar | Utility | Dialog | Normal | Unknown
 s0_mipmap = true
 s0_saturation = 100
@@ -545,8 +493,8 @@ s0_minimized = true
 s0_auto_rotate = false
 
 [neg]
-as_window_toggle_key = <Super>n
-as_screen_toggle_key = <Super>m
+as_window_toggle = <Super>n,Button0,,0,false
+as_screen_toggle = <Super>m,Button0,,0,false
 s0_neg_match = any
 s0_exclude_match = type=Desktop
 
@@ -554,25 +502,14 @@ s0_exclude_match = type=Desktop
 as_mount_point = compiz
 
 [shift]
-as_initiate_key = <Shift><Super>s
-as_initiate_button = Disabled
-as_initiate_edge = 
-as_initiate_all_key = Disabled
-as_initiate_all_button = Disabled
-as_initiate_all_edge = 
-as_terminate_button = Button3
-as_next_key = <Super>Tab
-as_next_button = Disabled
-as_prev_key = <Shift><Super>Tab
-as_prev_button = Disabled
-as_next_all_key = <Alt><Super>Tab
-as_next_all_button = Disabled
-as_prev_all_key = <Shift><Alt><Super>Tab
-as_prev_all_button = Disabled
-as_next_group_key = Disabled
-as_next_group_button = Disabled
-as_prev_group_key = Disabled
-as_prev_group_button = Disabled
+as_initiate = <Shift><Super>s,Button0,,0,false
+as_initiate_all = ,Button0,,0,false
+as_next = <Super>Tab,Button0,,0,false
+as_prev = <Shift><Super>Tab,Button0,,0,false
+as_next_all = <Alt><Super>Tab,Button0,,0,false
+as_prev_all = <Shift><Alt><Super>Tab,Button0,,0,false
+as_next_group = ,Button0,,0,false
+as_prev_group = ,Button0,,0,false
 s0_window_match = Normal | Dialog | ModalDialog | Utility | Unknown
 s0_minimized = true
 s0_click_duration = 500
@@ -598,14 +535,10 @@ s0_fadetime = 500
 s0_window_match = Toolbar | Utility | Dialog | Normal | Unknown
 
 [cubecaps]
-as_top_next_key = space
-as_top_next_button = Disabled
-as_top_prev_key = Disabled
-as_top_prev_button = Disabled
-as_bottom_next_key = Disabled
-as_bottom_next_button = Disabled
-as_bottom_prev_key = Disabled
-as_bottom_prev_button = Disabled
+as_top_next = space,Button0,,0,false
+as_top_prev = ,Button0,,0,false
+as_bottom_next = ,Button0,,0,false
+as_bottom_prev = ,Button0,,0,false
 s0_draw_top = true
 s0_draw_bottom = true
 s0_adjust_top = false
@@ -620,14 +553,14 @@ s0_top_images = fusioncap.png
 s0_bottom_images = compizcap.png
 
 [core]
-as_active_plugins = water;workarounds;annotate;dbus;ezoom;resize;text;svg;neg;shift;core;move;thumbnail;firepaint;regex;decoration;png;place;imgjpeg;snow;animation;wobbly;fade;cube;rotate;scale;switcher;cubecaps;cubereflex
+as_active_plugins = water;workarounds;annotate;dbus;ezoom;resize;text;svg;shift;move;thumbnail;firepaint;regex;decoration;png;place;imgjpeg;fade;cube;rotate;scale;switcher;cubecaps;cubereflex
 as_texture_filter = 1
 as_click_to_focus = true
 as_autoraise = false
 as_autoraise_delay = 0
-as_close_window_key = <Alt>F4
-as_main_menu_key = <Alt>F1
-as_run_key = <Alt>F2
+as_close_window = <Alt>F4,Button0,,0,false
+as_main_menu = <Alt>F1,Button0,,0,false
+as_run = <Alt>F2,Button0,,0,false
 as_command0 = 
 as_command1 = 
 as_command2 = 
@@ -640,46 +573,44 @@ as_command8 =
 as_command9 = 
 as_command10 = 
 as_command11 = xkill
-as_run_command0_key = Disabled
-as_run_command1_key = Disabled
-as_run_command2_key = Disabled
-as_run_command3_key = Disabled
-as_run_command4_key = Disabled
-as_run_command5_key = Disabled
-as_run_command6_key = Disabled
-as_run_command7_key = Disabled
-as_run_command8_key = Disabled
-as_run_command9_key = Disabled
-as_run_command10_key = Disabled
-as_run_command11_key = <Control><Alt>Escape
-as_slow_animations_key = <Shift>F10
-as_raise_window_button = <Control>Button6
-as_lower_window_button = <Alt>Button6
-as_unmaximize_window_key = Disabled
-as_minimize_window_key = <Alt>F9
-as_maximize_window_key = Disabled
-as_maximize_window_horizontally_key = Disabled
-as_maximize_window_vertically_key = Disabled
-as_opacity_increase_button = <Alt>Button4
-as_opacity_decrease_button = <Alt>Button5
+as_run_command0 = ,Button0,,0,false
+as_run_command1 = ,Button0,,0,false
+as_run_command2 = ,Button0,,0,false
+as_run_command3 = ,Button0,,0,false
+as_run_command4 = ,Button0,,0,false
+as_run_command5 = ,Button0,,0,false
+as_run_command6 = ,Button0,,0,false
+as_run_command7 = ,Button0,,0,false
+as_run_command8 = ,Button0,,0,false
+as_run_command9 = ,Button0,,0,false
+as_run_command10 = ,Button0,,0,false
+as_run_command11 = <Control><Alt>Escape,Button0,,0,false
+as_slow_animations = <Shift>F10,Button0,,0,false
+as_raise_window = ,<Control>Button6,,0,false
+as_lower_window = ,<Alt>Button6,,0,false
+as_unmaximize_window = ,Button0,,0,false
+as_minimize_window = <Alt>F9,Button0,,0,false
+as_maximize_window = ,Button0,,0,false
+as_maximize_window_horizontally = ,Button0,,0,false
+as_maximize_window_vertically = ,Button0,,0,false
+as_opacity_increase = ,<Alt>Button4,,0,false
+as_opacity_decrease = ,<Alt>Button5,,0,false
 as_command_screenshot = ksnapshot
-as_run_command_screenshot_key = <Control>Print
+as_run_command_screenshot = <Control>Print,Button0,,0,false
 as_command_window_screenshot = ksnapshot -c
-as_run_command_window_screenshot_key = <Alt>Print
-as_window_menu_button = <Alt>Button3
-as_window_menu_key = <Alt>F3
-as_show_desktop_key = <Control><Alt>d
-as_show_desktop_edge = 
+as_run_command_window_screenshot = <Alt>Print,Button0,,0,false
+as_window_menu = <Alt>F3,<Alt>Button3,,0,false
+as_show_desktop = <Control><Alt>d,Button0,,0,false
 as_raise_on_click = true
 as_audible_bell = true
-as_toggle_window_maximized_key = Disabled
-as_toggle_window_maximized_horizontally_key = Disabled
-as_toggle_window_maximized_vertically_key = Disabled
+as_toggle_window_maximized = ,Button0,,0,false
+as_toggle_window_maximized_horizontally = ,Button0,,0,false
+as_toggle_window_maximized_vertically = ,Button0,,0,false
 as_hide_skip_taskbar_windows = true
-as_toggle_window_shaded_key = <Control><Alt>s
+as_toggle_window_shaded = <Control><Alt>s,Button0,,0,false
 as_ignore_hints_when_maximized = true
 as_command_terminal = 
-as_run_command_terminal_key = Disabled
+as_run_command_terminal = ,Button0,,0,false
 as_ping_delay = 5000
 s0_detect_refresh_rate = true
 s0_lighting = true
@@ -698,7 +629,7 @@ s0_opacity_matches =
 s0_opacity_values = 
 
 [blur]
-as_pulse = false
+as_pulse = ,Button0,,0,false
 s0_focus_blur_match = toolbar | menu | utility | normal | dialog | modaldialog
 s0_focus_blur = false
 s0_alpha_blur_match = 
@@ -709,8 +640,7 @@ s0_saturation = 100
 s0_occlusion = true
 
 [move]
-as_initiate_button = <Alt>Button1
-as_initiate_key = <Alt>F7
+as_initiate = <Alt>F7,<Alt>Button1,,0,false
 as_opacity = 100
 as_constrain_y = true
 as_snapoff_maximized = true
@@ -726,6 +656,18 @@ s0_border_size = 5
 s0_font_color = #ffffffff
 s0_back_color = #00000099
 
+[visualevent]
+as_toggle_key = false
+s0_border_color = #000000ff
+s0_body_color = #ffffffff
+s0_button1_color = #7fff00ff
+s0_button2_color = #ffbf00ff
+s0_button3_color = #007fffff
+s0_keyboard_left_margin = 20
+s0_keyboard_bottom_margin = 20
+s0_mouse_right_margin = 20
+s0_mouse_bottom_margin = 20
+
 [reflex]
 s0_file = reflection.png
 s0_match = any
@@ -735,11 +677,10 @@ s0_threshold = 1
 s0_moving = true
 
 [fakeargb]
-as_window_toggle_key = <Super>f
-as_window_toggle_button = Disabled
+as_window_toggle = <Super>f,Button0,,0,false
 
 [bench]
-as_initiate_key = <Super>F12
+as_initiate = <Super>F12,Button0,,0,false
 as_disable_limiter = true
 as_output_screen = true
 as_position_x = 0
@@ -749,16 +690,14 @@ as_console_update_time = 5
 
 [crashhandler]
 as_enabled = true
-as_directory = /tmp
 as_start_wm = true
 as_wm_cmd = 
 
 [mswitch]
-as_begin_key = <Super>s
-as_begin_button = Disabled
+as_begin = <Super>s,Button0,,0,false
 
 [opacify]
-as_toggle_key = <Super>o
+as_toggle = <Super>o,Button0,,0,false
 as_toggle_reset = true
 as_timeout = 700
 as_init_toggle = true
@@ -770,18 +709,12 @@ s0_active_opacity = 100
 s0_passive_opacity = 10
 
 [ring]
-as_next_key = <Super>Tab
-as_next_button = Disabled
-as_prev_key = <Shift><Super>Tab
-as_prev_button = Disabled
-as_next_all_key = <Alt><Super>Tab
-as_next_all_button = Disabled
-as_prev_all_key = <Shift><Alt><Super>Tab
-as_prev_all_button = Disabled
-as_next_group_key = Disabled
-as_next_group_button = Disabled
-as_prev_group_key = Disabled
-as_prev_group_button = Disabled
+as_next = <Super>Tab,Button0,,0,false
+as_prev = <Shift><Super>Tab,Button0,,0,false
+as_next_all = <Alt><Super>Tab,Button0,,0,false
+as_prev_all = <Shift><Alt><Super>Tab,Button0,,0,false
+as_next_group = ,Button0,,0,false
+as_prev_group = ,Button0,,0,false
 s0_inactive_opacity = 100
 s0_window_match = Normal | Dialog | ModalDialog | Utility | Unknown
 s0_overlay_icon = 1
@@ -801,7 +734,7 @@ s0_title_font_color = #ffffffff
 s0_title_text_placement = 0
 
 [addhelper]
-as_toggle_key = <Super>p
+as_toggle = <Super>p,Button0,,0,false
 as_window_types = Toolbar | Utility | Dialog | ModalDialog | Fullscreen | Normal
 as_brightness = 30
 as_saturation = 50
@@ -815,29 +748,29 @@ s0_zoom_manual_only = true
 s0_mode = 0
 
 [clone]
-as_initiate_button = <Shift><Super>Button1
+as_initiate = ,<Shift><Super>Button1,,0,false
 
 [colorfilter]
-as_toggle_window_key = <Super>f
-as_toggle_screen_key = <Super>d
-as_switch_filter_key = <Shift><Super>s
+as_toggle_window = <Super>f,Button0,,0,false
+as_toggle_screen = <Super>d,Button0,,0,false
+as_switch_filter = <Super>s,Button0,,0,false
 s0_filters = negative;negative-green;blueish-filter;sepia;grayscale
 s0_filter_decorations = false
 s0_filter_match = any
 s0_exclude_match = type=Desktop
 
 [group]
-as_select_button = Disabled
-as_select_single_key = <Super>s
-as_group_key = <Super>g
-as_ungroup_key = <Super>u
-as_remove_key = <Super>r
-as_close_key = <Super>c
-as_ignore_key = <Super>x
-as_tabmode_key = <Super>t
-as_change_tab_left_key = <Super>Left
-as_change_tab_right_key = <Super>Right
-as_change_color_key = Disabled
+as_select = ,Button0,,0,false
+as_select_single = <Super>s,Button0,,0,false
+as_group = <Super>g,Button0,,0,false
+as_ungroup = <Super>u,Button0,,0,false
+as_remove = <Super>r,Button0,,0,false
+as_close = <Super>c,Button0,,0,false
+as_ignore = <Super>x,Button0,,0,false
+as_tabmode = <Super>t,Button0,,0,false
+as_change_tab_left = <Super>Left,Button0,,0,false
+as_change_tab_right = <Super>Right,Button0,,0,false
+as_change_color = ,Button0,,0,false
 s0_move_all = true
 s0_resize_all = false
 s0_raise_all = true
@@ -867,6 +800,7 @@ s0_tab_highlight_color = #ffffff99
 s0_tab_style = 0
 s0_tabbar_font_size = 12
 s0_tabbar_font_color = #ffffffff
+s0_spring_model_on_move = false
 s0_dnd_ungroup_window = true
 s0_drag_y_distance = 400
 s0_drag_speed_limit = 800
@@ -894,9 +828,9 @@ s0_window_match = type=toolbar | type=utility | type=dialog | type=normal
 s0_window_part_size = 20
 
 [wobbly]
-as_snap_key = <Shift>
+as_snap = <Shift>,Button0,,0,false
 as_snap_inverted = false
-as_shiver = false
+as_shiver = ,Button0,,0,false
 s0_grid_resolution = 48
 s0_min_grid_size = 8
 s0_map_effect = 0
@@ -908,26 +842,12 @@ s0_move_window_match = Toolbar | Menu | Utility | Dialog | Normal | Unknown
 s0_maximize_effect = true
 
 [firepaint]
-as_initiate_key = Disabled
-as_initiate_button = <Shift><Super>Button1
-as_clear_key = <Shift><Super>c
-as_clear_button = <Shift><Super>Button3
+as_initiate = ,<Shift><Super>Button1,,0,false
+as_clear = <Shift><Super>c,<Shift><Super>Button3,,0,false
 s0_num_particles = 3000
 s0_fire_color = #ff3305ff
 s0_fire_mystical = false
 s0_bg_brightness = 100
-
-[3d]
-s0_window_match = Toolbar | Utility | Dialog | Normal | Unknown
-s0_mipmaps = false
-s0_disable_culling = true
-s0_disable_caps = true
-s0_manual_only = true
-s0_bevel = 0
-s0_bevel_topleft = true
-s0_bevel_topright = true
-s0_bevel_bottomleft = true
-s0_bevel_bottomright = true
 
 [snap]
 as_avoid_snap = 0
@@ -944,12 +864,12 @@ as_tile_join = false
 as_tile_delta = 35
 as_tile_left_occupancy = 60
 as_exclude_match = 
-as_tile_vertically_key = Disabled
-as_tile_horizontally_key = Disabled
-as_tile_tile_key = <Shift><Super>a
-as_tile_cascade_key = <Shift><Super>s
-as_tile_restore_key = <Shift><Super>z
-as_tile_toggle_key = <Shift><Super>x
+as_tile_vertically = ,Button0,,0,false
+as_tile_horizontally = ,Button0,,0,false
+as_tile_tile = <Shift><Super>a,Button0,,0,false
+as_tile_cascade = <Shift><Super>s,Button0,,0,false
+as_tile_restore = <Shift><Super>z,Button0,,0,false
+as_tile_toggle = <Shift><Super>x,Button0,,0,false
 
 [decoration]
 as_shadow_color = #00000000
