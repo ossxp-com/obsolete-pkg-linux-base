@@ -36,14 +36,23 @@ function usage()
 
 function inst_apache
 {
+
+    if [ UNINSTALL="yes" ]; then
+	    if [ "$TYPE" = "--prefork" ]; then
+        	$INSTALLCMD ossxp-apache2-prefork-dev
+	    else
+        	$INSTALLCMD ossxp-apache2-threaded-dev
+	    fi
+    fi
+
     if [ "$TYPE" = "--prefork" ]; then
         $INSTALLCMD \
             ossxp-apache2-mpm-prefork ossxp-apache2-doc \
-            ossxp-apache2 
+            ossxp-apache2-utils ossxp-apache2 
     else
         $INSTALLCMD \
             ossxp-apache2-mpm-worker ossxp-apache2-doc \
-            ossxp-apache2 
+            ossxp-apache2-utils ossxp-apache2 
     fi
 }
 
