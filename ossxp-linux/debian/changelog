@@ -1,4 +1,4 @@
-ossxp-linux (1.25+3) unstable; urgency=low
+ossxp-linux (1.25+4) unstable; urgency=low
 
   * remove flexbackup, use ossxp-backup instead;
 
