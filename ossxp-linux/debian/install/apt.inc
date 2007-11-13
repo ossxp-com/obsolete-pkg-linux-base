@@ -1,4 +1,3 @@
-
 ########################################
 # install packages only necessary
 ########################################
@@ -74,6 +73,7 @@ function uninstall_packages()
     interactive="no"
     dryrun="no"
     packages=
+    purgemode="no"
 
     while [ $# -gt 0 ]; do
         if [ "$1" = "-" ] ; then
@@ -86,6 +86,8 @@ function uninstall_packages()
         	dryrun="yes"
 	elif [ "$1" = "-i" ]; then
         	interactive="yes"
+	elif [ "$1" = "--purge" ]; then
+        	purgemode="yes"
 	else
 		packages="$packages $1"
 	fi
@@ -113,12 +115,18 @@ function uninstall_packages()
         echo -e "Nothing will be uninstalled."
         echo ""
     else
-        echo -e "[1mFollowing packages will be uninstalled:[0m"
+	if [ "$purgemode" = "yes" ]; then
+          echo -e "[1mFollowing packages will be purged:[0m"
+	else
+          echo -e "[1mFollowing packages will be uninstalled:[0m"
+	fi
         echo $delete_list
         read -p "Press any key ..." -s -n1
         echo ""
 	if [ "$dryrun" = "yes" ]; then
             dpkg --dry-run --remove $delete_list
+	elif [ "$purgemode" = "yes" ]; then
+            dpkg --purge $delete_list || echo -e "[1m[44minstall failed! [0m"
 	else
             dpkg --remove $delete_list || echo -e "[1m[44minstall failed! [0m"
 	fi
