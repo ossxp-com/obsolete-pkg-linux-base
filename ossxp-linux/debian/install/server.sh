@@ -1,5 +1,4 @@
 #!/bin/sh -e
-
 # include apt maintainance functions
 . /opt/ossxp/install/apt.inc
 
@@ -14,6 +13,7 @@ SCRIPTNAME=`basename $0`
 TYPE="--thread"
 INSTALLCMD="install_packages -i"
 UNINSTALL=
+PURGE=
 
 function usage()
 {
@@ -37,7 +37,7 @@ function usage()
 function inst_apache
 {
 
-    if [ UNINSTALL="yes" ]; then
+    if [ "$UNINSTALL" = "yes" ]; then
 	    if [ "$TYPE" = "--prefork" ]; then
         	$INSTALLCMD ossxp-apache2-prefork-dev
 	    else
@@ -47,11 +47,13 @@ function inst_apache
 
     if [ "$TYPE" = "--prefork" ]; then
         $INSTALLCMD \
-            ossxp-apache2-mpm-prefork ossxp-apache2-doc \
+            ossxp-apache2-mpm-prefork ossxp-apache2.2-common \
+	    ossxp-apache2-doc \
             ossxp-apache2-utils ossxp-apache2 
     else
         $INSTALLCMD \
-            ossxp-apache2-mpm-worker ossxp-apache2-doc \
+            ossxp-apache2-mpm-worker ossxp-apache2.2-common \
+	    ossxp-apache2-doc \
             ossxp-apache2-utils ossxp-apache2 
     fi
 }
@@ -75,14 +77,24 @@ function inst_php
 {
     if [ "$TYPE" = "--prefork" ]; then
         $INSTALLCMD \
-            ossxp-php5-common ossxp-libapache2-mod-php5 \
-            ossxp-php5-cgi ossxp-php5-cli ossxp-php5 \
-            ossxp-php5-gd ossxp-php5-mysql ossxp-php-pear
+            ossxp-php5-common-prefork ossxp-php5-common \
+	    ossxp-libapache2-mod-php5-prefork ossxp-libapache2-mod-php5 \
+            ossxp-php5-cgi-prefork ossxp-php5-cgi \
+	    ossxp-php5-cli-prefork ossxp-php5-cli \
+	    ossxp-php5-prefork ossxp-php5 \
+            ossxp-php5-gd-prefork ossxp-php5-gd \
+	    ossxp-php5-mysql-prefork ossxp-php5-mysql \
+	    ossxp-php-pear
     else
         $INSTALLCMD \
-            ossxp-php5-common-mt ossxp-libapache2-mod-php5-mt \
-            ossxp-php5-cgi-mt ossxp-php5-cli-mt ossxp-php5-mt \
-            ossxp-php5-gd-mt ossxp-php5-mysql-mt ossxp-php-pear-mt
+            ossxp-php5-common-worker ossxp-php5-common \
+	    ossxp-libapache2-mod-php5-worker ossxp-libapache2-mod-php5 \
+            ossxp-php5-cgi-worker ossxp-php5-cgi \
+	    ossxp-php5-cli-worker ossxp-php5-cli \
+	    ossxp-php5-worker ossxp-php5 \
+            ossxp-php5-gd-worker ossxp-php5-gd \
+	    ossxp-php5-mysql-worker ossxp-php5-mysql \
+	    ossxp-php-pear
     fi
 }
 
@@ -91,7 +103,8 @@ function inst_svn
 {
     $INSTALLCMD \
             ossxp-libsvn1 ossxp-libapache2-svn ossxp-libsvn-doc \
-            ossxp-subversion ossxp-subversion-tools ossxp-python-subversion \
+            ossxp-subversion ossxp-subversion-tools \
+            ossxp-libsvn-perl ossxp-python-subversion \
             ossxp-svn-client ossxp-svn-server
 }
 
@@ -153,6 +166,11 @@ while [ $# -gt 0 ]; do
 
     --uninstall)
         UNINSTALL="yes"
+        ;;
+
+    --purge)
+        UNINSTALL="yes"
+        PURGE="yes"
         ;;
 
     --thread|--mpm|--worker)
@@ -225,7 +243,11 @@ if [ "$UNINSTALL" != "yes" ]; then
 	[ ! -z $cmd_docbook ] && inst_docbook
 	[ ! -z $cmd_gosa    ] && inst_gosa
 elif [ "$UNINSTALL" = "yes" ]; then
-	INSTALLCMD="uninstall_packages "
+	if [ "$PURGE" = "yes" ]; then
+		INSTALLCMD="uninstall_packages --purge"
+	else
+		INSTALLCMD="uninstall_packages"
+	fi
 
 	if [ ! -z $cmd_apache ]; then
 		cmd_php=1
