@@ -26,6 +26,7 @@ function usage()
     echo "    svn"
     echo "    mailman"
     echo "    mantis"
+    echo "    moin"
     echo "    mwiki"
     echo "    gosa"
     echo "    docbook"
@@ -139,6 +140,14 @@ function inst_mantis
 }
 
 
+function inst_moin
+{
+    $INSTALLCMD \
+        ossxp-libapache2-mod-fastcgi ossxp-libapache2-mod-python \
+	ossxp-moinmoin
+}
+
+
 function inst_phpbb
 {
     $INSTALLCMD \
@@ -211,6 +220,10 @@ while [ $# -gt 0 ]; do
         cmd_mwiki=1
         ;;
 
+    moin|moinmoin)
+    	cmd_moin=1
+	;;
+
     gosa)
         cmd_gosa=1
         ;;
@@ -239,6 +252,7 @@ if [ "$UNINSTALL" != "yes" ]; then
 	[ ! -z $cmd_mailman ] && inst_mailman
 	[ ! -z $cmd_mantis  ] && inst_mantis
 	[ ! -z $cmd_mwiki   ] && inst_mwiki
+	[ ! -z $cmd_moin    ] && inst_moin
 	[ ! -z $cmd_phpbb   ] && inst_phpbb
 	[ ! -z $cmd_docbook ] && inst_docbook
 	[ ! -z $cmd_gosa    ] && inst_gosa
@@ -253,6 +267,7 @@ elif [ "$UNINSTALL" = "yes" ]; then
 		cmd_php=1
 		cmd_svn=1
 		cmd_mailman=1
+		cmd_moin=1
 	fi
 	if [ ! -z $cmd_php ]; then
 		cmd_mantis=1
@@ -269,6 +284,7 @@ elif [ "$UNINSTALL" = "yes" ]; then
 	[ ! -z $cmd_svn     ] && inst_svn
 	[ ! -z $cmd_mailman ] && inst_mailman
 	[ ! -z $cmd_php     ] && inst_php
+	[ ! -z $cmd_moin    ] && inst_moin
 	[ ! -z $cmd_apache  ] && inst_apache
 	[ ! -z $cmd_mysql   ] && inst_mysql
 fi
