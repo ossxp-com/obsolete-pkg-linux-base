@@ -35,127 +35,184 @@ function usage()
 }
 
 
-function inst_apache
+function real_actions
 {
-
-    if [ "$UNINSTALL" = "yes" ]; then
-	    if [ "$TYPE" = "--prefork" ]; then
-        	$INSTALLCMD ossxp-apache2-prefork-dev
-	    else
-        	$INSTALLCMD ossxp-apache2-threaded-dev
-	    fi
-    fi
+    PACKAGES=
 
     if [ "$TYPE" = "--prefork" ]; then
-        $INSTALLCMD \
-            ossxp-apache2-mpm-prefork ossxp-apache2.2-common \
-	    ossxp-apache2-doc \
-            ossxp-apache2-utils ossxp-apache2 
+	MAIN_PACKAGES=$(echo $MAIN_PACKAGES | sed -e 's/@@PoW@@/-prefork/g')
+	UNINST_PACKAGES=$(echo $UNINST_PACKAGES | sed -e 's/@@PoW@@/-prefork/g')
+	INST_PACKAGES=$(echo $INST_PACKAGES | sed -e 's/@@PoW@@/-prefork/g')
     else
-        $INSTALLCMD \
-            ossxp-apache2-mpm-worker ossxp-apache2.2-common \
-	    ossxp-apache2-doc \
-            ossxp-apache2-utils ossxp-apache2 
+	MAIN_PACKAGES=$(echo $MAIN_PACKAGES | sed -e 's/@@PoW@@/-worker/g')
+	UNINST_PACKAGES=$(echo $UNINST_PACKAGES | sed -e 's/@@PoW@@/-worker/g')
+	INST_PACKAGES=$(echo $INST_PACKAGES | sed -e 's/@@PoW@@/-worker/g')
     fi
+
+    if [ "$UNINSTALL" = "yes" ]; then
+        PACKAGES="$MAIN_PACKAGES $UNINST_PACKAGES"
+    else
+        PACKAGES="$MAIN_PACKAGES $INST_PACKAGES"
+    fi
+    $INSTALLCMD $PACKAGES
+}
+
+
+function inst_apache
+{
+    if [ "$TYPE" = "--prefork" ]; then
+	MAIN_PACKAGES="ossxp-apache2-mpm-prefork ossxp-apache2.2-common 
+	               ossxp-apache2-doc
+                       ossxp-apache2-utils ossxp-apache2"
+       	UNINST_PACKAGES="ossxp-apache2-prefork-dev"
+	INST_PACKAGES=
+    else
+	MAIN_PACKAGES="ossxp-apache2-mpm-worker ossxp-apache2.2-common 
+	               ossxp-apache2-doc
+                       ossxp-apache2-utils ossxp-apache2"
+       	UNINST_PACKAGES="ossxp-apache2-threaded-dev"
+	INST_PACKAGES=
+    fi
+    real_actions
 }
 
 
 function inst_gosa
 {
-    $INSTALLCMD \
-            ossxp-gosa ossxp-gosa-schema ossxp-ldap
+    MAIN_PACKAGES="ossxp-gosa ossxp-gosa-schema ossxp-ldap"
+    INST_PACKAGES="
+            ossxp-php5-imap@@PoW@@ ossxp-php5-imap
+	    ossxp-php5-ldap@@PoW@@ ossxp-php5-ldap
+            ossxp-php5-mhash@@PoW@@ ossxp-php5-mhash
+            ossxp-php5-recode@@PoW@@ ossxp-php5-recode
+	    "
+    UNINST_PACKAGES=""
+    real_actions
 }
 
 
 function inst_docbook
 {
-    $INSTALLCMD \
-            ossxp-docbook
+    MAIN_PACKAGES="ossxp-docbook"
+    INST_PACKAGES=
+    UNINST_PACKAGES=
+    real_actions
 }
 
 
 function inst_php
 {
-    if [ "$TYPE" = "--prefork" ]; then
-        $INSTALLCMD \
-            ossxp-php5-common-prefork ossxp-php5-common \
-	    ossxp-libapache2-mod-php5-prefork ossxp-libapache2-mod-php5 \
-            ossxp-php5-cgi-prefork ossxp-php5-cgi \
-	    ossxp-php5-cli-prefork ossxp-php5-cli \
-	    ossxp-php5-prefork ossxp-php5 \
-            ossxp-php5-gd-prefork ossxp-php5-gd \
-	    ossxp-php5-mysql-prefork ossxp-php5-mysql \
-	    ossxp-php-pear
-    else
-        $INSTALLCMD \
-            ossxp-php5-common-worker ossxp-php5-common \
-	    ossxp-libapache2-mod-php5-worker ossxp-libapache2-mod-php5 \
-            ossxp-php5-cgi-worker ossxp-php5-cgi \
-	    ossxp-php5-cli-worker ossxp-php5-cli \
-	    ossxp-php5-worker ossxp-php5 \
-            ossxp-php5-gd-worker ossxp-php5-gd \
-	    ossxp-php5-mysql-worker ossxp-php5-mysql \
-	    ossxp-php-pear
-    fi
+    MAIN_PACKAGES="
+	    ossxp-php5-common@@PoW@@ ossxp-php5-common 
+	    ossxp-libapache2-mod-php5@@PoW@@ ossxp-libapache2-mod-php5 
+	    ossxp-php5-cgi@@PoW@@ ossxp-php5-cgi 
+	    ossxp-php5-cli@@PoW@@ ossxp-php5-cli 
+	    ossxp-php5@@PoW@@ ossxp-php5 
+	    ossxp-php5-gd@@PoW@@ ossxp-php5-gd 
+	    ossxp-php5-mysql@@PoW@@ ossxp-php5-mysql 
+	    ossxp-php-pear"
+    UNINST_PACKAGES="
+	    ossxp-libphp-jpgraph ossxp-jpgraph
+	    ossxp-smarty ossxp-smarty-gettext
+	    ossxp-php-auth ossxp-php-auth-sasl
+	    ossxp-php-db ossxp-php-http ossxp-php-log
+            ossxp-php-mail ossxp-php-mail-mime 
+	    ossxp-php-net-smtp ossxp-php-net-socket 
+	    ossxp-php-xml-parser
+	    ossxp-php-versioncontrol-svn
+            ossxp-php5@@PoW@@-dev ossxp-php5-dev
+            ossxp-php5-curl@@PoW@@ ossxp-php5-curl
+	    ossxp-php5-gmp@@PoW@@ ossxp-php5-gmp
+            ossxp-php5-imap@@PoW@@ ossxp-php5-imap
+	    ossxp-php5-interbase@@PoW@@ ossxp-php5-interbase
+	    ossxp-php5-ldap@@PoW@@ ossxp-php5-ldap
+	    ossxp-php5-mcrypt@@PoW@@ ossxp-php5-mcrypt
+            ossxp-php5-mhash@@PoW@@ ossxp-php5-mhash
+            ossxp-php5-odbc@@PoW@@ ossxp-php5-odbc
+            ossxp-php5-pgsql@@PoW@@ ossxp-php5-pgsql
+            ossxp-php5-pspell@@PoW@@ ossxp-php5-pspell
+            ossxp-php5-recode@@PoW@@ ossxp-php5-recode
+            ossxp-php5-snmp@@PoW@@ ossxp-php5-snmp
+            ossxp-php5-sqlite@@PoW@@ ossxp-php5-sqlite
+            ossxp-php5-sybase@@PoW@@ ossxp-php5-sybase
+            ossxp-php5-tidy@@PoW@@ ossxp-php5-tidy
+            ossxp-php5-xmlrpc@@PoW@@ ossxp-php5-xmlrpc
+            ossxp-php5-xsl@@PoW@@ ossxp-php5-xsl
+	    "
+    INST_PACKAGES=
+
+    real_actions
 }
 
 
 function inst_svn
 {
-    $INSTALLCMD \
-            ossxp-libsvn1 ossxp-libapache2-svn ossxp-libsvn-doc \
-            ossxp-subversion ossxp-subversion-tools \
-            ossxp-libsvn-perl ossxp-python-subversion \
-            ossxp-svn-client ossxp-svn-server
+    MAIN_PACKAGES="ossxp-libsvn1 ossxp-libapache2-svn ossxp-libsvn-doc 
+            ossxp-subversion ossxp-subversion-tools 
+            ossxp-libsvn-perl ossxp-python-subversion 
+            ossxp-svn-client ossxp-svn-server"
+    INST_PACKAGES=
+    UNINST_PACKAGES=
+    real_actions
 }
 
 
 function inst_mailman
 {
-    $INSTALLCMD \
-        ossxp-mailman 
+    MAIN_PACKAGES="ossxp-mailman"
+    INST_PACKAGES=
+    UNINST_PACKAGES=
+    real_actions
 }
 
 
 function inst_mysql
 {
-    $INSTALLCMD \
-        mysql-server
+    MAIN_PACKAGES="mysql-server"
+    INST_PACKAGES=
+    UNINST_PACKAGES=
+    real_actions
 }
 
 
 function inst_mwiki
 {
-    $INSTALLCMD \
-        ossxp-mediawiki ossxp-mediawiki-math
-        # ossxp-mediawiki-style-worldhello
+    MAIN_PACKAGES="ossxp-mediawiki ossxp-mediawiki-math"
+    INST_PACKAGES=
+    UNINST_PACKAGES=ossxp-mediawiki-style-worldhello
+    real_actions
 }
 
 
 function inst_mantis
 {
-    $INSTALLCMD \
-        ossxp-mantis 
-	# ossxp-mantis-theme-worldhello
+    MAIN_PACKAGES="ossxp-mantis"
+    INST_PACKAGES=ossxp-linux-fonts
+    UNINST_PACKAGES=ossxp-mantis-theme-worldhello
+    real_actions
 }
 
 
 function inst_moin
 {
-    $INSTALLCMD \
-        ossxp-libapache2-mod-fastcgi ossxp-libapache2-mod-python \
-	ossxp-moinmoin
+    MAIN_PACKAGES="ossxp-libapache2-mod-fastcgi 
+        ossxp-libapache2-mod-python 
+	ossxp-moinmoin"
+    INST_PACKAGES=
+    UNINST_PACKAGES=
+    real_actions
 }
 
 
 function inst_phpbb
 {
-    $INSTALLCMD \
-        ossxp-phpbb \
-	ossxp-phpbb-avatars \
-        ossxp-phpbb-language-zh \
-        ossxp-phpbb-smiles 
-        # ossxp-phpbb-style-worldhello
+    MAIN_PACKAGES="ossxp-phpbb 
+	ossxp-phpbb-avatars 
+        ossxp-phpbb-language-zh 
+        ossxp-phpbb-smiles"
+    INST_PACKAGES=
+    UNINST_PACKAGES=ossxp-phpbb-style-worldhello
+    real_actions
 }
 
 ########################################
@@ -245,6 +302,7 @@ while [ $# -gt 0 ]; do
 done
 
 if [ "$UNINSTALL" != "yes" ]; then
+	INSTALLCMD="install_packages -i"
 	[ ! -z $cmd_mysql   ] && inst_mysql
 	[ ! -z $cmd_apache  ] && inst_apache
 	[ ! -z $cmd_php     ] && inst_php
