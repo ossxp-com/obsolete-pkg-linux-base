@@ -135,7 +135,7 @@ function inst_mwiki
 function inst_mantis
 {
     $INSTALLCMD \
-        ossxp-mantis ossxp-linux-fonts 
+        ossxp-mantis 
 	# ossxp-mantis-theme-worldhello
 }
 
