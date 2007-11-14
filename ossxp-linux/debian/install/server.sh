@@ -4,21 +4,26 @@
 
 [ -x /bin/echo ] && alias echo=/bin/echo
 
-if [ `id -u` -ne 0 ]; then
-  echo "you must be root to run this script!"
-  exit 1
-fi
+function is_prefork_mode()
+{
+    VER=$(LC_ALL=C apt-cache policy ossxp-apache2-mpm-prefork 2>/dev/null | grep Installed  -n | cut -d":" -f3 | sed -e 's/ //g')
+    if [ -n "$VER" ] && [ "$VER" != "(none)" ]; then
+        return 0
+    fi
 
-SCRIPTNAME=`basename $0`
-TYPE="--thread"
-INSTALLCMD="install_packages -i"
-UNINSTALL=
-PURGE=
+    VER=$(LC_ALL=C apt-cache policy ossxp-php5-common-prefork 2>/dev/null | grep Installed  -n | cut -d":" -f3 | sed -e 's/ //g')
+    if [ -n "$VER" ] && [ "$VER" != "(none)" ]; then
+        return 0
+    fi
+
+    return 1
+}
+
 
 function usage()
 {
     echo "Usage:"
-    echo "    $SCRIPTNAME [--prefork|--thread] [--install|--uninstall] <server> ..."
+    echo "    $SCRIPTNAME [--prefork|--worker] [--install|--uninstall] <server> ..."
     echo "Available Servers:"
     echo "    lamp --- mysql & apache & php"
     echo "    apache"
@@ -31,6 +36,7 @@ function usage()
     echo "    gosa"
     echo "    docbook"
     echo "    phpbb"
+    echo "Current PoW state: $PoW_MODE"
     exit 1
 }
 
@@ -39,7 +45,7 @@ function real_actions
 {
     PACKAGES=
 
-    if [ "$TYPE" = "--prefork" ]; then
+    if [ "$PoW_MODE" = "--prefork" ]; then
 	MAIN_PACKAGES=$(echo $MAIN_PACKAGES | sed -e 's/@@PoW@@/-prefork/g')
 	UNINST_PACKAGES=$(echo $UNINST_PACKAGES | sed -e 's/@@PoW@@/-prefork/g')
 	INST_PACKAGES=$(echo $INST_PACKAGES | sed -e 's/@@PoW@@/-prefork/g')
@@ -60,7 +66,7 @@ function real_actions
 
 function inst_apache
 {
-    if [ "$TYPE" = "--prefork" ]; then
+    if [ "$PoW_MODE" = "--prefork" ]; then
 	MAIN_PACKAGES="ossxp-apache2-mpm-prefork ossxp-apache2.2-common 
 	               ossxp-apache2-doc
                        ossxp-apache2-utils ossxp-apache2"
@@ -219,11 +225,27 @@ function inst_phpbb
 # main function here:
 ########################################
 
+if [ `id -u` -ne 0 ]; then
+  echo "you must be root to run this script!"
+  exit 1
+fi
+
+SCRIPTNAME=`basename $0`
+if is_prefork_mode ; then
+    PoW_MODE="--prefork"
+else
+    PoW_MODE="--worker"
+fi
+INSTALLCMD="install_packages -i"
+UNINSTALL=
+PURGE=
+
+
 [ $# -eq 0 ] && usage
 while [ $# -gt 0 ]; do
     case $1 in
     --prefork)
-        TYPE=$1
+        PoW_MODE=$1
         ;;
 
     --install)
@@ -239,9 +261,10 @@ while [ $# -gt 0 ]; do
         PURGE="yes"
         ;;
 
-    --thread|--mpm|--worker)
-        TYPE=$1
+    --thread|--worker)
+        PoW_MODE=$1
         ;;
+
     -*)
         echo -e "[1mError: unknown option: $1[0m"
         usage
