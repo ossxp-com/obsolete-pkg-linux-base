@@ -1,6 +1,7 @@
-ossxp-linux (1.25+4) unstable; urgency=low
+ossxp-linux (1.25+5) unstable; urgency=low
 
   * remove flexbackup, use ossxp-backup instead;
+  * apache,php packages refactor;
 
  -- Jiang Xin <jiangxin@foo.bar>  Fri, 12 Oct 2007 01:19:08 +0800
 
