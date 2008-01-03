@@ -131,10 +131,10 @@ def network_test(hosts):
         logging.debug("NetTest for host:%s, type:%s, limt:%s" % (host,type,limit))
 
 	if type == 'i': # icmp
-	    cmd = 'fping -e %s' % host
+	    cmd = 'fping -e %s 2>&1' % host
 	    result_regex = icmp_regex
 	else:
-	    cmd = "curl -L %s -m 5 -s" % host
+	    cmd = "curl -L %s -m 5 -s 2>&1" % host
 	    result_regex = re.compile(limit, re.U)
 	logging.debug("Cmd line: %s" % cmd)
 
@@ -154,10 +154,6 @@ def network_test(hosts):
 	            logging.info("Test passed for %s" % host)
 	        else:
 	            logging.error("Test FAILED for %s. Response time %.2f greater then limit:%s" % (host, response_time, limit))
-	            if len(buff)>200:
-	                logging.error("Buff: %s \r\n...\r\n%s " % (buff[0:70], buff[-70:]))
-	            else:
-	                logging.error("Buff: %s " % buff)
             else:
 	        if result is None:
 	            logging.error("Test FAILED for %s. No response, or response not match with %s" % (host, limit))
