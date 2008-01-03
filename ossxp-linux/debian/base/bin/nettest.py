@@ -157,6 +157,10 @@ def network_test(hosts):
             else:
 	        if result is None:
 	            logging.error("Test FAILED for %s. No response, or response not match with %s" % (host, limit))
+	            if len(buff)>200:
+	                logging.error("Buff: %s \r\n...\r\n%s " % (buff[0:70], buff[-70:]))
+	            else:
+	                logging.error("Buff: %s " % buff)
 		else:
 	            logging.info("Test passed for %s" % host)
 	except:
