@@ -106,18 +106,18 @@ def network_test(hosts):
     for host in hosts:
         case = {}
         element = host.split(':')
-	if len(element) == 1:
-	    case['type'] = 'i'
-	    case['limit'] = '50'
-	    case['host'] = element[0]
-	elif len(element) == 2:
-	    case['type'] = 'i'
-	    case['limit'] = element[0]
-	    case['host'] = element[1]
-	else:
-	    case['type'] = element[0]
-	    case['limit'] = element[1]
-	    case['host'] = element[2]
+        if len(element) == 1:
+            case['type'] = 'i'
+            case['limit'] = '50'
+            case['host'] = element[0]
+        elif len(element) == 2:
+            case['type'] = 'i'
+            case['limit'] = element[0]
+            case['host'] = element[1]
+        else:
+            case['type'] = element[0]
+            case['limit'] = element[1]
+            case['host'] = element[2]
 
         testcase.append(case)
         
@@ -125,46 +125,46 @@ def network_test(hosts):
 
     for case in testcase:
         host = case['host']
-	type = case['type']
-	limit = case['limit']
+        type = case['type']
+        limit = case['limit']
 
         logging.debug("NetTest for host:%s, type:%s, limt:%s" % (host,type,limit))
 
-	if type == 'i': # icmp
-	    cmd = 'fping -e %s 2>&1' % host
-	    result_regex = icmp_regex
-	else:
-	    cmd = "curl -L %s -m 5 -s 2>&1" % host
-	    result_regex = re.compile(limit, re.U)
-	logging.debug("Cmd line: %s" % cmd)
+        if type == 'i': # icmp
+            cmd = 'fping -e %s 2>&1' % host
+            result_regex = icmp_regex
+        else:
+            cmd = "curl -L %s -m 5 -s 2>&1" % host
+            result_regex = re.compile(limit, re.U)
+        logging.debug("Cmd line: %s" % cmd)
 
-	buff = os.popen(cmd).read().strip()
-	if len(buff)>200:
-	    logging.debug("Buff: %s \r\n...\r\n%s " % (buff[0:70], buff[-70:]))
-	else:
-	    logging.debug("Buff: %s " % buff)
-	result = result_regex.search(buff)
-	if result:
-	    logging.info("Host: %s match limit: %s" % (host, limit))
+        buff = os.popen(cmd).read().strip()
+        if len(buff)>200:
+            logging.debug("Buff: %s \r\n...\r\n%s " % (buff[0:70], buff[-70:]))
+        else:
+            logging.debug("Buff: %s " % buff)
+        result = result_regex.search(buff)
+        if result:
+            logging.info("Host: %s match limit: %s" % (host, limit))
 
-	try:
-	    if type == 'i': # icmp
-	        response_time = float(result.groups()[0])
-	        if response_time < float(limit):
-	            logging.info("Test passed for %s" % host)
-	        else:
-	            logging.error("Test FAILED for %s. Response time %.2f greater then limit:%s" % (host, response_time, limit))
+        try:
+            if type == 'i': # icmp
+                response_time = float(result.groups()[0])
+                if response_time < float(limit):
+                    logging.info("Test passed for %s" % host)
+                else:
+                    logging.error("Test FAILED for %s. Response time %.2f greater then limit:%s" % (host, response_time, limit))
             else:
-	        if result is None:
-	            logging.error("Test FAILED for %s. No response, or response not match with %s" % (host, limit))
-	            if len(buff)>200:
-	                logging.error("Buff: %s \r\n...\r\n%s " % (buff[0:70], buff[-70:]))
-	            else:
-	                logging.error("Buff: %s " % buff)
-		else:
-	            logging.info("Test passed for %s" % host)
-	except:
-	    logging.error("Unknown response for %s : %s" % (host, buff))
+                if result is None:
+                    logging.error("Test FAILED for %s. No response, or response not match with %s" % (host, limit))
+                    if len(buff)>200:
+                        logging.error("Buff: %s \r\n...\r\n%s " % (buff[0:70], buff[-70:]))
+                    else:
+                        logging.error("Buff: %s " % buff)
+                else:
+                    logging.info("Test passed for %s" % host)
+        except:
+            logging.error("Unknown response for %s : %s" % (host, buff))
 
     logging.shutdown()
 
@@ -182,7 +182,7 @@ def main(argv=None):
         argv = sys.argv
     try:
         opts, args = getopt.getopt( 
-	    argv[1:], "hH:l:f:m:vq", 
+            argv[1:], "hH:l:f:m:vq", 
             ["help", "verbose", "quiet", "host=", "loglevel=", "logfile=", "mail="])
     except getopt.error, msg:
         return usage(1, msg)
@@ -191,18 +191,18 @@ def main(argv=None):
         if opt in ("-h", "--help"):
             return usage()
         elif opt in ("-H", "--host"):
-	    opt_host = arg
+            opt_host = arg
         elif opt in ("-l", "--loglevel"):
-	    opt_loglevel = arg.lower()
+            opt_loglevel = arg.lower()
         elif opt in ("-f", "--logfile"):
-	    opt_logfile = arg
+            opt_logfile = arg
         elif opt in ("-m", "--mail"):
-	    opt_mail = arg
+            opt_mail = arg
         elif opt in ("-v", "--verbose"):
-	    opt_verbose = True
+            opt_verbose = True
         elif opt in ("-q", "--quiet"):
-	    opt_verbose = False
-	else:
+            opt_verbose = False
+        else:
             return usage(1)
 
     if opt_verbose:
@@ -233,26 +233,26 @@ def main(argv=None):
         logger_f = logging.FileHandler(opt_logfile)
         logger_f.setLevel(loglevel)
         logger_f.setFormatter(logging.Formatter(log_format))
-	# add file_logger to root logger
+        # add file_logger to root logger
         logging.getLogger('').addHandler(logger_f)
 
     # log to mail
     if isinstance(opt_mail, (str,unicode)):
         #logger_m = logging.handlers.SMTPHandler('localhost','root@foo.bar', opt_mail, 'NetTester')
 
-	# using a buffered smtp logger
+        # using a buffered smtp logger
         logger_m = BufferingSMTPHandler('localhost','root@foo.bar', opt_mail, 'NetTester', 10)
         logger_m.setLevel(loglevel)
         logger_m.setFormatter(logging.Formatter(log_format))
 
-	# add mail_logger to root logger
+        # add mail_logger to root logger
         logging.getLogger('').addHandler(logger_m)
 
     if opt_host is not None:
         return network_test(opt_host)
     else:
         print "Nothing to test!"
-	return 1
+        return 1
 
    
 if __name__ == "__main__":
