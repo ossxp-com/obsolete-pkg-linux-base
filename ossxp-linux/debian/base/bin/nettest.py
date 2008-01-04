@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+# vim: ft=python ts=4 sw=4 et
 
 # Copyright (C) 2007 by the OpenSourceXpress co. ltd, Beijing, China.
 #
@@ -14,9 +15,8 @@
 # GNU General Public License for more details.
 #
 # Our website: 
-# 	http://www.WorldHello.net
-# 	http://www.OpenSourceXpress.com
-
+#   http://www.WorldHello.net
+#   http://www.OpenSourceXpress.com
 
 '''Test network connections
 
@@ -175,6 +175,7 @@ def main(argv=None):
     opt_loglevel = None
     opt_logfile = None
     opt_mail = None
+    opt_mail_subject = "NetTest"
     opt_verbose = False
     loglevel=logging.DEBUG
 
@@ -182,8 +183,8 @@ def main(argv=None):
         argv = sys.argv
     try:
         opts, args = getopt.getopt( 
-            argv[1:], "hH:l:f:m:vq", 
-            ["help", "verbose", "quiet", "host=", "loglevel=", "logfile=", "mail="])
+                argv[1:], "hH:l:f:m:s:vq", 
+                ["help", "verbose", "quiet", "subject=", "host=", "loglevel=", "logfile=", "mail="])
     except getopt.error, msg:
         return usage(1, msg)
 
@@ -198,6 +199,8 @@ def main(argv=None):
             opt_logfile = arg
         elif opt in ("-m", "--mail"):
             opt_mail = arg
+        elif opt in ("-s", "--subject"):
+            opt_mail_subject = arg
         elif opt in ("-v", "--verbose"):
             opt_verbose = True
         elif opt in ("-q", "--quiet"):
@@ -238,10 +241,10 @@ def main(argv=None):
 
     # log to mail
     if isinstance(opt_mail, (str,unicode)):
-        #logger_m = logging.handlers.SMTPHandler('localhost','root@foo.bar', opt_mail, 'NetTester')
+        #logger_m = logging.handlers.SMTPHandler('localhost','root@foo.bar', opt_mail, opt_mail_subject)
 
         # using a buffered smtp logger
-        logger_m = BufferingSMTPHandler('localhost','root@foo.bar', opt_mail, 'NetTester', 10)
+        logger_m = BufferingSMTPHandler('localhost','root@foo.bar', opt_mail, opt_mail_subject, 10)
         logger_m.setLevel(loglevel)
         logger_m.setFormatter(logging.Formatter(log_format))
 
