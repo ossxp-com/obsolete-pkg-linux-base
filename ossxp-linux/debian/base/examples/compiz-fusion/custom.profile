@@ -105,7 +105,8 @@ s0_ground_color2 = #b3b3b300
 s0_top_images = /opt/jiangxin/media/小雪/favorite/071223_22.jpg;/opt/jiangxin/media/小雪/favorite/071224_23.jpg;/opt/jiangxin/media/小雪/favorite/071219_01.jpg
 
 [core]
-as_active_plugins = water;workarounds;annotate;vpswitch;dbus;resize;text;screenshot;minimize;svg;neg;shift;core;move;crashhandler;showdesktop;firepaint;regex;decoration;png;place;imgjpeg;snow;wobbly;fade;cube;rotate;scale;cubecaps;addhelper;cubereflex;3d;atlantis;expo;ezoom;switcher
+as_active_plugins = water;workarounds;annotate;vpswitch;dbus;resize;text;screenshot;minimize;svg;neg;shift;core;move;crashhandler;showdesktop;firepaint;regex;decoration;png;place;imgjpeg;snow;wobbly;fade;cube;rotate;scale;cubecaps;addhelper;3d;expo;ezoom;switcher
+as_texture_filter = 0
 as_autoraise = false
 as_autoraise_delay = 0
 as_command11 = xkill
@@ -116,10 +117,12 @@ as_command_screenshot = ksnapshot
 as_run_command_screenshot_key = <Control>Print
 as_command_window_screenshot = ksnapshot -c
 as_window_menu_key = <Alt>F3
+s0_sync_to_vblank = false
 s0_outputs = 1280x800+0+0
 
 [crashhandler]
 as_start_wm = true
+as_wm_cmd = kwin --replace
 
 [cubereflex]
 s0_ground_color1 = #b3b3b3cc

@@ -29,7 +29,7 @@ Actions:
 ############################################################
 PKG_LIST='''
 	acl, apt-show-versions, ascii, autofs, bsdutils, bridge-utils, bzip2, curl, cabextract, 
-	dstat, ethtool, file, fping, fuse-utils, 
+	dstat, ethtool, file, fpdns, fping, fuse-utils, 
 	gnupg, htop, ia32-libs, ia32-libs-gtk, indent, iproute, 
 	less, locales, lynx, ntfs-3g, ntpdate, nmap, ngrep, 
 	openssl, p7zip-full, pciutils, perl, psmisc, 
