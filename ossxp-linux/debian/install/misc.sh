@@ -10,7 +10,7 @@ PKG_LIST="
     nfs-common portmap
     auto-apt 
     eject 
-    gpm mc pdumpfs resolvconf 
+    gpm mc pdumpfs 
     smbfs sshfs xprobe 
     "
 
