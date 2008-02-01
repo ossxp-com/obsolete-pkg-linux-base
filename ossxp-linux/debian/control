@@ -9,7 +9,7 @@ Package: ossxp-linux-base
 Architecture: all
 Section: ossxp
 Priority: optional
-Depends: 
+Depends: python
 Suggests: ossxp-linux-desktop-light, localepurge
 Description: basic linux tools.
  Useful console tools, such as bzip2, p7zip, vim, ...
