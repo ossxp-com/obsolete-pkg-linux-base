@@ -32,7 +32,7 @@ PKG_LIST='''
 	dstat, ethtool, file, fpdns, fping, fuse-utils, 
 	gnupg, htop, ia32-libs, ia32-libs-gtk, indent, iproute, 
 	less, locales, lynx, ntfs-3g, ntpdate, nmap, ngrep, 
-	openssl, p7zip-full, pciutils, perl, psmisc, 
+	openssl, p7zip-full, pciutils, perl, psmisc, preload, 
 	rdiff-backup, rsync, saidar, screen, shellutils, ssh, star, sudo, sysstat, sysutils, tcpdump, 
 	udev, unison, vim, vnstat, wget, zhcon, 
 	'''
