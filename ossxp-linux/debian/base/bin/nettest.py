@@ -59,7 +59,10 @@ class BufferingSMTPHandler(logging.handlers.BufferingHandler):
         self.mailhost = mailhost
         self.mailport = None
         self.fromaddr = fromaddr
-        self.toaddrs = toaddrs
+        if isinstance(toaddrs, (str,unicode)):
+            self.toaddrs = [ toaddrs ]
+        else:
+            self.toaddrs = toaddrs
         self.subject = subject
         self.setFormatter(logging.Formatter("%(levelname)s : %(asctime)-15s > %(message)s"))
 
@@ -180,10 +183,11 @@ def main(argv=None):
     loglevel=logging.DEBUG
 
     if argv is None:
-        argv = sys.argv
+        argv = sys.argv[1:]
+
     try:
         opts, args = getopt.getopt( 
-                argv[1:], "hH:l:f:m:s:vq", 
+                argv, "hH:l:f:m:s:vq", 
                 ["help", "verbose", "quiet", "subject=", "host=", "loglevel=", "logfile=", "mail="])
     except getopt.error, msg:
         return usage(1, msg)
