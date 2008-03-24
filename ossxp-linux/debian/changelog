@@ -1,3 +1,10 @@
+ossxp-linux (1.25+8) unstable; urgency=low
+
+  * add /opt/ossxp/install/README, guide for new installer.
+  * new kvm config file in /opt/ossxp/examples/kvm/config.vm
+
+ -- Jiang Xin <jiangxin@foo.bar>  Mon, 24 Mar 2008 13:45:20 +0800
+
 ossxp-linux (1.25+7) unstable; urgency=low
 
   * remove flexbackup, use ossxp-backup instead;

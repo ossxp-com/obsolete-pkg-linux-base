@@ -1,0 +1,74 @@
+1. add ossxp public key ring:
+  $ wget http://update.foo.bar/public.key
+  $ apt-key add public.key
+
+2. change hostname and hosts
+  $ hostname new-hostname
+  $ vi /etc/hostname
+    > new-hostname
+  $ vi /etc/hosts
+    > 127.0.0.1        new-hostname.foo.bar   new-hostname
+    > 10.0.0.2         update.foo.bar
+
+2. apt sources.list
+
+  deb  http://myname:hidden@update.foo.bar/.ossxp sid main
+
+  # apt-proxy setup
+  deb http://10.0.0.2:9999/debian/ etch  main contrib non-free
+  deb http://10.0.0.2:9999/debian/ lenny main contrib non-free
+  deb http://10.0.0.2:9999/debian/ sid main contrib non-free
+  deb http://10.0.0.2:9999/debian/ experimental main contrib non-free
+
+  deb http://10.0.0.2:9999/security/ etch/updates  main contrib non-free
+  deb http://10.0.0.2:9999/security/ lenny/updates main contrib non-free
+
+  deb-src http://10.0.0.2:9999/debian/ etch  main contrib non-free
+  deb-src http://10.0.0.2:9999/debian/ lenny main contrib non-free
+  deb-src http://10.0.0.2:9999/debian/ sid main contrib non-free
+  deb-src http://10.0.0.2:9999/debian/ experimental main contrib non-free
+
+  deb-src http://10.0.0.2:9999/security/ etch/updates  main contrib non-free
+  deb-src http://10.0.0.2:9999/security/ lenny/updates main contrib non-free
+
+  deb http://download.tuxfamily.org/shames/debian-sid/desktopfx/unstable ./
+
+2. install basic packages
+  $ sudo apt-get update
+  $ sudo apt-get upgrade
+  $ sudo apt-get install ssh sudo screen vim autofs
+
+3. add system group wheel
+  $ sudo addgroup --system wheel
+  $ sudo usermod -a -G wheel myname
+
+4. remove permenant ether mapping
+  $ sudo vi /etc/udev/rules.d/z25_persistent-net.rules
+    > remove SUBSYSTEM ... eth0.
+
+5. install ossxp-linux-base package, but not run base.py
+  $ sudo apt-get install ossxp-linux-base
+  $ sudo apt-get install ssh sudo screen vim autofs
+
+6. cleanup
+  $ sudo apt-get clean
+
+7. setup autofs
+  $ sudo vi /etc/auto.master
+    > /netmnt /etc/auto.network --ghost
+    > /isomnt /etc/auto.iso --timeout=300 --ghost
+  $ sudo mkdir /netmnt /isomnt
+  $ sudo vi /etc/auto.network
+    ## Windows share
+    win_d		-fstype=cifs,soft,iocharset=utf8,uid=myname,gid=wheel,umask=002,username=myname,password=hidden	://10.0.0.5/d\$
+    win_e		-fstype=cifs,soft,iocharset=utf8,uid=myname,gid=wheel,umask=002,username=myname,password=hidden	://10.0.0.5/e\$
+    win_f		-fstype=cifs,soft,iocharset=utf8,uid=myname,gid=wheel,umask=002,username=myname,password=hidden	://10.0.0.5/f\$
+
+    ## 10.0.0.3
+    vm_data         -fstype=cifs,soft,iocharset=utf8,uid=myname,gid=wheel,umask=002,username=myname,password=hidden       ://10.0.0.3/data
+
+    ## 10.0.0.2
+    packages        -fstype=cifs,soft,iocharset=utf8,uid=myname,gid=wheel,umask=002,username=myname,password=hidden       ://10.0.0.2/packages
+    software        -fstype=cifs,soft,iocharset=utf8,uid=myname,gid=wheel,umask=002,username=myname,password=hidden       ://10.0.0.2/software
+    ebook           -fstype=cifs,soft,iocharset=utf8,uid=myname,gid=wheel,umask=002,username=myname,password=hidden       ://10.0.0.2/ebook
+

@@ -1,17 +1,18 @@
 #!/bin/sh
 
-DISK_C=base.img
-DISK_D=swap.img
-CDROM=/data/_iso/ubuntu/dvd/kubuntu-7.04-dvd-i386.iso
+HDA=hda.img
+HDB=swap.img
+#CDROM=/data/_iso/debian/debian-etch4.0r3_i386/debian-40r3-i386-DVD-1.iso
+#CDROM=/data/_iso/debian/debian-etch4.0r3_amd64/debian-40r3-amd64-DVD-1.iso
 
-ACPI=yes
-BOOT=d
+BOOT=c
+ACPI=no
 MEMORY=512
-MACADDR=52:54:00:12:34:04
+MACADDR=52:54:00:01:01:01
 MOUSE=usb
 NET=bridge
 SMP=yes
 SOUNDHW=sb16
-STDVGA=yes
+STDVGA=no
 UTC=no
 VNC=yes
