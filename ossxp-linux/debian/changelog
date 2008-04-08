@@ -1,6 +1,6 @@
 ossxp-linux (1.25+9) unstable; urgency=low
 
-  * add shtool in devel.py
+  * add shtool, manpages-dev  in develop package;
 
  -- Jiang Xin <jiangxin@foo.bar>  Mon, 24 Mar 2008 13:45:20 +0800
 
