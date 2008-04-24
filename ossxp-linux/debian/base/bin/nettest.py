@@ -108,7 +108,7 @@ def network_test(hosts):
 
     for host in hosts:
         case = {}
-        element = host.split(':')
+        element = host.split(':',2)
         if len(element) == 1:
             case['type'] = 'i'
             case['limit'] = '50'

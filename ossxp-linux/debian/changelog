@@ -1,5 +1,6 @@
-ossxp-linux (1.25+9) unstable; urgency=low
+ossxp-linux (1.25+10) unstable; urgency=low
 
+  * split host str max to 3 parts. user:pass@url is a valid url now.
   * add shtool, manpages-dev  in develop package;
 
  -- Jiang Xin <jiangxin@foo.bar>  Mon, 24 Mar 2008 13:45:20 +0800
