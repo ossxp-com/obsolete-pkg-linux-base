@@ -135,8 +135,12 @@ if [ -z "$MACADDR" ]; then
     MACADDR=$(GetMacAddr)
 fi
 
+if [ -z "$NETSCRIPT" ]; then
+    NETSCRIPT="/etc/kvm/kvm-ifup"
+fi
+
 if echo $NET|egrep -iq "^bridge"; then
-    opt_net="-net nic,vlan=0,macaddr=$MACADDR -net tap,vlan=0,script=/etc/kvm/kvm-ifup"
+    opt_net="-net nic,vlan=0,macaddr=$MACADDR -net tap,vlan=0,script=${NETSCRIPT}"
 elif echo $NET|egrep -iq "^nat"; then
     opt_net="-net nic,macaddr=$MACADDR -net user"
 elif echo $NET|egrep -iq "^standalone"; then
