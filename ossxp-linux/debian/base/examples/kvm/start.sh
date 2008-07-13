@@ -213,7 +213,7 @@ if [ ! -z "$BOOT" ]; then
 fi
 
 for disk in $HDA $HDB $HDC $HDD; do
-    if [ ! -z $disk ] && lsattr $disk | cut -d" " -f1 | grep -q "i" ; then
+   if [ ! -z $disk ] && ( lsattr $disk 2>/dev/null| cut -d" " -f1 | grep -q "i" || ! test -w $disk ); then
       echo -e "[1mImage($(basename $disk)) is readonly, using snapshot mode![0m"
       opt_snapshot="-snapshot"
   fi
