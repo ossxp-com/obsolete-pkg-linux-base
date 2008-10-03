@@ -1,3 +1,9 @@
+ossxp-linux (1.25+10+) unstable; urgency=low
+
+  * add svnclean alias
+
+ -- Jiang Xin <jiangxin@foo.bar>  Fri, 03 Oct 2008 15:46:22 +0800
+
 ossxp-linux (1.25+10) unstable; urgency=low
 
   * split host str max to 3 parts. user:pass@url is a valid url now.

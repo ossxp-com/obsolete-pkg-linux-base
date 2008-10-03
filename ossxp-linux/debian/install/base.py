@@ -130,6 +130,8 @@ if [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
 fi
 set -o vi
+alias svnclean='svn st | grep "^?" | sed -e "s/?//g" | xargs -I {} -i bash -c "echo delete {}; rm -rf {}"'
+alias ll='ls -al --color=auto'
 '''
 		else:
 			patch['append']    = '''
