@@ -33,7 +33,7 @@ PKG_LIST='''
 	mozilla-thunderbird, mozilla-thunderbird-inspector, mozilla-thunderbird-typeaheadfind, thunderbird-locale-zh-cn, 
 	cupsys-client, cupsys-driver-gutenprint, cupsys, cups-pdf, cupsys-bsd, printconf, xsane, 
 	kate, quanta, 
-	amarok, mplayer, 
+	amarok, mplayer, kid3, 
 	nessusd, nessus, nmapfe, flashplugin-nonfree, 
 	gq, meld, azureus, amule, 
 	kompare, cervisia, kdesvn, kdevelop3, kdevelop, 
@@ -45,6 +45,7 @@ PKG_LIST='''
 	pidgin, ekiga, v4l-config, libsdl1.2debian-all, 
 	wine, wine-utils,
 	kvm, qemu, 
+	eclipse, 
 	'''
 
 # Games: pingus, lbreakout2, supertux,
@@ -147,3 +148,4 @@ def main(argv=None):
 if __name__ == "__main__":
 	sys.exit(main())
 
+# vim: noet
