@@ -33,7 +33,7 @@ PKG_LIST='''
 	gnupg, htop, ia32-libs, ia32-libs-gtk, indent, iproute, 
 	less, locales, lynx, ntfs-3g, ntpdate, nmap, ngrep, 
 	openssl, p7zip-full, pciutils, perl, psmisc, preload, 
-	rdiff-backup, rsync, saidar, screen, shellutils, ssh, star, sudo, sysstat, sysutils, tcpdump, 
+	rdiff-backup, rsync, rar, saidar, screen, shellutils, ssh, star, sudo, sysstat, sysutils, tcpdump, 
 	udev, unison, vim, vnstat, wget, zhcon, 
 	'''
 ############################################################
@@ -73,6 +73,9 @@ def do_install():
 		args.append('-q')
 	args.append('--install')
 		
+	print "[1m========== Install ossxp custom packages ==========[0m"
+	apt.run( args+ [PKG_LIST] )
+
 	print "[1m========== Install debian standard packages ==========[0m"
 	cmd = 'aptitude search -F "%p" ~pstandard'
 	list = apt.get_list(cmd)
@@ -87,9 +90,6 @@ def do_install():
 	cmd = 'aptitude search -F "%p" ~pimportant'
 	list = apt.get_list(cmd)
 	apt.run( args+ [list] )
-
-	print "[1m========== Install ossxp custom packages ==========[0m"
-	apt.run( args+ [PKG_LIST] )
 
 
 
