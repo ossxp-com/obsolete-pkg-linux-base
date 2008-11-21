@@ -45,7 +45,7 @@ PKG_LIST='''
 	pidgin, ekiga, v4l-config, libsdl1.2debian-all, 
 	wine, wine-utils,
 	kvm, qemu, 
-	eclipse, kbabel,
+	eclipse, kbabel, bluefish,
 	'''
 
 # Games: pingus, lbreakout2, supertux,
