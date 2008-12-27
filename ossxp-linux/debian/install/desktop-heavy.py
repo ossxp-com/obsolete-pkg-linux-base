@@ -32,7 +32,7 @@ PKG_LIST='''
 	mozilla-firefox, mozilla-firefox-locale-zh-cn, 
 	mozilla-thunderbird, mozilla-thunderbird-inspector, mozilla-thunderbird-typeaheadfind, thunderbird-locale-zh-cn, 
 	cupsys-client, cupsys-driver-gutenprint, cupsys, cups-pdf, cupsys-bsd, printconf, xsane, 
-	kate, quanta, 
+	kate, quanta, kdiff3,
 	amarok, mplayer, kid3, 
 	nessusd, nessus, nmapfe, flashplugin-nonfree, 
 	gq, meld, azureus, amule, 
