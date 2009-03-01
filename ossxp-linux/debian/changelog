@@ -1,3 +1,10 @@
+ossxp-linux (1:1.26.132) unstable; urgency=low
+
+  * maintain using hg;
+  * add demo.sh for setup environment for demostration;
+
+ -- Jiang Xin <jiangxin@foo.bar>  Sun, 01 Mar 2009 09:11:46 +0800
+
 ossxp-linux (1.26.4980) unstable; urgency=low
 
   * add svnclean alias
