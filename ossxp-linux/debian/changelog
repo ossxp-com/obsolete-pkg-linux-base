@@ -1,3 +1,9 @@
+ossxp-linux (1:1.26.137) unstable; urgency=low
+
+  * Better support for alternative packages.
+
+ -- Jiang Xin <jiangxin@foo.bar>  Wed, 03 Jun 2009 18:50:24 +0800
+
 ossxp-linux (1:1.26.132) unstable; urgency=low
 
   * maintain using hg;

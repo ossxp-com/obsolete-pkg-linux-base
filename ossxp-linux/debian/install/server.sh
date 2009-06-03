@@ -1,6 +1,6 @@
 #!/bin/sh -e
 # include apt maintainance functions
-. /opt/ossxp/install/apt.inc
+. /opt/ossxp/install/myapt.inc
 
 [ -x /bin/echo ] && alias echo=/bin/echo
 

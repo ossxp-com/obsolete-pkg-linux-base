@@ -1,4 +1,4 @@
 debian/base/*   opt/ossxp/
-debian/install/apt.inc  opt/ossxp/install/
-debian/install/apt.py   opt/ossxp/install/
+debian/install/myapt.inc  opt/ossxp/install/
+debian/install/myapt.py   opt/ossxp/install/
 debian/install/misc.sh  opt/ossxp/install/
