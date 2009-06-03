@@ -58,7 +58,7 @@ def run(*argv):
 	global verbose
 	interactive = 1
 	dryrun = 0
-	list = ""
+	package_list = ""
 	install = 1
 
 	# if argv passed from sys.argv, argv[0] should pass to getopt
@@ -105,15 +105,15 @@ def run(*argv):
 						item = "%s, %s" % (item, line)
 				except EOFError:
 					break
-		if list == '':
-			list = item
+		if package_list == '':
+			package_list = item
 		else:
-			list = "%s, %s" % (list, item)
+			package_list = "%s, %s" % (package_list, item)
 
 	if install:
-		process_packages(list, install_mode=1, interactive=interactive, dryrun=dryrun)
+		process_packages(package_list, install_mode=1, interactive=interactive, dryrun=dryrun)
 	else:
-		process_packages(list, install_mode=0, interactive=interactive, dryrun=dryrun)
+		process_packages(package_list, install_mode=0, interactive=interactive, dryrun=dryrun)
 
 alike_pkgs = (
 	( 'exim4-daemon-light', 'exim4-daemon-heavy', 'exim4-daemon-custom', ),
@@ -122,18 +122,18 @@ alike_pkgs = (
 
 
 def get_list(cmd):
-	list=""
+	package_list=""
 	policy = os.popen(cmd, 'r')
 	while 1:
 		line=policy.readline()
 		if not line:
 			break
 		line=line.strip()
-		if list == '':
-			list = line
+		if package_list == '':
+			package_list = line
 		else:
-			list = "%s, %s" % (list, line)
-	return list
+			package_list = "%s, %s" % (package_list, line)
+	return package_list
 
 
 def get_pkg_status(pkg):
@@ -183,12 +183,12 @@ def check_package(pkg):
 
 
 def pre_check(packages):
-	list = packages.split(',')
+	package_list = packages.split(',')
 	uptodate_list=[]
 	upgrade_list=[]
 	notinst_list=[]
 	unknown_list=[]
-	for item in list:
+	for item in package_list:
 		item = item.strip()
 		if len(item) == 0:
 			continue
@@ -207,11 +207,11 @@ def pre_check(packages):
 					upgrade_list.append(pkg)
 					found = 1
 					break
-			if found:
-				continue
+			if not found:
+				unknown_list.extend(split)
+			continue
 
-		pkg = split[0]
-		pkg, status = check_package(pkg) 
+		pkg, status = check_package(split[0]) 
 		if status == VERSION_EQUAL:
 			uptodate_list.append(pkg)
 		elif status == VERSION_DIFF:
@@ -285,8 +285,8 @@ def config_file_append(conffile, patch):
 				break
 
 
-def process_packages(list, install_mode=1, interactive=1, dryrun=1):
-	lists = pre_check(list)
+def process_packages(package_list, install_mode=1, interactive=1, dryrun=1):
+	lists = pre_check(package_list)
 	if install_mode:
 		if lists[VERSION_UNKNOWN]:
 			print "These packages are not found for this distrabution:"

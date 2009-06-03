@@ -34,7 +34,7 @@ PKG_LIST='''
 	devscripts, fakeroot, hdparm, 
 	libtool, libc6-dev, libncurses5-dev, 
 	libssl-dev, libldap2-dev, libxml2-dev, libexpat1-dev, libperl-dev, libbz2-dev, 
-	libc-client-dev, libcurl3-dev, libfreetype6-dev, libgcrypt11-dev, libgd2-xpm-dev, 
+	libc-client2007b-dev | libc-client-dev, libcurl3-dev, libfreetype6-dev, libgcrypt11-dev, libgd2-xpm-dev, 
 	libjpeg62-dev, libmcrypt-dev, libmhash-dev, libmysqlclient-dev, libpng12-dev, libsnmp-dev, 
 	libsdl1.2debian, libsdl1.2debian-all, libsdl-image1.2, 
 	libsdl1.2-dev, libsdl-image1.2-dev, libasound2, libasound2-dev, 
