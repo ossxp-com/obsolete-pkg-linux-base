@@ -207,6 +207,10 @@ def pre_check(packages):
 					upgrade_list.append(pkg)
 					found = 1
 					break
+				elif status == VERSION_NOTINST:
+					notinst_list.append(pkg)
+					found = 1
+					break
 			if not found:
 				unknown_list.extend(split)
 			continue
