@@ -40,7 +40,8 @@ PKG_LIST='''
 ############################################################
 
 
-import apt, os, sys, re, string, getopt, tempfile, shutil
+import myapt as apt
+import os, sys, re, string, getopt, tempfile, shutil
 
 
 interactive = 1

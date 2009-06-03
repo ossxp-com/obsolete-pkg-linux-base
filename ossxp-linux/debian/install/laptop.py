@@ -34,7 +34,8 @@ PKG_LIST='''
 ############################################################
 
 
-import apt, os, sys, re, string, getopt
+import myapt as apt
+import os, sys, re, string, getopt
 
 
 interactive = 1
