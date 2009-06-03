@@ -35,6 +35,7 @@ PKG_LIST='''
 	openssl, p7zip-full, pciutils, perl, psmisc, preload, 
 	rdiff-backup, rsync, rar, saidar, screen, shellutils, ssh, star, sudo, sysstat, sysutils, tcpdump, 
 	udev, unison, vim, vnstat, wget, zhcon, 
+	coreutils, memtester, procinfo, tofrodos,
 	'''
 ############################################################
 
