@@ -146,12 +146,13 @@ set -o vi
 	if os.path.exists(CONFFILE):
 		patch = {}
 		patch['filemod'] = "440"
-		patch['precheck_deny'] = "%wheel"
+		patch['precheck_deny'] = "ossxp_config_begin"
 		patch['stamp_before'] = "##### ossxp_config_begin #####"
 		patch['stamp_end']    = "##### ossxp_config_end #####"
 		patch['append']    = '''
-#%wheel		ALL = (ALL) ALL
-%wheel		ALL = NOPASSWD: ALL
+##%wheel    ALL = (ALL) ALL
+#%sudo      ALL = NOPASSWD: ALL
+#%wheel     ALL = NOPASSWD: ALL
 
 #User_Alias	FULLTIMERS = admin1,admin2
 #FULLTIMERS	ALL = NOPASSWD: ALL
@@ -163,12 +164,12 @@ set -o vi
 	if os.path.exists(CONFFILE):
 		patch = {}
 		patch['filemod'] = "644"
-		patch['precheck_deny'] = "AllowGroups wheel"
+		patch['precheck_deny'] = "ossxp_config_begin"
 		patch['stamp_before'] = "##### ossxp_config_begin #####"
 		patch['stamp_end']    = "##### ossxp_config_end #####"
 		patch['append']    = '''
 # Only allow login if users belong to these groups:
-#AllowGroups wheel
+#AllowGroups sudo wheel
 '''
 		patch['trans_from'] = ['Protocol 2', 'PermitRootLogin no', 'PermitRootLogin no', 'UsePrivilegeSeparation yes']
 		patch['trans_to']   = ['Protocol 2', 'PermitRootLogin no', 'PermitRootLogin no', 'UsePrivilegeSeparation yes']

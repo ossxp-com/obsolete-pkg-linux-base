@@ -245,11 +245,11 @@ def config_file_append(conffile, patch):
 	buff = open(conffile).read()
 
 	if patch.has_key('precheck_deny') and patch['precheck_deny']:
-		if re.match(patch['precheck_deny'], buff, re.DOTALL):
+		if re.search(patch['precheck_deny'], buff, re.DOTALL):
 			vprint ("Match %s, not modify config file %s" % (patch['precheck_deny'], conffile) )
 			return 0
 	if patch.has_key('precheck_pass') and patch['precheck_pass']:
-		if not re.match(patch['precheck_pass'], buff, re.DOTALL):
+		if not re.search(patch['precheck_pass'], buff, re.DOTALL):
 			vprint ("Not match %s, not modify config file %s" % (patch['precheck_deny'], conffile) )
 			return 0
 
