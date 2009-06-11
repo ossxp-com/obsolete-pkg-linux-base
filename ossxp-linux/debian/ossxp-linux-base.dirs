@@ -1,2 +1,4 @@
+/etc/ossxp/packages
 /opt/ossxp/conf/linux_kernel
 /opt/ossxp/bin
+/opt/ossxp/lib/packages

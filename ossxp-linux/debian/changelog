@@ -1,3 +1,9 @@
+ossxp-linux (1:1.26.143) unstable; urgency=low
+
+  * add ossxp_pkgadmin.py
+
+ -- Jiang Xin <jiangxin@foo.bar>  Thu, 11 Jun 2009 16:15:54 +0800
+
 ossxp-linux (1:1.26.137) unstable; urgency=low
 
   * Better support for alternative packages.

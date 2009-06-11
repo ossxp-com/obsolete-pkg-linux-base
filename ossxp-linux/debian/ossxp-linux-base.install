@@ -1,3 +1,4 @@
+debian/macro.in etc/ossxp/packages/
 debian/base/*   opt/ossxp/
 debian/install/myapt.inc  opt/ossxp/install/
 debian/install/myapt.py   opt/ossxp/install/
