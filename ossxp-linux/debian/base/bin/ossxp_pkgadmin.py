@@ -19,8 +19,8 @@ options:
     -p name:
         Set package name
 
-    --type ip|host:
-    -t ip|host:
+    --type 
+    -t ip|host|email|name|password|others:
         Config file type.
 """
 
@@ -31,7 +31,7 @@ import re
 MACROS_FILE = '/etc/ossxp/packages/macros'
 PACKAGE_LIB_DIR = '/opt/ossxp/lib/packages'
 PATTERN_MACRONAME = re.compile(r'\(\?P<([^>]+)>.*?\)')
-VALID_RECORD_TYPE = ('ip', 'host', 'others')
+VALID_RECORD_TYPE = ('ip', 'host', 'email', 'name', 'password', 'others')
 
 
 class ConfigFile(object):
@@ -85,7 +85,7 @@ class Packages(object):
             line = fp.readline()
             if line == '':
                 break
-            if line.strip()=='' or line[0] == '#':
+            if line.strip()=='' or line.strip()[0] == '#':
                 continue
 
             if line.startswith('file:'):
@@ -107,10 +107,8 @@ class Packages(object):
 
             if line.startswith('regex:'):
                 has_regex = True
-                continue
-
-            # regex: may follow a regex 
-            line = '\t'+line[5:]
+                # regex: may follow a regex 
+                line = ' '+line[5:]
 
             if has_regex and (line[0] == ' ' or line[0] == '\t'):
                 config.add_regex(line.strip())
@@ -230,6 +228,8 @@ class Packages(object):
                         m = obj.pattern[idx].search(line)
                         if not m:
                             continue
+                        if opt_debug:
+                            print "pattern '%s' matched line '%s'" % (obj.regex[idx], line)
                         for macro in PATTERN_MACRONAME.findall(obj.regex[idx]):
                             if m.group(macro):
                                 if line.count(m.group(macro)) > 1:
@@ -257,17 +257,18 @@ def usage(code, msg=''):
     sys.exit(code)
 
 def main(argv=None):
-    global opt_type, opt_package, opt_dryrun
+    global opt_type, opt_package, opt_dryrun, opt_debug
     opt_type = ''
     opt_package = ''
     opt_dryrun = False
+    opt_debug = False
 
     if argv is None:
         argv = sys.argv
     try:
         opts, args = getopt.getopt(
-            argv[1:], "hvt:p:n", 
-            ["help", "verbose", "type=", "package=", "dryrun"])
+            argv[1:], "hvt:p:nd", 
+            ["help", "verbose", "type=", "package=", "dryrun", "debug"])
     except getopt.error, msg:
          return usage(1, msg)
 
@@ -282,6 +283,8 @@ def main(argv=None):
             opt_package = arg
         elif opt in ('-n', '--dryrun'):
             opt_dryrun = True
+        elif opt in ('-d', '--debug'):
+            opt_debug = True
         else:
             return usage(1, 'Unknown option: %s' % opt)
         #elif opt in ('--more_options'):
