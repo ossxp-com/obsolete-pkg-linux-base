@@ -171,7 +171,7 @@ class Packages(object):
             line = line.strip()
             if not line or line[0]=='#':
                 continue
-            key, value = line.split(':',1)
+            key, value = line.split('=',1)
             self._pre_defined_macros[key.strip()] = value.strip()
         return self._pre_defined_macros
 
