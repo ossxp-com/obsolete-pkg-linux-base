@@ -2,13 +2,14 @@
 # -*- coding: utf-8 -*-
 
 """
-Copyright 2009, by Jiang Xin at OpenSourceXpress co. ltd. 
+%(COPYRIGHT)s
 Contact: <worldhello.net AT gmail.com>
 
 Usage:
     %(PACKAGENAME)s options... list
     %(PACKAGENAME)s options... list_macros
-    %(PACKAGENAME)s options... update_config_files
+    %(PACKAGENAME)s options... extract_macros
+    %(PACKAGENAME)s options... change_config_files
 
 options:
     -n:
@@ -28,8 +29,9 @@ import os, sys
 import getopt
 import re
 
+COPYRIGHT="Copyright 2009, by Jiang Xin at OpenSourceXpress co. ltd."
 MACROS_FILE = '/etc/ossxp/packages/macros'
-PACKAGE_LIB_DIR = '/opt/ossxp/lib/packages'
+PACKAGE_LIBS = ['/opt/ossxp/lib/packages', '/etc/ossxp/packages',]
 PATTERN_MACRONAME = re.compile(r'\(\?P<([^>]+)>.*?\)')
 VALID_RECORD_TYPE = ('ip', 'host', 'email', 'name', 'password', 'others')
 
@@ -59,18 +61,27 @@ class Packages(object):
     _reference_macros = set([])
 
 
-    def __init__(self, name = PACKAGE_LIB_DIR):
-        if os.path.isdir(name):
-            self.walk_dir(name)
-        elif os.path.isfile(name):
-            packagename = os.path.basename(name).rsplit('.',1)[0]
-            self.packages[packagename] = self.parse_file(name)
-        else:
-            filename = os.path.join(PACKAGE_LIB_DIR, name) + '.conf'
-            if not os.path.isfile(filename):
-                raise Exception('config file for package %s does not exist!' % name)
-            self.packages[name] =  self.parse_file(filename)
-            print filename
+    def __init__(self, packages = PACKAGE_LIBS):
+        def initialize(name):
+            if os.path.isdir(name):
+                self.walk_dir(name)
+            elif os.path.isfile(name):
+                packagename = os.path.basename(name).rsplit('.',1)[0]
+                self.packages[packagename] = self.parse_file(name)
+            else:
+                for dir in PACKAGE_LIBS:
+                    filename = os.path.join(dir, name) + '.conf'
+                    if os.path.isfile(filename):
+                        break
+                if not os.path.isfile(filename):
+                    raise Exception('config file for package %s does not exist!' % name)
+                self.packages[name] =  self.parse_file(filename)
+        if isinstance(packages, basestring):
+            packages = packages.split(",")
+        if not isinstance(packages, (list,tuple)):
+            raise Exception("packages should be list or tuple.")
+        for pkg in packages:
+            initialize(pkg)
 
     def parse_file(self, filename):
         if not os.path.isfile(filename):
@@ -129,7 +140,11 @@ class Packages(object):
                 packages[pkg_name] = self.parse_file(os.path.join(dirname, i))
 
         os.path.walk(path, _parse_dir, packages)
-        self.packages = packages
+        for key, value in packages.iteritems():
+            if key in self.packages:
+                raise Exception('%s in %s already initialized in other location.' % (key, path))
+            else:
+                self.packages[key] = value
 
     def get_config_obj_by_type(self, config_type=None):
         objs = []
@@ -174,7 +189,7 @@ class Packages(object):
     pre_defined_macros = property(get_pre_defined_macros)
     reference_macros = property(get_reference_macros)
 
-    def _update_precheck(self):
+    def _macros_precheck(self):
         not_defined_macros = self.reference_macros - set(self.pre_defined_macros.keys())
         if not_defined_macros:
             raise Exception("Macros not defined in file %s:\n%s" % 
@@ -207,8 +222,43 @@ class Packages(object):
         print "saved %s." % filename
         print
 
-    def update(self):
-        self._update_precheck()
+    def extract_macros(self):
+        macros = {}
+        for val in self.packages.values():
+            for obj in val:
+                if not obj.regex:
+                    continue
+
+                filename = obj.name
+                if not os.path.isfile(filename):
+                    print >> sys.stderr, "File '%s' not exist!" % filename
+                fp = open(filename)
+                for line in fp.readlines():
+                    for idx in range(len(obj.pattern)):
+                        m = obj.pattern[idx].search(line)
+                        if not m:
+                            continue
+                        if opt_debug:
+                            print "pattern '%s' matched line '%s'" % (obj.regex[idx], line)
+                        for macro in PATTERN_MACRONAME.findall(obj.regex[idx]):
+                            if m.group(macro):
+                                if line.count(m.group(macro)) > 1:
+                                    print >> sys.stderr, "Find multiple '%s' for macro '%s' in line: %s" % \
+                                        (m.group(macro), macro, line)
+                                    continue
+                                if macro in macros and macros[macro] != m.group(macro):
+                                    print >> sys.stderr, "Macro %s already set to %s! set to %s failed!" % \
+                                        (macro, macros[macro], m.group(macro))
+                                elif macro not in macros:
+                                    macros[macro] = m.group(macro)
+                fp.close()
+        print "# Generated by %s.\n# %s" % (sys.argv[0], COPYRIGHT)
+        print "# Format: macro = value"
+        print '\n'.join( [ "%s = %s" % (k, v) for k, v in sorted(macros.iteritems()) ] )
+
+
+    def change_config_files(self):
+        self._macros_precheck()
         for key, val in self.packages.items():
             for obj in val:
                 if not obj.pattern:
@@ -251,7 +301,7 @@ def usage(code, msg=''):
         fd = sys.stderr
     else:
         fd = sys.stdout
-    print >> fd, __doc__
+    print >> fd, __doc__ % {"COPYRIGHT":COPYRIGHT, "PACKAGENAME":sys.argv[0], }
     if msg:
         print >> fd, msg
     sys.exit(code)
@@ -302,7 +352,7 @@ def main(argv=None):
             config_files = packages.get_config_file_by_type(opt_type)
             print "\n".join(config_files)
 
-        elif cmd in ['list_macros', 'macros']:
+        elif cmd in ['list_macros', 'macros', 'listmacros']:
             not_defined_macros = packages.reference_macros - set(packages.pre_defined_macros.keys())
             print "# Pre defined macros in %s:" % MACROS_FILE
             print '\t',
@@ -316,8 +366,14 @@ def main(argv=None):
                 print '\t',
                 print '\n\t'.join(not_defined_macros)
 
-        elif cmd in ['update_config_files',]:
-            packages.update()
+        elif len(cmd)>=len('change') and  'change_config_files'.startswith(cmd):
+            packages.change_config_files()
+
+        elif len(cmd)>=len('extract') and  'extract_macros'.startswith(cmd):
+            packages.extract_macros()
+
+        else:
+            usage(1, 'Unknown cmd: %s' % cmd)
 
 if __name__ == "__main__":
     sys.exit(main())
