@@ -1,0 +1,5 @@
+ldap_default_servers = "localhost::389"
+ldap_version = 3
+LDAP_FILTER_MAIL_MATCH = &(objectClass=ossxpMailAccount)(ossxpMailAddress=${local_part}@${domain})
+LDAP_VIRTUAL_MAIL_SPOOL= ${lookup ldap {user=cn=ldapadmin,dc=foo,dc=bar pass=guess ldap:///dc=foo,dc=bar?cn?sub?(LDAP_FILTER_MAIL_MATCH)}{/var/mail/exim/$domain/$local_part/}}
+

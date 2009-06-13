@@ -1,0 +1,31 @@
+
+# 投递到目录，Maildir 格式
+vdom_mail_dir:
+    debug_print = "T: vdom_mail_dir for $local_part@$domain"
+    driver = appendfile
+    delivery_date_add
+    envelope_to_add
+    return_path_add
+    check_string = ""
+    escape_string = ""
+    create_directory
+    mode = 0660
+    directory_mode = 0770
+    user = 400
+    group = 400
+    maildir_format
+
+# 投递到文件，mailbox 格式
+vdom_mail_file:
+    debug_print = "T: vdom_mail_file for $local_part@$domain"
+    driver = appendfile
+    delivery_date_add
+    envelope_to_add
+    return_path_add
+    check_string = ""
+    escape_string = ""
+    mode = 0660
+    directory_mode = 0770
+    user = 400
+    group = 400
+

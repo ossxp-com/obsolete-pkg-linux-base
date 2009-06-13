@@ -1,0 +1,17 @@
+%           SOA    ns1.foo.bar.  root@foo.bar.  /serial 7200 3600 604800 1800 
+
+%           NS     ns1.foo.bar. 
+%           NS     ns2.foo.bar. 
+ns1.%       A      127.0.0.1
+ns2.%       A      127.0.0.1 
+%           A      127.0.0.1 
+%           MX 10  mail.foo.bar. 
+mail.%      A      127.0.0.1 
+myhp.%      FQDN4  127.0.0.1 
+www.%       FQDN4  127.0.0.1 
+jiangxin.%  CNAME  www.% 
+c4.%        A      10.0.0.1 
+c3.%        CNAME  c4.% 
+c2.%        CNAME  c3.% 
+c1.%        CNAME  c2.% 
+*.%         A      127.0.0.1 

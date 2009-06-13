@@ -1,6 +1,7 @@
-ossxp-linux (1:1.26.149) unstable; urgency=low
+ossxp-linux (1:1.26.156) unstable; urgency=low
 
   * add ossxp_pkgadmin.py
+  * add package info for linux base system.
 
  -- Jiang Xin <jiangxin@foo.bar>  Thu, 11 Jun 2009 16:15:54 +0800
 

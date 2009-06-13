@@ -1,0 +1,31 @@
+vdom_aliases:
+    debug_print = "R: vdom_aliases for $local_part@$domain"
+    driver = redirect
+    allow_defer
+    allow_fail
+    # 属于虚拟域的邮件投递
+    domains = dsearch;/etc/exim4/virtual
+    data = ${expand:${lookup{$local_part}lsearch*@{/etc/exim4/virtual/$domain}}}
+    retry_use_local_part
+    # 使用 vdom_mail_dir transport
+    directory_transport = vdom_mail_dir
+    # 使用 vdom_mail_file transport
+    file_transport = vdom_mail_file
+    pipe_transport   = address_pipe
+    # 如果注释掉 no_more 则可以在 /etc/exim4/virtual 下创建本地域名，
+    # 同时支持 本地帐号邮件地址和 虚拟帐号邮件地址。
+    #no_more
+
+
+vdom_aliases_ldap:
+    debug_print = "R: vdom_aliases_ldap for $local_part@$domain"
+    driver = redirect
+    allow_defer
+    allow_fail
+    domains = dsearch;/etc/exim4/virtual
+    data = LDAP_VIRTUAL_MAIL_SPOOL
+    #retry_use_local_part
+    directory_transport = vdom_mail_dir
+    file_transport = vdom_mail_file
+    pipe_transport   = address_pipe
+    #no_more

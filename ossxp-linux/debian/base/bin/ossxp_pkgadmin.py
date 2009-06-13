@@ -262,7 +262,7 @@ class Packages(object):
                                         (m.group(macro), macro, line)
                                     continue
                                 if macro in macros and macros[macro] != m.group(macro):
-                                    print >> sys.stderr, "Macro %s already set to %s! set to %s failed!" % \
+                                    print >> sys.stderr, "Warning: Macro %s already set to %s! set to %s failed!" % \
                                         (macro, macros[macro], m.group(macro))
                                 elif macro not in macros:
                                     macros[macro] = m.group(macro)
