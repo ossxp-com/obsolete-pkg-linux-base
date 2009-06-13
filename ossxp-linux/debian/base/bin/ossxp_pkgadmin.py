@@ -388,6 +388,9 @@ def main(argv=None):
              (not cmd.startswith('list_') and len(cmd)>len('list') and  'listbackups'.startswith(cmd) ):
             packages.list_backups()
 
+        elif len(cmd)>=len('change') and  'change_config_files'.startswith(cmd):
+            packages.change_config_files()
+
         elif len(cmd)>=len('extract') and  'extract_macros'.startswith(cmd):
             packages.extract_macros()
 
