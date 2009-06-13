@@ -34,7 +34,7 @@ COPYRIGHT="Copyright 2009, by Jiang Xin at OpenSourceXpress co. ltd."
 MACROS_FILE = '/etc/ossxp/packages/macros'
 PACKAGE_LIBS = ['/opt/ossxp/lib/packages', '/etc/ossxp/packages',]
 PATTERN_MACRONAME = re.compile(r'\(\?P<([^>]+)>.*?\)')
-VALID_TYPES = ('ip', 'host', 'email', 'name', 'password', 'backup', 'others')
+VALID_TYPES = ('ip', 'host', 'email', 'name', 'number', 'password', 'backup', 'others')
 IGNORE_TYPES = ('backup', 'directory')
 
 
