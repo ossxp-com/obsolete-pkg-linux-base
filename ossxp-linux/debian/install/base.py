@@ -106,7 +106,7 @@ def do_config():
 	if os.path.exists(CONFFILE):
 		patch = {}
 		patch['filemod'] = "644"
-		#patch['precheck_deny'] = "set completion-ignore-case on"
+		patch['precheck_deny'] = "set completion-ignore-case on"
 		patch['stamp_before'] = "##### ossxp_config_begin #####"
 		patch['stamp_end']    = "##### ossxp_config_end #####"
 		patch['append']    = '''
@@ -123,7 +123,7 @@ set editing-mode vi
 	if os.path.exists(CONFFILE):
 		patch = {}
 		patch['filemod'] = "644"
-		#patch['precheck_deny'] = "set -o vi"
+		patch['precheck_deny'] = "set -o vi"
 		patch['stamp_before'] = "##### ossxp_config_begin #####"
 		patch['stamp_end']    = "##### ossxp_config_end #####"
 		if os.path.exists('/etc/bash_completion'):
@@ -181,7 +181,7 @@ set -o vi
 	if os.path.exists(CONFFILE):
 		patch = {}
 		patch['filemod'] = "644"
-		#patch['precheck_deny'] = "caption always"
+		patch['precheck_deny'] = "caption always"
 		patch['stamp_before'] = "##### ossxp_config_begin #####"
 		patch['stamp_end']    = "##### ossxp_config_end #####"
 		patch['append']    = '''
