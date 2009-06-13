@@ -8,6 +8,7 @@ Contact: <worldhello.net AT gmail.com>
 Usage:
     %(PACKAGENAME)s options... list
     %(PACKAGENAME)s options... list_macros
+    %(PACKAGENAME)s options... list_backups
     %(PACKAGENAME)s options... extract_macros
     %(PACKAGENAME)s options... change_config_files
 
@@ -21,7 +22,7 @@ options:
         Set package name
 
     --type 
-    -t ip|host|email|name|password|others:
+    -t %(VALID_TYPES)s:
         Config file type.
 """
 
@@ -33,7 +34,8 @@ COPYRIGHT="Copyright 2009, by Jiang Xin at OpenSourceXpress co. ltd."
 MACROS_FILE = '/etc/ossxp/packages/macros'
 PACKAGE_LIBS = ['/opt/ossxp/lib/packages', '/etc/ossxp/packages',]
 PATTERN_MACRONAME = re.compile(r'\(\?P<([^>]+)>.*?\)')
-VALID_RECORD_TYPE = ('ip', 'host', 'email', 'name', 'password', 'others')
+VALID_TYPES = ('ip', 'host', 'email', 'name', 'password', 'backup', 'others')
+IGNORE_TYPES = ('backup', 'directory')
 
 
 class ConfigFile(object):
@@ -99,27 +101,29 @@ class Packages(object):
             if line.strip()=='' or line.strip()[0] == '#':
                 continue
 
-            if line.startswith('file:'):
+            if line.startswith('file:') or line.startswith('directory:'):
                 if config:
                     configs.append(config)
-                config = ConfigFile(line[5:])
+                config = ConfigFile(line.split(':',1)[1])
+                if line.startswith('directory:'):
+                    config.types.append('directory')
                 has_regex = False
 
             if line.startswith('type:'):
-                types = line[5:].split(',')
+                types = line.split(':',1)[1].split(',')
                 for config_type in types:
                     config_type = config_type.strip()
-                    if config_type not in VALID_RECORD_TYPE:
+                    if config_type not in VALID_TYPES:
                         raise Exception('Unknown type: %s' % config_type)
                     config.types.append(config_type)
 
             if line.startswith('desc:'):
-                config.desc = line[5:].strip()
+                config.desc = line.split(':',1)[1].strip()
 
             if line.startswith('regex:'):
                 has_regex = True
                 # regex: may follow a regex 
-                line = ' '+line[5:]
+                line = ' '+line.split(':',1)[1].strip()
 
             if has_regex and (line[0] == ' ' or line[0] == '\t'):
                 config.add_regex(line.strip())
@@ -152,13 +156,21 @@ class Packages(object):
             config_type = config_type.strip().lower()
         for val in self.packages.values():
             for obj in val:
+                # Exclude config file/dir not in this config_type
                 if config_type and config_type not in obj.types:
+                    continue
+                # Ignore pure backup config file, or pure backup directory
+                if not config_type and not ( set(obj.types) - set(IGNORE_TYPES) ):
                     continue
                 objs.append(obj)
         return objs 
 
     def get_config_file_by_type(self, config_type=None):
         return map(lambda x:x.name, self.get_config_obj_by_type(config_type))
+
+    def list_backups(self):
+        backups = map(lambda x:x.name, self.get_config_obj_by_type('backup'))
+        print '\n'.join(backups)
 
     def get_pre_defined_macros(self, filename=MACROS_FILE):
         if not os.path.isfile(filename):
@@ -301,7 +313,12 @@ def usage(code, msg=''):
         fd = sys.stderr
     else:
         fd = sys.stdout
-    print >> fd, __doc__ % {"COPYRIGHT":COPYRIGHT, "PACKAGENAME":sys.argv[0], }
+    print >> fd, __doc__ % {
+        "COPYRIGHT":COPYRIGHT,
+        "PACKAGENAME":sys.argv[0],
+        "VALID_TYPES":' | '.join(VALID_TYPES), 
+        }
+
     if msg:
         print >> fd, msg
     sys.exit(code)
@@ -327,7 +344,7 @@ def main(argv=None):
             return usage(0)
         elif opt in ('-t', '--type'):
             opt_type = arg.lower()
-            if opt_type not in VALID_RECORD_TYPE:
+            if opt_type not in VALID_TYPES:
                 return usage(1, 'Unknown type: %s' % opt_type)
         elif opt in ('-p', '--package'):
             opt_package = arg
@@ -352,7 +369,8 @@ def main(argv=None):
             config_files = packages.get_config_file_by_type(opt_type)
             print "\n".join(config_files)
 
-        elif cmd in ['list_macros', 'macros', 'listmacros']:
+        elif (cmd.startswith('list_') and len(cmd)>len('list_') and  'list_macros'.startswith(cmd) ) or \
+             (not cmd.startswith('list_') and len(cmd)>len('list') and  'listmacros'.startswith(cmd) ):
             not_defined_macros = packages.reference_macros - set(packages.pre_defined_macros.keys())
             print "# Pre defined macros in %s:" % MACROS_FILE
             print '\t',
@@ -366,8 +384,9 @@ def main(argv=None):
                 print '\t',
                 print '\n\t'.join(not_defined_macros)
 
-        elif len(cmd)>=len('change') and  'change_config_files'.startswith(cmd):
-            packages.change_config_files()
+        elif (cmd.startswith('list_') and len(cmd)>len('list_') and  'list_backups'.startswith(cmd) ) or \
+             (not cmd.startswith('list_') and len(cmd)>len('list') and  'listbackups'.startswith(cmd) ):
+            packages.list_backups()
 
         elif len(cmd)>=len('extract') and  'extract_macros'.startswith(cmd):
             packages.extract_macros()
