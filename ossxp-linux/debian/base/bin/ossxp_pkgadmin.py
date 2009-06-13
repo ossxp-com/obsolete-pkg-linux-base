@@ -51,7 +51,10 @@ class ConfigFile(object):
         if not regex or regex in self.regex:
             return
         self.regex.append(regex)
-        self.pattern.append(re.compile(regex, re.I))
+        try:
+            self.pattern.append(re.compile(regex, re.I))
+        except:
+            raise Exception("Regex compile failed for %s, line: %s" % (self.name, regex))
 
     def __str__(self):
         return self.name
@@ -274,10 +277,11 @@ class Packages(object):
         for key, val in self.packages.items():
             for obj in val:
                 if not obj.pattern:
-                    if obj.desc:
-                        print >> sys.stderr, "%s\n\t<< %s (%s)" % (obj.name, obj.desc, key)
-                    else:
-                        print >> sys.stderr, "%s\n\t<< No pattern defined for this file in '%s'. Manual edit it please!" % (obj.name, key)
+                    if set(obj.types) - set(IGNORE_TYPES):
+                        if obj.desc:
+                            print >> sys.stderr, "%s\n\t<< %s (%s)" % (obj.name, obj.desc, key)
+                        else:
+                            print >> sys.stderr, "%s\n\t<< No pattern defined for this file in '%s'. Manual edit it please!" % (obj.name, key)
                     continue
                 filename = obj.name
                 if not os.path.isfile(filename):
