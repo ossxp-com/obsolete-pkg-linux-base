@@ -19,4 +19,7 @@ $(patsubst %,binary-fixup/%,$(DEB_ALL_PACKAGES)) ::
 	pkg=$(subst binary-fixup/,,$@); \
 		find debian/$$pkg/ \( -name .svn -o -name "*~" \) -exec rm -rf {} + 
 
+binary-fixup/ossxp-linux-base::
+	chmod -R 700 /etc/ossxp
+
 # vim: noet

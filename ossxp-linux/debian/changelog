@@ -1,6 +1,7 @@
-ossxp-linux (1:1.26.158) unstable; urgency=low
+ossxp-linux (1:1.26.159) unstable; urgency=low
 
   * In package info file, one section may have multiple files.
+  * Set /etc/ossxp permissions.
 
  -- Jiang Xin <jiangxin@foo.bar>  Sun, 14 Jun 2009 17:52:14 +0800
 

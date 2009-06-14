@@ -178,7 +178,7 @@ class Packages(object):
         files = []
         for obj in self.get_config_obj_by_type('backup'):
             files.extend(obj.file_list)
-        print '\n'.join(sorted(files))
+        print '\n'.join(sorted(set(files)))
 
     def get_pre_defined_macros(self, filename=MACROS_FILE):
         if not os.path.isfile(filename):
