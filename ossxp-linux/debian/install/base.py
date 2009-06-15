@@ -215,7 +215,14 @@ caption always "%{= kw}%-Lw%{= BW}%n %t%{-}%+w %-= @%H - %Y/%m/%d, %C"
 		file.write(content)
 		file.close()
 
-
+	if not os.path.exists('/dev/loop63'):
+		for i in range(8,64):
+			if os.path.exists('/dev/loop%d' % i):
+				continue
+			cmd = "mknod -m 660 /dev/loop%d b 7 %d" % (i, i)
+			os.system(cmd)
+			cmd = "chown root.disk /dev/loop%d" % i
+			os.system(cmd)
 
 def main(argv=None):
 	global interactive, dryrun, verbose
@@ -269,3 +276,4 @@ def main(argv=None):
 if __name__ == "__main__":
 	sys.exit(main())
 
+# vim: noet
