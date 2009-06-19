@@ -314,7 +314,8 @@ class Packages(object):
                                         print >> sys.stderr, "Error: find multiple '%s' for macro '%s' in line: %s" % \
                                             (m.group(macro), macro, line)
                                         continue
-                                    assert macro in self.pre_defined_macros
+                                    if macro not in self.pre_defined_macros:
+                                        raise Exception("Error: macro '%s' not defined." % macro)
                                     if m.group(macro) != self.pre_defined_macros[macro]:
                                         line = line.replace(m.group(macro), self.pre_defined_macros[macro])
                                         save = True
