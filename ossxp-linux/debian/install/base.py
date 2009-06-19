@@ -29,12 +29,12 @@ Actions:
 ############################################################
 PKG_LIST='''
 	acl, apt-show-versions, ascii, autofs, bsdutils, bridge-utils, bzip2, curl, cabextract, 
-	dstat, ethtool, file, fpdns, fping, fuse-utils, 
+	dstat, ethtool, etckeeper, file, fpdns, fping, fuse-utils, 
 	gnupg, htop, ia32-libs, ia32-libs-gtk, indent, iproute, 
 	less, locales, lynx, ntfs-3g, ntpdate, nmap, ngrep, 
 	openssl, p7zip-full, pciutils, perl, psmisc, preload, 
 	rdiff-backup, resolvconf, rsync, rar, saidar, screen, coreutils | shellutils, ssh, sshfs, star, sudo, sysstat, tcpdump, 
-	memtester | sysutils, procinfo | sysutils, tofrodos | sysutils,
+	mercurial, memtester | sysutils, procinfo | sysutils, tofrodos | sysutils,
 	udev, unison, vim, vnstat, wget, zhcon, 
 	'''
 ############################################################
