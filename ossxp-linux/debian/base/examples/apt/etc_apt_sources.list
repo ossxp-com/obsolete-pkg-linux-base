@@ -15,35 +15,39 @@
 #deb file:/isomnt/debian_etch-cd2 etch main contrib
 #deb file:/isomnt/debian_etch-cd3 etch main contrib
 
+# ISO mirror
+#deb http://apt-source/debian/lenny/i386/dvd1/ lenny main contrib
+#deb http://apt-source/debian/lenny/i386/dvd2/ lenny main contrib
+#deb http://apt-source/debian/lenny/i386/dvd3/ lenny main contrib
+#deb http://apt-source/debian/lenny/i386/dvd4/ lenny main contrib
+#deb http://apt-source/debian/lenny/i386/dvd5/ lenny main contrib
+#deb http://apt-source/debian/lenny/i386/dvd6/ lenny main contrib
 
 # apt-proxy setup
-#deb http://update.foo.bar:9999/debian/ etch  main contrib non-free
-#deb http://update.foo.bar:9999/debian/ lenny main contrib non-free
-#deb http://update.foo.bar:9999/debian/ sid main contrib #non-free
-#deb http://update.foo.bar:9999/debian/ experimental main contrib non-free
+#deb http://apt-source:9999/debian/ etch  main contrib non-free
+#deb http://apt-source:9999/debian/ lenny main contrib non-free
+#deb http://apt-source:9999/debian/ sid main contrib #non-free
+#deb http://apt-source:9999/debian/ experimental main contrib non-free
 
-#deb http://update.foo.bar:9999/security/ etch/updates  main contrib non-free
-#deb http://update.foo.bar:9999/security/ lenny/updates main contrib non-free
+#deb http://apt-source:9999/security/ etch/updates  main contrib non-free
+#deb http://apt-source:9999/security/ lenny/updates main contrib non-free
 
-#deb-src http://update.foo.bar:9999/debian/ etch  main contrib non-free
-#deb-src http://update.foo.bar:9999/debian/ lenny main contrib non-free
-#deb-src http://update.foo.bar:9999/debian/ sid main contrib non-free
-#deb-src http://update.foo.bar:9999/debian/ experimental main contrib non-free
-#deb-src http://update.foo.bar:9999/security/ etch/updates  main contrib non-free
-#deb-src http://update.foo.bar:9999/security/ lenny/updates main contrib non-free
-
+#deb-src http://apt-source:9999/debian/ etch  main contrib non-free
+#deb-src http://apt-source:9999/debian/ lenny main contrib non-free
+#deb-src http://apt-source:9999/debian/ sid main contrib non-free
+#deb-src http://apt-source:9999/debian/ experimental main contrib non-free
+#deb-src http://apt-source:9999/security/ etch/updates  main contrib non-free
+#deb-src http://apt-source:9999/security/ lenny/updates main contrib non-free
 
 # ossxp packages
-#deb  http://user:pass@update.foo.bar/clientid etch main
-#deb  http://user:pass@update.foo.bar/clientid etch-testing main
-#deb  http://user:pass@update.foo.bar/clientid lenny main
-#deb  http://user:pass@update.foo.bar/clientid sid main
-
+#deb  http://user:pass@apt-source/clientid etch main
+#deb  http://user:pass@apt-source/clientid etch-testing main
+#deb  http://user:pass@apt-source/clientid lenny main
+#deb  http://user:pass@apt-source/clientid sid main
 
 # Debian official security update apt sources
 #deb http://security.debian.org/ etch/updates main contrib non-free
 #deb-src http://security.debian.org/ etch/updates main contrib non-free
-
 
 # Debian official apt source
 #deb http://cudlug.cudenver.edu/debian/ etch main non-free contrib
