@@ -176,9 +176,20 @@ class Packages(object):
 
     def list_backups(self):
         files = []
+        backups = []
         for obj in self.get_config_obj_by_type('backup'):
             files.extend(obj.file_list)
-        print '\n'.join(sorted(set(files)))
+        for item in sorted(files):
+            alreadyin = False
+            for bak in backups:
+                if item == bak or \
+                   ( item.startswith(bak) and (bak[-1]=='/' or item[len(bak)]=='/') ):
+                    alreadyin = True
+                    break
+            if not alreadyin:
+                backups.append(item)
+
+        print '\n'.join(backups)
 
     def get_pre_defined_macros(self, filename=MACROS_FILE):
         if not os.path.isfile(filename):

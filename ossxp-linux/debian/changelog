@@ -1,8 +1,9 @@
-ossxp-linux (1:1.26.167) unstable; urgency=low
+ossxp-linux (1:1.26.170) unstable; urgency=low
 
   * Add more loop device in /dev.
   * add authz_host defaults in /etc/apache2/include/authz_host.
   * add mercurial/etckeeper to base.py.
+  * remove duplicate items from backups.
 
  -- Jiang Xin <jiangxin@foo.bar>  Mon, 15 Jun 2009 12:15:54 +0800
 

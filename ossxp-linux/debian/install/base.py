@@ -169,7 +169,7 @@ set -o vi
 		patch['stamp_end']    = "##### ossxp_config_end #####"
 		patch['append']    = '''
 # Only allow login if users belong to these groups:
-#AllowGroups sudo wheel
+#AllowGroups ssh sudo wheel
 '''
 		patch['trans_from'] = ['Protocol 2', 'PermitRootLogin no', 'PermitRootLogin no', 'UsePrivilegeSeparation yes']
 		patch['trans_to']   = ['Protocol 2', 'PermitRootLogin no', 'PermitRootLogin no', 'UsePrivilegeSeparation yes']
