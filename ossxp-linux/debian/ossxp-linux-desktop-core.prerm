@@ -1,4 +1,4 @@
 #!/bin/sh -e
 
-rm -f /opt/ossxp/install/desktop-core.done
-rm -f /opt/ossxp/install/tor+privoxy.done
+rm -f /opt/ossxp/install/.desktop-core.done
+rm -f /opt/ossxp/install/.tor+privoxy.done
