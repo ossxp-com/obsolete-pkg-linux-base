@@ -1,13 +1,23 @@
 hide_disclaimer = "YES"
 timeout_seconds = 6
+
+# Note 1: ossxp new init.d script for maradns, can automatically update the 
+#         bind address to all live ip addresses.
+# Note 2: this ossxp enhancement not works with multiple mararc files,
+#         each bind to a different ip address.
+# Note 3: in this ossxp enhancement, administrator should define NS record(s)
+#         in each zone file, cause the bind ip address viriant.
 ipv4_bind_addresses = "127.0.0.1,10.0.2.1"
+
 chroot_dir = "/etc/maradns"
 recursive_acl = "127.0.0.1,10.0.0.0/8"
 
 # if not want query from root dns from IANN,
 # define upstream recursive dns server.
+# define RESOLVCONF_UPDATE_FORWARDERS=yes in /etc/default/maradns to enable
+# dynamic name servers.
 upstream_servers = {}
-upstream_servers["."] = "202.106.46.151,202.106.0.20,210.77.16.1"
+upstream_servers["."] = "resolvconf_nameservers"
 
 # authoritative dns server
 csv2 = {}
@@ -26,3 +36,7 @@ zone_transfer_acl = "127.0.0.1,10.0.0.0/8"
 max_ar_chain = 2
 
 maradns_uid = 117
+
+# Update by resolvconf. Must enabled it in /etc/default/maradns
+ipv4_alias["resolvconf_nameservers"] = "192.168.0.1"
+
