@@ -1,0 +1,62 @@
+--- /etc/init.d/maradns	2008-10-13 16:49:04.243218700 +0800
++++ init.d_maradns	2009-06-28 18:52:29.119216915 +0800
+@@ -35,6 +35,53 @@
+ exit 0
+ fi
+ 
++function update_dynamic_bind_address()
++{
++  rcfile=$1
++  if [ ! -f "$rcfile" ]; then
++    echo "Error: file '$rcfile' not exist"
++    return 1
++  fi
++
++  IPS=$(ifconfig | sed -ne '
++  s/.* inet addr:\([0-9.]\+\) .*/\1/
++  T
++  P
++  ')
++
++  BINDIP=
++  CHANGED=0
++  for ip in $IPS; do
++    BINDIP=${BINDIP}${BINDIP:+,}$ip
++  done
++
++  BIND_REGEXP="\(bind_address\|ipv4_bind_addresses\)[[:space:]]*="
++  if grep -q "^$BIND_REGEXP" $rcfile; then
++    HASHSUM=$(md5sum $rcfile)
++    SEDSCRIPT="s@^\($BIND_REGEXP\).*@\1 \"$BINDIP\"@"
++    sed -i -e "$SEDSCRIPT" $rcfile
++    [ "$HASHSUM" != "$(md5sum $rcfile)" ] && CHANGED=1
++  else
++    echo "Error: no bind_address direction in $rcfile!!!"
++  fi
++  if [ $CHANGED -eq 1 ]; then
++    echo "Note: bind ip changed to $BINDIP"
++  fi
++}
++
++if [ -z "${DYNAMIC_BIND_ADDRESS:-}" ]; then
++  echo "Warning: \$DYNAMIC_BIND_ADDRESS not defined in $DEFAULT." >&2
++fi
++
++case $DYNAMIC_BIND_ADDRESS in
++  n*|N*|0|off|Off|false|False|FALSE)
++    ;;
++	
++  *)
++    update_dynamic_bind_address "$SERVERS"
++    ;;
++esac
++
+ set -e
+ 
+ case "$1" in
+@@ -102,3 +149,5 @@
+ esac
+ 
+ exit 0
++
++# vim: et ts=2 sw=2
