@@ -207,23 +207,19 @@ def pre_check(packages):
 					upgrade_list.append(pkg)
 					found = 1
 					break
-				elif status == VERSION_NOTINST:
-					notinst_list.append(pkg)
-					found = 1
-					break
 			if not found:
 				unknown_list.extend(split)
-			continue
-
-		pkg, status = check_package(split[0]) 
-		if status == VERSION_EQUAL:
-			uptodate_list.append(pkg)
-		elif status == VERSION_DIFF:
-			upgrade_list.append(pkg)
-		elif status == VERSION_NOTINST:
-			notinst_list.append(pkg)
-		else:
-			unknown_list.append(pkg)
+				notinst_list.append(split[0])
+        else:
+            pkg, status = check_package(split[0]) 
+            if status == VERSION_EQUAL:
+                uptodate_list.append(pkg)
+            elif status == VERSION_DIFF:
+                upgrade_list.append(pkg)
+            elif status == VERSION_NOTINST:
+                notinst_list.append(pkg)
+            else:
+                unknown_list.append(pkg)
 
 	vprint ("unknown_list: %s" % unknown_list)
 	vprint ("upgrade_list: %s" % upgrade_list)

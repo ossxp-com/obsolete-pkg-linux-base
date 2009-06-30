@@ -30,7 +30,7 @@ Actions:
 PKG_LIST='''
 	xfce4, xdm, xscreensaver, 
 	epiphany-browser, konsole, 
-	firestarter | shorewall | guarddog | guidedog | kmyfirewall, 
+	shorewall | firestarter | guarddog | guidedog | kmyfirewall, 
 	alsa-base, alsa-oss, 
 	tsclient, xvncviewer, 
 	d4x, ossxp-freemind, 
