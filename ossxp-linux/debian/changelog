@@ -1,6 +1,7 @@
-ossxp-linux (1:1.26.178) unstable; urgency=low
+ossxp-linux (1:1.26.180) unstable; urgency=low
 
   * maradns related files move to ossxp-maradns package.
+  * add xorg into desktop-core.py packages.
 
  -- Jiang Xin <jiangxin@foo.bar>  Tue, 30 Jun 2009 11:24:23 +0800
 

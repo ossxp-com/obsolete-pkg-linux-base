@@ -9,38 +9,46 @@
   $ vi /etc/hosts
     > 127.0.0.1        new-hostname.foo.bar   new-hostname
     > 10.0.0.2         update.foo.bar
+    > xxx.xxx.xxx.xxx  apt-source
+    > xxx.xxx.xxx.xxx  backup-host1
+    > xxx.xxx.xxx.xxx  ldap-mirror1
+    > xxx.xxx.xxx.xxx  cosign-client1
 
 2. apt sources.list
 
+  # dvd mirror
+  deb http://apt-source/debian/lenny/i386/dvd1/ lenny main contrib
+  deb http://apt-source/debian/lenny/i386/dvd2/ lenny main contrib
+  deb http://apt-source/debian/lenny/i386/dvd3/ lenny main contrib
+  deb http://apt-source/debian/lenny/i386/dvd4/ lenny main contrib
+  deb http://apt-source/debian/lenny/i386/dvd5/ lenny main contrib
+  deb http://apt-source/debian/lenny/i386/dvd6/ lenny main contrib
+  deb http://apt-source/update/jiangxin/ sid main
+
+  # ossxp packages
   deb  http://myname:hidden@update.foo.bar/.ossxp sid main
 
   # apt-proxy setup
-  deb http://10.0.0.2:9999/debian/ etch  main contrib non-free
-  deb http://10.0.0.2:9999/debian/ lenny main contrib non-free
-  deb http://10.0.0.2:9999/debian/ sid main contrib non-free
-  deb http://10.0.0.2:9999/debian/ experimental main contrib non-free
+  deb http://apt-source:9999/debian/ lenny main contrib non-free
+  deb http://apt-source:9999/debian/ sid main contrib non-free
+  deb http://apt-source:9999/debian/ experimental main contrib non-free
 
-  deb http://10.0.0.2:9999/security/ etch/updates  main contrib non-free
-  deb http://10.0.0.2:9999/security/ lenny/updates main contrib non-free
+  deb http://apt-source:9999/security/ lenny/updates main contrib non-free
 
-  deb-src http://10.0.0.2:9999/debian/ etch  main contrib non-free
-  deb-src http://10.0.0.2:9999/debian/ lenny main contrib non-free
-  deb-src http://10.0.0.2:9999/debian/ sid main contrib non-free
-  deb-src http://10.0.0.2:9999/debian/ experimental main contrib non-free
+  deb-src http://apt-source:9999/debian/ lenny main contrib non-free
+  deb-src http://apt-source:9999/debian/ sid main contrib non-free
+  deb-src http://apt-source:9999/debian/ experimental main contrib non-free
 
-  deb-src http://10.0.0.2:9999/security/ etch/updates  main contrib non-free
-  deb-src http://10.0.0.2:9999/security/ lenny/updates main contrib non-free
-
-  deb http://download.tuxfamily.org/shames/debian-sid/desktopfx/unstable ./
+  deb-src http://apt-source:9999/security/ lenny/updates main contrib non-free
 
 2. install basic packages
   $ sudo apt-get update
   $ sudo apt-get upgrade
   $ sudo apt-get install ssh sudo screen vim autofs
 
-3. add system group wheel
-  $ sudo addgroup --system wheel
-  $ sudo usermod -a -G wheel myname
+3. add system group sudo
+  $ sudo addgroup --system sudo
+  $ sudo usermod -a -G sudo myname
 
 4. remove permenant ether mapping
   $ sudo vi /etc/udev/rules.d/z25_persistent-net.rules

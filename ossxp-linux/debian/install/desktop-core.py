@@ -28,7 +28,7 @@ Actions:
 
 ############################################################
 PKG_LIST='''
-	x-window-system-core, xdg-utils, menu, 
+	xorg | x-window-system-core, xdg-utils, menu, 
 	ttf-arphic-uming, ttf-arphic-ukai, ttf-bitstream-vera, 
 	ttf-arphic-newsung, wqy-bitmapfont, 
 	scim, scim-chinese, scim-pinyin, scim-tables-zh, fcitx, im-switch, 

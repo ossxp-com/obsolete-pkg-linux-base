@@ -150,9 +150,7 @@ set -o vi
 		patch['stamp_before'] = "##### ossxp_config_begin #####"
 		patch['stamp_end']    = "##### ossxp_config_end #####"
 		patch['append']    = '''
-##%wheel    ALL = (ALL) ALL
-#%sudo      ALL = NOPASSWD: ALL
-#%wheel     ALL = NOPASSWD: ALL
+%sudo      ALL = NOPASSWD: ALL
 
 #User_Alias	FULLTIMERS = admin1,admin2
 #FULLTIMERS	ALL = NOPASSWD: ALL
