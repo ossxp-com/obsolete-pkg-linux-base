@@ -144,7 +144,7 @@ organizationalUnitName_default	= security
 
 commonName			= Common Name (eg, Server name)
 commonName_max			= 64
-commonName_default		= www.worldhello.net
+commonName_default		= *.worldhello.net
 
 emailAddress			= Email Address
 emailAddress_max		= 64
