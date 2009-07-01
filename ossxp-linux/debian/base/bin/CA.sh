@@ -35,8 +35,8 @@ UNPROTECTED="-nodes"
 
 if [ -z "$OPENSSL" ]; then OPENSSL=openssl; fi
 
-DAYS="-days 365"	# 1 year
-CADAYS="-days 1095"	# 3 years
+DAYS="-days 3650"	# 10 year
+CADAYS="-days 7300"	# 20 years
 REQ="$OPENSSL req $SSLEAY_CONFIG"
 CA="$OPENSSL ca $SSLEAY_CONFIG"
 VERIFY="$OPENSSL verify"

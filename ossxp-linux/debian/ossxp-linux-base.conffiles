@@ -1,1 +1,2 @@
 /opt/ossxp/conf/ssl/openssl.cnf
+/opt/ossxp/bin/CA.sh
