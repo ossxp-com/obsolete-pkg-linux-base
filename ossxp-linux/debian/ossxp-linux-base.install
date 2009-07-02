@@ -5,4 +5,3 @@ debian/install/myapt.py   opt/ossxp/install/
 debian/install/misc.sh  opt/ossxp/install/
 debian/install/README   opt/ossxp/install/
 debian/package_info/*   opt/ossxp/lib/packages/
-debian/etc/apache2/*    etc/apache2/

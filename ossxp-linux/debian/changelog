@@ -1,6 +1,7 @@
-ossxp-linux (1:1.26.185) unstable; urgency=low
+ossxp-linux (1:1.26.187) unstable; urgency=low
 
   * Change default cert valid date to 10 years.
+  * Move apache default authz config to pkg-apache package.
 
  -- Jiang Xin <jiangxin@foo.bar>  Wed, 01 Jul 2009 15:23:32 +0800
 
