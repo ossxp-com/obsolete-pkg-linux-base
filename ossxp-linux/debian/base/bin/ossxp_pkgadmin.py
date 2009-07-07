@@ -33,46 +33,171 @@ import re
 COPYRIGHT="Copyright 2009, by Jiang Xin at OpenSourceXpress co. ltd."
 MACROS_FILE = '/etc/ossxp/packages/macros'
 PACKAGE_LIBS = ['/opt/ossxp/lib/packages', '/etc/ossxp/packages',]
-PATTERN_MACRONAME = re.compile(r'\(\?P<([^>]+)>.*?\)')
+PATTERN_MACRO_IN_REGEX = re.compile(r'\(\?P<([^>]+)>.*?\)')
+PATTERN_MACRO_IN_REPL = re.compile(r'\\g<([^>]+)>')
 VALID_TYPES = ('ip', 'host', 'email', 'name', 'number', 'password', 'backup', 'others')
 IGNORE_TYPES = ('backup', 'directory')
 
 
-class ConfigFile(object):
+class ConfigSection(object):
+
     def __init__(self, name):
         self.file_list = map(lambda x: x.strip(), name.split(','))
         self.desc = ''
         self.types = []
         self.regex = []
+        self.regex_replacement = []
+        self.regex_comment = []
         self.pattern = []
 
-    def add_regex(self,regex):
-        regex = regex.strip()
-        if not regex or regex in self.regex:
+    def add_regex(self, pattern, replacement='', comment=''):
+        pattern = pattern.strip()
+        if not pattern:
             return
-        self.regex.append(regex)
+        if pattern in self.regex:
+            raise Exception('pattern %s already declare in %s' % (pattern, self.file_list))
+        self.regex.append(pattern)
+        self.regex_replacement.append(replacement)
+        self.regex_comment.append(comment)
         try:
-            self.pattern.append(re.compile(regex, re.I))
+            self.pattern.append(re.compile(pattern, re.I))
         except:
-            raise Exception("Regex compile failed for %s, line: %s" % (','.join(self.file_list), regex))
+            if comment:
+                raise Exception("Regex compile failed for %s, line: %s.\n" % (','.join(self.file_list), comment))
+            else:
+                raise Exception("Regex compile failed for %s, line: %s.\n" % (','.join(self.file_list), pattern))
 
     def __str__(self):
         return ', '.join(self.file_list)
 
 
-class Packages(object):
-    packages = {}
-    _pre_defined_macros = {}
-    _reference_macros = set([])
+class Package(object):
 
+    def __init__(self, filename):
+        self.filename = filename
+        self.packagename = os.path.basename(filename).rsplit('.',1)[0]
+        self.config_sections = []
+        self.parse_file(filename)
+
+    def __len__(self):
+        return len(self.config_sections)
+
+    def parse_file(self, filename):
+        if not os.path.isfile(filename):
+            return
+
+        config  = None
+        has_regex = False
+        fp = open(filename)
+
+        readline_already = False
+        line=''
+        lineno = 0
+        while True:
+            if not readline_already:
+                line = fp.readline()
+                lineno = lineno+1
+            else:
+                readline_already = False
+            stripped = line.strip()
+            if line == '':
+                break
+            if not stripped or stripped[0] == '#':
+                continue
+
+            if line.startswith('file:') or line.startswith('directory:'):
+                has_regex = False
+                if config:
+                    self.config_sections.append(config)
+                config = ConfigSection(line.split(':',1)[1])
+                if line.startswith('directory:'):
+                    config.types.append('directory')
+                continue
+
+            if line.startswith('type:'):
+                has_regex = False
+                types = line.split(':',1)[1].split(',')
+                for config_type in types:
+                    config_type = config_type.strip()
+                    if config_type not in VALID_TYPES:
+                        raise Exception('Unknown type: %s' % config_type)
+                    config.types.append(config_type)
+                continue
+
+            if line.startswith('desc:'):
+                has_regex = False
+                config.desc = line.split(':',1)[1].strip()
+                continue
+
+            if line.startswith('regex:'):
+                has_regex = True
+                # regex: may follow a regex 
+                line = line.split(':',1)[1]
+                stripped = line.strip()
+                if not stripped:
+                    continue
+                if line[0] not in ' \n':
+                    line = ' ' + line
+
+            if has_regex and line[0] in ' \t':
+                if stripped and stripped[0] in "*":
+                    left = line.split('*', 1)[0]
+                    regex_comment = stripped[1:]
+                    regex_pattern = ""
+                    regex_replacement = ""
+                    while True:
+                        line = fp.readline()
+                        lineno = lineno+1
+                        stripped = line.strip()
+                        if (# file end
+                            line == '' or
+                            # another section or new regex pattern begins
+                            not line.startswith(left) or len(line) == len(left) or
+                            # comment or blank line
+                            not stripped or stripped[0] == '#' or
+                            # another regex begins
+                            line[len(left)] not in ' \t'):
+
+                            config.add_regex(pattern=regex_pattern, replacement=regex_replacement, comment=regex_comment)
+                            # do not bypass this line
+                            readline_already = True
+                            break
+                        # other parameter for pattern:
+                        else:
+                            if stripped[0] == '*':
+                                stripped = stripped[1:]
+                                key, value = stripped.split(':',1)
+                                if key.strip() == 'match':
+                                    regex_pattern = value.strip()
+                                elif key.strip() == 'replacement':
+                                    regex_replacement = value.strip()
+                                else:
+                                    raise Exception('Unknown directive for regex: %d:%s.' % (lineno,line))
+                else:
+                    config.add_regex(stripped)
+            else:
+                raise Exception('Unknown directive: %d:%s.' % (lineno,line))
+
+        if config:
+            self.config_sections.append(config)
+
+        fp.close()
+
+
+
+class PackageGroups(object):
 
     def __init__(self, packages = PACKAGE_LIBS):
+        self.packages = {}
+        self._pre_defined_macros = {}
+        self._reference_macros = set([])
+
         def initialize(name):
             if os.path.isdir(name):
                 self.walk_dir(name)
             elif os.path.isfile(name):
                 packagename = os.path.basename(name).rsplit('.',1)[0]
-                self.packages[packagename] = self.parse_file(name)
+                self.packages[packagename] = Package(name)
             else:
                 for dir in PACKAGE_LIBS:
                     filename = os.path.join(dir, name) + '.conf'
@@ -80,61 +205,14 @@ class Packages(object):
                         break
                 if not os.path.isfile(filename):
                     raise Exception('config file for package %s does not exist!' % name)
-                self.packages[name] =  self.parse_file(filename)
+                self.packages[name] =  self.Package(filename)
+
         if isinstance(packages, basestring):
             packages = packages.split(",")
         if not isinstance(packages, (list,tuple)):
             raise Exception("packages should be list or tuple.")
         for pkg in packages:
             initialize(pkg)
-
-    def parse_file(self, filename):
-        if not os.path.isfile(filename):
-            return None
-
-        configs = []
-        config  = None
-        has_regex = False
-        fp = open(filename)
-
-        while True:
-            line = fp.readline()
-            if line == '':
-                break
-            if line.strip()=='' or line.strip()[0] == '#':
-                continue
-
-            if line.startswith('file:') or line.startswith('directory:'):
-                if config:
-                    configs.append(config)
-                config = ConfigFile(line.split(':',1)[1])
-                if line.startswith('directory:'):
-                    config.types.append('directory')
-                has_regex = False
-
-            if line.startswith('type:'):
-                types = line.split(':',1)[1].split(',')
-                for config_type in types:
-                    config_type = config_type.strip()
-                    if config_type not in VALID_TYPES:
-                        raise Exception('Unknown type: %s' % config_type)
-                    config.types.append(config_type)
-
-            if line.startswith('desc:'):
-                config.desc = line.split(':',1)[1].strip()
-
-            if line.startswith('regex:'):
-                has_regex = True
-                # regex: may follow a regex 
-                line = ' '+line.split(':',1)[1].strip()
-
-            if has_regex and (line[0] == ' ' or line[0] == '\t'):
-                config.add_regex(line.strip())
-
-        if config:
-            configs.append(config)
-
-        return configs
 
     def walk_dir(self, path):
         packages = {}
@@ -144,7 +222,7 @@ class Packages(object):
                     del fnames[i]
             for i in fnames:
                 pkg_name = i.rsplit('.',1)[0]
-                packages[pkg_name] = self.parse_file(os.path.join(dirname, i))
+                packages[pkg_name] = Package(os.path.join(dirname, i))
 
         os.path.walk(path, _parse_dir, packages)
         for key, value in packages.iteritems():
@@ -157,15 +235,15 @@ class Packages(object):
         objs = []
         if config_type:
             config_type = config_type.strip().lower()
-        for val in self.packages.values():
-            for obj in val:
+        for package in self.packages.values():
+            for config_section in package.config_sections:
                 # Exclude config file/dir not in this config_type
-                if config_type and config_type not in obj.types:
+                if config_type and config_type not in config_section.types:
                     continue
                 # Ignore pure backup config file, or pure backup directory
-                if not config_type and not ( set(obj.types) - set(IGNORE_TYPES) ):
+                if not config_type and not ( set(config_section.types) - set(IGNORE_TYPES) ):
                     continue
-                objs.append(obj)
+                objs.append(config_section)
         return objs 
 
     def get_config_file_by_type(self, config_type=None):
@@ -209,12 +287,12 @@ class Packages(object):
     def get_reference_macros(self):
         if self._reference_macros:
             return self._reference_macros
-        for val in self.packages.values():
-            for obj in val:
-                if not obj.regex:
+        for package in self.packages.values():
+            for config_section in package.config_sections:
+                if not config_section.regex:
                     continue
-                for regex in obj.regex:
-                    self._reference_macros |= set(PATTERN_MACRONAME.findall(regex))
+                for regex in config_section.regex:
+                    self._reference_macros |= set(PATTERN_MACRO_IN_REGEX.findall(regex))
         return self._reference_macros
 
     pre_defined_macros = property(get_pre_defined_macros)
@@ -255,24 +333,24 @@ class Packages(object):
 
     def extract_macros(self):
         macros = {}
-        for val in self.packages.values():
-            for obj in val:
-                if not obj.regex:
+        for package in self.packages.values():
+            for config_section in package.config_sections:
+                if not config_section.regex:
                     continue
 
-                for filename in obj.file_list:
+                for filename in config_section.file_list:
                     if not os.path.isfile(filename):
                         print >> sys.stderr, "Warning: file '%s' not exist!" % filename
                         continue
                     fp = open(filename)
                     for line in fp.readlines():
-                        for idx in range(len(obj.pattern)):
-                            m = obj.pattern[idx].search(line)
+                        for idx in range(len(config_section.pattern)):
+                            m = config_section.pattern[idx].search(line)
                             if not m:
                                 continue
                             if opt_debug:
-                                print "pattern '%s' matched line '%s'" % (obj.regex[idx], line)
-                            for macro in PATTERN_MACRONAME.findall(obj.regex[idx]):
+                                print "pattern '%s' matched line '%s'" % (config_section.regex[idx], line)
+                            for macro in PATTERN_MACRO_IN_REGEX.findall(config_section.regex[idx]):
                                 if m.group(macro):
                                     if line.count(m.group(macro)) > 1:
                                         print >> sys.stderr, "Warning: find multiple '%s' for macro '%s' in line: %s" % \
@@ -296,46 +374,63 @@ class Packages(object):
 
     def change_config_files(self):
         self._macros_precheck()
-        for key, val in self.packages.items():
-            for obj in val:
-                if not obj.pattern:
-                    if set(obj.types) - set(IGNORE_TYPES):
-                        if obj.desc:
-                            print >> sys.stderr, "Note: %s\n\t<< %s (%s)" % (','.join(obj.file_list), obj.desc, key)
+        for package_file_name, package in self.packages.items():
+            for config_section in package.config_sections:
+                if not config_section.pattern:
+                    if set(config_section.types) - set(IGNORE_TYPES):
+                        if config_section.desc:
+                            print >> sys.stderr, "Note: %s\n\t<< %s (%s)" % (','.join(config_section.file_list), config_section.desc, package_file_name)
                         else:
-                            print >> sys.stderr, "Note: %s\n\t<< No pattern defined for this file in '%s'. Manual edit it please!" % (','.join(obj.file_list), key)
+                            print >> sys.stderr, "Note: %s\n\t<< No pattern defined for this file in '%s'. Manual edit it please!" % (','.join(config_section.file_list), package_file_name)
                     continue
-                for filename in obj.file_list:
-                    if not os.path.isfile(filename):
-                        print >> sys.stderr, "Warning: file '%s' not exist!" % filename
+                for config_file_name in config_section.file_list:
+                    if not os.path.isfile(config_file_name):
+                        print >> sys.stderr, "Warning: file '%s' not exist!" % config_file_name
                         continue
-                    fp = open(filename)
+                    fp = open(config_file_name)
                     contents=""
                     save = False
                     for line in fp.readlines():
-                        for idx in range(len(obj.pattern)):
-                            m = obj.pattern[idx].search(line)
+                        for idx in range(len(config_section.pattern)):
+                            m = config_section.pattern[idx].search(line)
                             if not m:
                                 continue
                             if opt_debug:
-                                print "pattern '%s' matched line '%s'" % (obj.regex[idx], line)
-                            for macro in PATTERN_MACRONAME.findall(obj.regex[idx]):
-                                if m.group(macro):
-                                    if line.count(m.group(macro)) > 1:
-                                        print >> sys.stderr, "Error: find multiple '%s' for macro '%s' in line: %s" % \
-                                            (m.group(macro), macro, line)
-                                        continue
-                                    if macro not in self.pre_defined_macros:
-                                        raise Exception("Error: macro '%s' not defined." % macro)
-                                    if m.group(macro) != self.pre_defined_macros[macro]:
-                                        line = line.replace(m.group(macro), self.pre_defined_macros[macro])
-                                        save = True
-                                else:
-                                    print >> sys.stderr, "Warning: '%s' in re.match is blank, line: %s" % (macro, line)
+                                print "pattern '%s' matched line '%s'" % (config_section.regex[idx], line)
+
+                            # Pattern with a replacement
+                            if config_section.regex_replacement[idx]:
+                                replacement = config_section.regex_replacement[idx]
+                                for macro in PATTERN_MACRO_IN_REPL.findall(replacement):
+                                    replacement = re.sub(r'\\g<%s>' % macro, self.pre_defined_macros[macro], replacement)
+
+                                linesub = config_section.pattern[idx].sub(replacement, line)
+                                if linesub != line:
+                                    save = True
+                                    line = linesub
+
+                            # Pattern without a replacement
+                            #  * first search against named pattern, and get what named pattern is
+                            #  * substitued matched named pattern in contents to macro.
+                            else:
+
+                                for macro in PATTERN_MACRO_IN_REGEX.findall(config_section.regex[idx]):
+                                    if m.group(macro):
+                                        if line.count(m.group(macro)) > 1:
+                                            print >> sys.stderr, "Error: find multiple '%s' for macro '%s' in line: %s" % \
+                                                (m.group(macro), macro, line)
+                                            continue
+                                        if macro not in self.pre_defined_macros:
+                                            raise Exception("Error: macro '%s' not defined." % macro)
+                                        if m.group(macro) != self.pre_defined_macros[macro]:
+                                            line = line.replace(m.group(macro), self.pre_defined_macros[macro])
+                                            save = True
+                                    else:
+                                        print >> sys.stderr, "Warning: '%s' in re.match is blank, line: %s" % (macro, line)
                         contents += line
                     fp.close()
                     if save:
-                        self._save_file(filename, contents)
+                        self._save_file(config_file_name, contents)
 
 def usage(code, msg=''):
     if code:
@@ -389,9 +484,9 @@ def main(argv=None):
         return usage(1)
 
     if opt_package:
-        packages = Packages(opt_package)
+        packages = PackageGroups(opt_package)
     else:
-        packages = Packages()
+        packages = PackageGroups()
 
     for cmd in args:
         if cmd == 'list':
