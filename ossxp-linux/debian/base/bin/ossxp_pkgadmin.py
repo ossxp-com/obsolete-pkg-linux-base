@@ -37,6 +37,7 @@ PATTERN_MACRO_IN_REGEX = re.compile(r'\(\?P<([^>]+)>.*?\)')
 PATTERN_MACRO_IN_REPL = re.compile(r'\\g<([^>]+)>')
 VALID_TYPES = ('ip', 'host', 'email', 'name', 'number', 'password', 'backup', 'others')
 IGNORE_TYPES = ('backup', 'directory')
+PREFIX_NO_MACRO = "_"
 
 
 class ConfigSection(object):
@@ -292,7 +293,7 @@ class PackageGroups(object):
                 if not config_section.regex:
                     continue
                 for regex in config_section.regex:
-                    self._reference_macros |= set(PATTERN_MACRO_IN_REGEX.findall(regex))
+                    self._reference_macros |= set( filter(lambda x: not x.startswith(PREFIX_NO_MACRO), PATTERN_MACRO_IN_REGEX.findall(regex)) )
         return self._reference_macros
 
     pre_defined_macros = property(get_pre_defined_macros)
@@ -351,6 +352,8 @@ class PackageGroups(object):
                             if opt_debug:
                                 print "pattern '%s' matched line '%s'" % (config_section.regex[idx], line)
                             for macro in PATTERN_MACRO_IN_REGEX.findall(config_section.regex[idx]):
+                                if macro.startswith(PREFIX_NO_MACRO):
+                                    continue
                                 if m.group(macro):
                                     if line.count(m.group(macro)) > 1:
                                         print >> sys.stderr, "Warning: find multiple '%s' for macro '%s' in line: %s" % \
@@ -402,6 +405,8 @@ class PackageGroups(object):
                             if config_section.regex_replacement[idx]:
                                 replacement = config_section.regex_replacement[idx]
                                 for macro in PATTERN_MACRO_IN_REPL.findall(replacement):
+                                    if macro.startswith(PREFIX_NO_MACRO) or not self.pre_defined_macros.get(macro):
+                                        continue
                                     replacement = re.sub(r'\\g<%s>' % macro, self.pre_defined_macros[macro], replacement)
 
                                 linesub = config_section.pattern[idx].sub(replacement, line)
@@ -415,6 +420,8 @@ class PackageGroups(object):
                             else:
 
                                 for macro in PATTERN_MACRO_IN_REGEX.findall(config_section.regex[idx]):
+                                    if macro.startswith(PREFIX_NO_MACRO):
+                                        raise Exception('Macro %s can not start with %s, if used as named pattern, define a replacement for pattern!' % (macro, PREFIX_NO_MACRO))
                                     if m.group(macro):
                                         if line.count(m.group(macro)) > 1:
                                             print >> sys.stderr, "Error: find multiple '%s' for macro '%s' in line: %s" % \
