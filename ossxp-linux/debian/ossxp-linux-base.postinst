@@ -2,6 +2,39 @@
 
 PATH=/sbin:/bin:/usr/sbin:/usr/bin 
 
+function hack_hosts()
+{
+    cf=/etc/hosts
+
+    hn=backup-host1
+    if ! grep -q "$hn" $cf; then
+        echo "" >> $cf
+        echo -e "# open tcp/22 to host: $hn, ..." >> $cf
+        echo -e "127.0.0.3\t$hn" >> $cf
+    fi
+
+    hn=ldap-mirror1
+    if ! grep -q "$hn" $cf; then
+        echo "" >> $cf
+        echo -e "# open tcp/389,636 to host: $hn, ..." >> $cf
+        echo -e "127.0.0.3\t$hn" >> $cf
+    fi
+
+    hn=cosign-client1
+    if ! grep -q "$hn" $cf; then
+        echo "" >> $cf
+        echo -e "# open tcp/6663 to host: $hn, ..." >> $cf
+        echo -e "127.0.0.3\t$hn" >> $cf
+    fi
+
+    hn=apt-source
+    if ! grep -q "$hn" $cf; then
+        echo "" >> $cf
+        echo -e "# update/upgrade debian packages from..." >> $cf
+        echo -e "127.0.0.3\t$hn" >> $cf
+    fi
+}
+
 case "$1" in
     configure)
     ;;
@@ -19,6 +52,10 @@ apt-key add /opt/ossxp/conf/public.key
 
 SCRIPT=/opt/ossxp/install/base.py
 [ -x $SCRIPT ] && $SCRIPT config
+
+if [ -z "$2" ] || dpkg --compare-versions "$2" lt "1:1.26.192"; then
+    hack_hosts
+fi
 
 cat <<EOF
 [1mrun this command as root:
