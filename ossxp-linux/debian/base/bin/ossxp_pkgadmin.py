@@ -447,7 +447,10 @@ class PackageGroups(object):
                                         continue
                                     replacement = re.sub(r'\\g<%s>' % macro, self.pre_defined_macros[macro], replacement)
 
-                                linesub = config_section.pattern[idx].sub(replacement, line)
+                                try:
+                                    linesub = config_section.pattern[idx].sub(replacement, line)
+                                except:
+                                    raise Exception("Substitude pattern failed. r: %s, l: %s" % (replacement, line))
                                 if linesub != line:
                                     save = True
                                     line = linesub
