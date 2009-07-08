@@ -39,6 +39,20 @@ VALID_TYPES = ('ip', 'host', 'email', 'name', 'number', 'password', 'backup', 'o
 IGNORE_TYPES = ('backup', 'directory')
 PREFIX_NO_MACRO = "_"
 
+def _PRE_DEFINED_MACROS(filename=MACROS_FILE):
+    macros = {}
+    fp = open(filename)
+    for line in fp.readlines():
+        line = line.strip()
+        if not line or line[0]=='#':
+            continue
+        key, value = line.split('=',1)
+        macros[key.strip()] = value.strip()
+    fp.close()
+    return macros
+
+MACROS = _PRE_DEFINED_MACROS()
+
 
 class ConfigSection(object):
 
@@ -168,10 +182,29 @@ class Package(object):
                             if stripped[0] == '*':
                                 stripped = stripped[1:]
                                 key, value = stripped.split(':',1)
+                                params = []
+                                if '(' in key:
+                                    key, params = key.split('(',1)
+                                    params=params.strip()[0:-1].strip()
+                                    if ',' in params:
+                                        params = [ item.strip() for item in params.split(',')]
+                                    else:
+                                        params = [ params.strip() ]
+                                key = key.strip()
+                                value = value.strip()
+
                                 if key.strip() == 'match':
                                     regex_pattern = value.strip()
                                 elif key.strip() == 'replacement':
-                                    regex_replacement = value.strip()
+                                    if params:
+                                        if len(params)==1 or params[1].lower() in ('notnull', '1'):
+                                            if MACROS.get(params[0]):
+                                                regex_replacement = value.strip()
+                                        elif len(params)==2 and params[1].lower() in ('null', '0'):
+                                            if not MACROS.get(params[0]):
+                                                regex_replacement = value.strip()
+                                    else:
+                                        regex_replacement = value.strip()
                                 else:
                                     raise Exception('Unknown directive for regex: %d:%s.' % (lineno,line))
                 else:
@@ -394,6 +427,11 @@ class PackageGroups(object):
                     contents=""
                     save = False
                     for line in fp.readlines():
+                        lineending = ""
+                        while line and line[-1] in "\r\n":
+                            lineending = line[-1] + lineending
+                            line = line[0:-1]
+
                         for idx in range(len(config_section.pattern)):
                             m = config_section.pattern[idx].search(line)
                             if not m:
@@ -405,7 +443,7 @@ class PackageGroups(object):
                             if config_section.regex_replacement[idx]:
                                 replacement = config_section.regex_replacement[idx]
                                 for macro in PATTERN_MACRO_IN_REPL.findall(replacement):
-                                    if macro.startswith(PREFIX_NO_MACRO) or not self.pre_defined_macros.get(macro):
+                                    if macro.startswith(PREFIX_NO_MACRO) or self.pre_defined_macros.get(macro) is None:
                                         continue
                                     replacement = re.sub(r'\\g<%s>' % macro, self.pre_defined_macros[macro], replacement)
 
@@ -434,7 +472,7 @@ class PackageGroups(object):
                                             save = True
                                     else:
                                         print >> sys.stderr, "Warning: '%s' in re.match is blank, line: %s" % (macro, line)
-                        contents += line
+                        contents += line + lineending
                     fp.close()
                     if save:
                         self._save_file(config_file_name, contents)
