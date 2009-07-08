@@ -196,12 +196,20 @@ class Package(object):
                                 if key.strip() == 'match':
                                     regex_pattern = value.strip()
                                 elif key.strip() == 'replacement':
+                                    if regex_replacement:
+                                        continue
                                     if params:
                                         if len(params)==1 or params[1].lower() in ('notnull', '1'):
                                             if MACROS.get(params[0]):
                                                 regex_replacement = value.strip()
                                         elif len(params)==2 and params[1].lower() in ('null', '0'):
                                             if not MACROS.get(params[0]):
+                                                regex_replacement = value.strip()
+                                        elif len(params)==2 and params[1].lower() in ('true', 'yes', 'on'):
+                                            if MACROS.get(params[0]) and MACROS.get(params[0]).lower() in ('true', 'yes', 'on') :
+                                                regex_replacement = value.strip()
+                                        elif len(params)==2 and params[1].lower() in ('false', 'no', 'off'):
+                                            if MACROS.get(params[0]) and MACROS.get(params[0]).lower() in ('false', 'no', 'off') :
                                                 regex_replacement = value.strip()
                                     else:
                                         regex_replacement = value.strip()
