@@ -199,6 +199,8 @@ class Package(object):
                                     if regex_replacement:
                                         continue
                                     if params:
+                                        if MACROS.get(params[0]) == None:
+                                            print >> sys.stderr, "Error: not defined macro '%s' used as parameter in file '%s'" % (params[0], filename)
                                         if len(params)==1 or params[1].lower() in ('notnull', '1'):
                                             if MACROS.get(params[0]):
                                                 regex_replacement = value.strip()
@@ -342,12 +344,15 @@ class PackageGroups(object):
 
     def _macros_precheck(self):
         not_defined_macros = self.reference_macros - set(self.pre_defined_macros.keys())
+
+        macros_with_blank_value = filter(lambda kv: not kv[1], self.pre_defined_macros.items())
+        if macros_with_blank_value:
+            print >> sys.stderr, "Info: These macros in '%s' do not have a value :" % MACROS_FILE
+            print "    * %s" % '\n    * '.join( [x[0] for x in macros_with_blank_value] )
+
         if not_defined_macros:
-            print >> sys.stderr, "Warning: Macros not defined in file %s:\n%s" % \
-                (MACROS_FILE, '\n'.join(not_defined_macros))
-        for k,v in self.pre_defined_macros.items():
-            if not v:
-                print >> sys.stderr, "Warning: You have not defined a value for macro '%s'!" % k
+            print >> sys.stderr, "Warning: Macros not defined in file %s:\n    * %s" % \
+                (MACROS_FILE, '\n    * '.join(not_defined_macros))
        
     def _save_file(self, filename, contents):
         import difflib
@@ -397,7 +402,7 @@ class PackageGroups(object):
                                     continue
                                 if m.group(macro):
                                     if line.count(m.group(macro)) > 1:
-                                        print >> sys.stderr, "Warning: find multiple '%s' for macro '%s' in line: %s" % \
+                                        print >> sys.stderr, "Warning: find multiple '%s' for macro '%s' in line: %s.\n    >> Use conditional replacement for this pattern." % \
                                             (m.group(macro), macro, line)
                                     if macro in macros and m.group(macro):
                                         if not macros[macro]:
@@ -423,9 +428,9 @@ class PackageGroups(object):
                 if not config_section.pattern:
                     if set(config_section.types) - set(IGNORE_TYPES):
                         if config_section.desc:
-                            print >> sys.stderr, "Note: %s\n\t<< %s (%s)" % (','.join(config_section.file_list), config_section.desc, package_file_name)
+                            print >> sys.stderr, "Note: %s\n    >> %s (%s)" % (','.join(config_section.file_list), config_section.desc, package_file_name)
                         else:
-                            print >> sys.stderr, "Note: %s\n\t<< No pattern defined for this file in '%s'. Manual edit it please!" % (','.join(config_section.file_list), package_file_name)
+                            print >> sys.stderr, "Note: %s\n    >> No pattern defined for this file in '%s'. Manual edit it please!" % (','.join(config_section.file_list), package_file_name)
                     continue
                 for config_file_name in config_section.file_list:
                     if not os.path.isfile(config_file_name):
@@ -451,8 +456,10 @@ class PackageGroups(object):
                             if config_section.regex_replacement[idx]:
                                 replacement = config_section.regex_replacement[idx]
                                 for macro in PATTERN_MACRO_IN_REPL.findall(replacement):
-                                    if macro.startswith(PREFIX_NO_MACRO) or self.pre_defined_macros.get(macro) is None:
+                                    if macro.startswith(PREFIX_NO_MACRO):
                                         continue
+                                    if macro not in self.pre_defined_macros:
+                                        raise Exception("Error: not defined macro '%s' for file '%s'" % (macro, config_file_name))
                                     replacement = re.sub(r'\\g<%s>' % macro, self.pre_defined_macros[macro], replacement)
 
                                 try:
@@ -477,7 +484,7 @@ class PackageGroups(object):
                                                 (m.group(macro), macro, line)
                                             continue
                                         if macro not in self.pre_defined_macros:
-                                            raise Exception("Error: macro '%s' not defined." % macro)
+                                            raise Exception("Error: not defined macro '%s' for file '%s'" % (macro, config_file_name))
                                         if m.group(macro) != self.pre_defined_macros[macro]:
                                             line = line.replace(m.group(macro), self.pre_defined_macros[macro])
                                             save = True
