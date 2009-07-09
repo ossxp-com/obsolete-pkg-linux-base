@@ -1,3 +1,9 @@
+ossxp-linux (1:1.26.198) unstable; urgency=low
+
+  * Add /opt/ossxp/doc
+
+ -- Jiang Xin <jiangxin@foo.bar>  Thu, 09 Jul 2009 19:04:44 +0800
+
 ossxp-linux (1:1.26.197) unstable; urgency=low
 
   * Change default cert valid date to 10 years.
