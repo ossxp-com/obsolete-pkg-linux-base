@@ -1,0 +1,63 @@
+== Modify config files ==
+ * /etc/hosts
+   {{{
+       192.168.0.120   apt-source
+   }}}
+
+ * /etc/apt/sources.list
+   {{{
+       deb http://apt-source/debian/lenny/i386/dvd1/ lenny main contrib
+       deb http://apt-source/debian/lenny/i386/dvd2/ lenny main contrib
+       deb http://apt-source/debian/lenny/i386/dvd3/ lenny main contrib
+       deb http://apt-source/debian/lenny/i386/dvd4/ lenny main contrib
+       deb http://apt-source/debian/lenny/i386/dvd5/ lenny main contrib
+       deb http://apt-source/debian/lenny/i386/dvd6/ lenny main contrib
+
+       deb http://apt-source/update/jiangxin/ sid main
+
+       deb http://apt-source:9999/debian/                      lenny main contrib non-free
+       deb http://apt-source:9999/security/                    stable/updates main
+    }}}
+
+== Install ossxp packages ==
+ * ossxp-secure-basic
+   {{{
+       $ sudo /opt/ossxp/install/base.py install config
+   }}}
+ * ossxp-secure-opensesame
+ * ossxp-secure-fw-shorewall
+   * config files: /etc/shorewall/rules, /etc/shorewall/macro.XXX.in
+   * Add hostname referenced by macro.xxx.in to /etc/hosts.
+
+ * ossxp-apache2
+   May already installed, which is depends by ossxp-secure-opensesame
+
+== Install DNS services ==
+ * ossxp-maradns
+   * config files: /etc/init.d/maradns, /etc/init.d/mararc, /etc/init.d/db.*
+     
+== Install Email services ==
+ * ossxp-mail
+   * Add new domain, add a file under: /etc/exim4/virtual/
+   * Edit /etc/exim4/conf.d/main/00_exim4-config_localmacros
+   * Create certificated file:
+     * /etc/exim4/exim.crt
+     * /etc/exim4/exim.key
+
+ * ossxp-mail-dovecot
+
+
+== Install LDAP services ==
+=== Ldap master ===
+Ldap master provide both ldap query and ldap maintenance.
+Install both slapd and gosa on this server.
+
+ * gosa
+   {{{
+   }}}
+
+=== Ldap mirror client ===
+Ldap mirror only provide ldap query.
+
+== Install Email services based on LDAP ==
+

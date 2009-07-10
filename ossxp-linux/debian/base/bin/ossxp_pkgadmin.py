@@ -41,14 +41,15 @@ PREFIX_NO_MACRO = "_"
 
 def _PRE_DEFINED_MACROS(filename=MACROS_FILE):
     macros = {}
-    fp = open(filename)
-    for line in fp.readlines():
-        line = line.strip()
-        if not line or line[0]=='#':
-            continue
-        key, value = line.split('=',1)
-        macros[key.strip()] = value.strip()
-    fp.close()
+    if os.path.exists(filename):
+        fp = open(filename)
+        for line in fp.readlines():
+            line = line.strip()
+            if not line or line[0]=='#':
+                continue
+            key, value = line.split('=',1)
+            macros[key.strip()] = value.strip()
+        fp.close()
     return macros
 
 MACROS = _PRE_DEFINED_MACROS()
