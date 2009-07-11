@@ -18,15 +18,16 @@
  * 邮件系统
    * 修改 /etc/exim4/virtual/ 下的文件名，和新域名相同
    * 修改邮件存储目录 /var/mail/exim/ 下的目录名称
-   * sudo dpkg-reconfigure exim4-config
-   * 重启 dovecot 和 exim4
+   * $ sudo dpkg-reconfigure exim4-config
+   * $ sudo /etc/init.d/dovecot restart
+   * $ sudo /etc/init.d/exim4 restart
 
  * LDAP 中用户的邮件地址
    离线操作：
-   * slapcat -b 'suffix' > export.ldif
-   * sed -i -e 's/@old/@new/' export.ldif
-   * create a new ldap databae.
-   * slapadd -b 'suffix'< export.ldif
+   * $ slapcat -b 'suffix' > export.ldif
+   * $ sed -i -e 's/@old/@new/' export.ldif
+   * $ create a new ldap databae.
+   * $ slapadd -b 'suffix'< export.ldif
 
  * 邮件列表
    * 逐个以管理员登录修改邮件列表设置
@@ -35,14 +36,19 @@
      注意对于空列表，会因为找不到 .mbox 文件而挂起
 
  * Subversion 邮件通知
-   * 用 pysvnmanager 修改
+   * 如果包含多个 pySvnManager 站点，创建文件 /etc/ossxp/packages/pysvnmanager.conf。
+     其中包含文件 /opt/pysvnmanager/<SiteName>/config/localconfig.py 的正则匹配
+   * 参考文件 /opt/ossxp/lib/packages/pysvnmanager.conf
 
  * Trac 邮件通知
-   * 如果不是在 /etc/trac/*.ini 中定义的，需要手动修改
-   * 修改文件 /opt/trac/sites/<EnvName>/conf/trac.ini
+   * 如果不是在 /etc/trac/*.ini 中定义的, 创建文件 /etc/ossxp/packages/trac.conf。
+     其中包含文件 /opt/trac/sites/<EnvName>/conf/trac.ini 的正则匹配
+   * 参考文件 /opt/ossxp/lib/packages/ossxp-trac.conf
 
  * Wiki 邮件通知
-   * 修改文件 /opt/moin/sites/<InstanceName>/conf/wikiconfig.py
+   * 如果包含多个站点文件，创建文件 /etc/ossxp/packages/moinmoin.conf。
+     其中包含文件 /opt/moin/sites/<EnvName>/conf/wikiconfig.py 的正则匹配
+   * 参考文件 /opt/ossxp/lib/packages/ossxp-moinmoin.conf
 
  * 重启服务
    * /etc/init.d/ossxp-cosign-daemon restart
