@@ -33,6 +33,13 @@ function hack_hosts()
         echo -e "# update/upgrade debian packages from..." >> $cf
         echo -e "127.0.0.3\t$hn" >> $cf
     fi
+
+    hn=ldap-sync-master
+    if ! grep -q "$hn" $cf; then
+        echo "" >> $cf
+        echo -e "# Slapd works as slave, sync ldap from..." >> $cf
+        echo -e "#OPM/COMMENT\t$hn" >> $cf
+    fi
 }
 
 case "$1" in
@@ -53,7 +60,7 @@ apt-key add /opt/ossxp/conf/public.key
 SCRIPT=/opt/ossxp/install/base.py
 [ -x $SCRIPT ] && $SCRIPT config
 
-if [ -z "$2" ] || dpkg --compare-versions "$2" lt "1:1.26.192"; then
+if [ -z "$2" ] || dpkg --compare-versions "$2" lt "1:1.26.200"; then
     hack_hosts
 fi
 
