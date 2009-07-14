@@ -223,6 +223,20 @@ caption always "%{= kw}%-Lw%{= BW}%n %t%{-}%+w %-= @%H - %Y/%m/%d, %C"
 			cmd = "chown root.disk /dev/loop%d" % i
 			os.system(cmd)
 
+	#------------------------------------------------------------
+	CONFFILE='/etc/resolvconf/resolv.conf.d/tail'
+	if os.path.exists(os.path.dirname(CONFFILE)):
+		if not os.path.exists(CONFFILE) or os.path.getsize(CONFFILE)==0:
+			content = '''
+# If you want custom nameservers than what DHCP get, edit this file:
+#     /etc/resolvconf/resolv.conf.d/base
+#     Add record such as: 'nameserver 127.0.0.1'...
+#     Then reload resolvconf: /etc/init.d/resolvconf reload
+'''
+			file = open(CONFFILE, 'w')
+			file.write(content)
+			file.close()
+
 def main(argv=None):
 	global interactive, dryrun, verbose
 

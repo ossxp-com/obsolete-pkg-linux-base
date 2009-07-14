@@ -1,8 +1,9 @@
-ossxp-linux (1:1.26.201) unstable; urgency=low
+ossxp-linux (1:1.26.202) unstable; urgency=low
 
   * Add /opt/ossxp/doc
+  * Add notes in /etc/resolvconf/resolv.conf.d/tail.
 
- -- Jiang Xin <jiangxin@foo.bar>  Thu, 09 Jul 2009 19:04:44 +0800
+ -- Jiang Xin <jiangxin@foo.bar>  Tue, 14 Jul 2009 09:41:17 +0800
 
 ossxp-linux (1:1.26.197) unstable; urgency=low
 

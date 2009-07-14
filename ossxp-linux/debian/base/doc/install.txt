@@ -87,6 +87,11 @@
    * Create certificated file:
      * /etc/exim4/exim.crt
      * /etc/exim4/exim.key
+   * open port 465 for smtp over ssl
+     * /etc/default/exim4
+       {{{
+        SMTPLISTENEROPTIONS='-oX 465:25 -oP  /var/run/exim4/exim.pid'
+       }}}
  * ossxp-mail-dovecot
 
 
@@ -107,6 +112,11 @@ Install both slapd and gosa on this server.
  * Create a readonly account, which has right to read password.
    * cn=readonly,dc=foo,dc=bar
    * using tools: slapcat, slapadd
+ * edit /etc/default/slapd:
+   {{{
+        SLAPD_SERVICES="ldap:/// ldaps:/// ldapi:///"
+   }}}
+
  * Open web browser, visit:
    http://members.foo.bar/members
 
@@ -165,13 +175,22 @@ Ldap client sync with ldap master. Ldap mirror only provide ldap query.
    * install these packages.
 
 == Subversion ==
+ * ossxp-svn-server
 
 == pySvnManager ==
+ * Install python-ldap
+   * apt-get install python-ldap
+ * Install python-pylons >= 0.9.7
+   * apt-get install -t sid python-pylons
+ * Install pysvnmanager
+   * apt-get install pysvnmanager
 
 == WebSvn ==
+ * ossxp-websvn
 
 == StatSvn ==
+ * ossxp-statsvn
 
 == Trac ==
-
+ * ossxp-trac-all
 
