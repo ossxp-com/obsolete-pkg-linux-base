@@ -1,7 +1,8 @@
-ossxp-linux (1:1.26.202) unstable; urgency=low
+ossxp-linux (1:1.26.203) unstable; urgency=low
 
   * Add /opt/ossxp/doc
   * Add notes in /etc/resolvconf/resolv.conf.d/tail.
+  * Add chroot sftp service in /etc/ssh/sshd_config
 
  -- Jiang Xin <jiangxin@foo.bar>  Tue, 14 Jul 2009 09:41:17 +0800
 

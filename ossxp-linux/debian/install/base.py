@@ -167,11 +167,24 @@ set -o vi
 		patch['stamp_before'] = "##### ossxp_config_begin #####"
 		patch['stamp_end']    = "##### ossxp_config_end #####"
 		patch['append']    = '''
-# Only allow login if users belong to these groups:
-#AllowGroups ssh sudo wheel
+## Only allow login if users belong to these groups.
+## User shouldn't be in both groups, or user can not login using ssh.
+## Person in sftp group can only use chroot sftp service.
+AllowGroups ssh sftp
+
+## People belong to sftp group, can not access ssh, only provide sftp service
+## People in this sftp group, can have a invaild shell: /bin/false,
+## and user homedir must owned by root user.
+Subsystem sftp internal-sftp
+Match group sftp
+    ChrootDirectory  %h
+    X11Forwarding no
+    AllowTcpForwarding no
+    ForceCommand internal-sftp
+## END OF File or another Match conditional block
 '''
-		patch['trans_from'] = ['Protocol 2', 'PermitRootLogin no', 'PermitRootLogin no', 'UsePrivilegeSeparation yes']
-		patch['trans_to']   = ['Protocol 2', 'PermitRootLogin no', 'PermitRootLogin no', 'UsePrivilegeSeparation yes']
+		#patch['trans_from'] = ['Protocol 2', 'PermitRootLogin no', 'PermitRootLogin no', 'UsePrivilegeSeparation yes']
+		#patch['trans_to']   = ['Protocol 2', 'PermitRootLogin no', 'PermitRootLogin no', 'UsePrivilegeSeparation yes']
 		apt.config_file_append(CONFFILE, patch)	
 
 

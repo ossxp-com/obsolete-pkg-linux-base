@@ -1,0 +1,33 @@
+--- sshd_config.old	2009-07-17 17:48:53.985601007 +0800
++++ sshd_config	2009-07-17 17:54:21.948329799 +0800
+@@ -23,7 +23,7 @@
+ 
+ # Authentication:
+ LoginGraceTime 120
+-PermitRootLogin no
++PermitRootLogin yes
+ StrictModes yes
+ 
+ RSAAuthentication yes
+@@ -75,3 +75,21 @@
+ Subsystem sftp /usr/lib/openssh/sftp-server
+ 
+ UsePAM yes
++
++##### ossxp_config_begin #####
++## Only allow login if users belong to these groups.
++## User shouldn't be in both groups, or user can not login using ssh.
++## Person in sftp group can only use chroot sftp service.
++AllowGroups ssh sftp
++
++## People belong to sftp group, can not access ssh, only provide sftp service
++## People in this sftp group, can have a invaild shell: /bin/false,
++## and user homedir must owned by root user.
++Subsystem sftp internal-sftp
++Match group sftp
++    ChrootDirectory  %h
++    X11Forwarding no
++    AllowTcpForwarding no
++    ForceCommand internal-sftp
++## END OF File or another Match conditional block
++##### ossxp_config_end #####
