@@ -1,6 +1,7 @@
-ossxp-linux (1:1.26.208) unstable; urgency=low
+ossxp-linux (1:1.26.209) unstable; urgency=low
 
   * move certs for foo.bar to ossxp-ssl-foo-bar package.
+  * move ca to ossxp-apache package.
 
  -- Jiang Xin <jiangxin@foo.bar>  Thu, 03 Sep 2009 16:53:09 +0800
 
