@@ -187,6 +187,22 @@ Match group sftp
 		#patch['trans_to']   = ['Protocol 2', 'PermitRootLogin no', 'PermitRootLogin no', 'UsePrivilegeSeparation yes']
 		apt.config_file_append(CONFFILE, patch)	
 
+	#------------------------------------------------------------
+	CONFFILE='/etc/ssh/ssh_config'
+	if os.path.exists(CONFFILE):
+		patch = {}
+		patch['filemod'] = "644"
+		patch['precheck_deny'] = "ossxp_config_begin"
+		patch['stamp_before'] = "##### ossxp_config_begin #####"
+		patch['stamp_end']    = "##### ossxp_config_end #####"
+		patch['append']    = '''
+Host *
+    CheckHostIP no
+    ForwardX11 yes
+    HashKnownHosts no
+    StrictHostKeyChecking no
+'''
+		apt.config_file_append(CONFFILE, patch)	
 
 	#------------------------------------------------------------
 	CONFFILE='/etc/screenrc'
