@@ -1,5 +1,6 @@
-ossxp-linux (1:1.26.210) unstable; urgency=low
+ossxp-linux (1:1.26.211) unstable; urgency=low
 
+  * Add subjectAltName example for CA.sh
   * custom /etc/ssh/ssh_config file, for client side.
   * move certs for foo.bar to ossxp-ssl-foo-bar package.
   * move ca to ossxp-apache package.

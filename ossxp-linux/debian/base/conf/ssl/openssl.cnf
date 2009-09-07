@@ -200,6 +200,9 @@ authorityKeyIdentifier=keyid,issuer
 # deprecated according to PKIX.
 # subjectAltName=email:move
 
+# To create one certificate for multiple domains, for example:
+# subjectAltName=DNS:*.jiangxin.ossxp.com,DNS:*.moon.ossxp.com,DNS:jiangxin.ossxp.com
+
 # Copy subject details
 # issuerAltName=issuer:copy
 
