@@ -1,2 +1,2 @@
 \.hgignore
-mybuild
+^(.*/)?mybuild$
