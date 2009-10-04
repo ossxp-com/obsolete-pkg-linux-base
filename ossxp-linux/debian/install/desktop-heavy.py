@@ -28,7 +28,7 @@ Actions:
 
 ############################################################
 PKG_LIST='''
-	kde, kdm, kde-i18n-zhcn, kde-i18n-zhtw, 
+	kde | kde-full, kdm, kde-i18n-zhcn, kde-i18n-zhtw, 
 	mozilla-firefox, mozilla-firefox-locale-zh-cn, 
 	mozilla-thunderbird, mozilla-thunderbird-inspector, mozilla-thunderbird-typeaheadfind, thunderbird-locale-zh-cn, 
 	cupsys-client, cupsys-driver-gutenprint, cupsys, cups-pdf, cupsys-bsd, printconf, xsane, 

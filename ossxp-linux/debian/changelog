@@ -1,3 +1,9 @@
+ossxp-linux (1:1.26.214) unstable; urgency=low
+
+  * Add kde-full for debian sid.
+
+ -- Jiang Xin <jiangxin@foo.bar>  Sun, 04 Oct 2009 15:09:06 +0800
+
 ossxp-linux (1:1.26.211) unstable; urgency=low
 
   * Add subjectAltName example for CA.sh
