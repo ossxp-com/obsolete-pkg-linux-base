@@ -1,81 +1,64 @@
-# CDROM
+## CDROM index added by `apt-cdrom'
 #deb cdrom:[Debian GNU/Linux testing _Etch_ - Official Snapshot DVD i386 Binary-1 20061204-18:24]/ etch contrib main
+################################################################################
+
+## local filesystem
+#deb file:/wwwroot/htdocs/default/debian/ ./
+
+## ISO automount
+#deb file:/mnt.iso/debian/lenny/i386/dvd1/     lenny main contrib
+#deb http://apt-source/debian/lenny/i386/dvd1/ lenny main contrib
+
+## apt-proxy setup
+##FILE : /etc/apt/apt.conf.d/02proxy
+##Acquire::http { Proxy "http://apt-source:9999"; };
+
+## ossxp packages
+#deb  http://user:pass@apt-source/clientid lenny main
+#deb  http://user:pass@apt-source/clientid sid   main
+
+## Debian official security update apt sources
+deb http://security.debian.org/ lenny/updates main
+deb http://security.debian.org/ testing/updates main
+deb-src http://security.debian.org/ lenny/updates main
+
+deb http://volatile.debian.org/debian-volatile lenny/volatile main
+deb-src http://volatile.debian.org/debian-volatile lenny/volatile main
 
 ################################################################################
 
-# local filesystem
-#deb file:/wwwroot/htdocs/default/debian/ ./
+## Debian official apt source
+#deb http://mirrors.geekbone.org/debian-volatile/  lenny/volatile  main contrib non-free
+#deb http://mirrors.geekbone.org/debian-security/  lenny/updates   main contrib non-free
+#deb http://mirrors.geekbone.org/debian-security/  testing/updates main contrib non-free
+#deb http://mirrors.geekbone.org/debian/           stable          main contrib non-free
+#deb http://mirrors.geekbone.org/debian/           testing         main contrib non-free
+#deb http://mirrors.geekbone.org/debian/           unstable        main contrib non-free
+#deb http://mirrors.geekbone.org/debian/           experimental    main contrib non-free
 
+#deb http://debian.uchicago.edu/debian/            lenny           main non-free contrib
+#deb http://debian.uchicago.edu/debian-security/   lenny/updates   main non-free contrib
+#deb http://cudlug.cudenver.edu/debian/            lenny           main non-free contrib
 
-# ISO automount
-#deb file:/isomnt/debian_etch_amd64-cd1 etch main contrib
-#deb file:/isomnt/debian_etch_amd64-cd2 etch main contrib
-#deb file:/isomnt/debian_etch_amd64-cd3 etch main contrib
-#deb file:/isomnt/debian_etch-cd1 etch main contrib
-#deb file:/isomnt/debian_etch-cd2 etch main contrib
-#deb file:/isomnt/debian_etch-cd3 etch main contrib
+#deb ftp://ftp.jp.debian.org/debian sid main contrib
 
-# ISO mirror
-#deb http://apt-source/debian/lenny/i386/dvd1/ lenny main contrib
-#deb http://apt-source/debian/lenny/i386/dvd2/ lenny main contrib
-#deb http://apt-source/debian/lenny/i386/dvd3/ lenny main contrib
-#deb http://apt-source/debian/lenny/i386/dvd4/ lenny main contrib
-#deb http://apt-source/debian/lenny/i386/dvd5/ lenny main contrib
-#deb http://apt-source/debian/lenny/i386/dvd6/ lenny main contrib
-
-# apt-proxy setup
-#deb http://apt-source:9999/debian/ etch  main contrib non-free
-#deb http://apt-source:9999/debian/ lenny main contrib non-free
-#deb http://apt-source:9999/debian/ sid main contrib #non-free
-#deb http://apt-source:9999/debian/ experimental main contrib non-free
-
-#deb http://apt-source:9999/security/ etch/updates  main contrib non-free
-#deb http://apt-source:9999/security/ lenny/updates main contrib non-free
-
-#deb-src http://apt-source:9999/debian/ etch  main contrib non-free
-#deb-src http://apt-source:9999/debian/ lenny main contrib non-free
-#deb-src http://apt-source:9999/debian/ sid main contrib non-free
-#deb-src http://apt-source:9999/debian/ experimental main contrib non-free
-#deb-src http://apt-source:9999/security/ etch/updates  main contrib non-free
-#deb-src http://apt-source:9999/security/ lenny/updates main contrib non-free
-
-# ossxp packages
-#deb  http://user:pass@apt-source/clientid etch main
-#deb  http://user:pass@apt-source/clientid etch-testing main
-#deb  http://user:pass@apt-source/clientid lenny main
-#deb  http://user:pass@apt-source/clientid sid main
-
-# Debian official security update apt sources
-#deb http://security.debian.org/ etch/updates main contrib non-free
-#deb-src http://security.debian.org/ etch/updates main contrib non-free
-
-# Debian official apt source
-#deb http://cudlug.cudenver.edu/debian/ etch main non-free contrib
 #deb-src http://cudlug.cudenver.edu/debian/ etch main non-free contrib
 
+################################################################################
 
-# http mirror from cdimage mirror
-#deb http://localhost/etch_amd64/cd1/ etch main contrib
-#deb http://localhost/etch_amd64/cd2/ etch main contrib
-#deb http://localhost/etch_amd64/cd3/ etch main contrib
+## Debian backports
+deb http://www.backports.org/debian/ etch-backports main contrib non-free
+deb http://www.backports.org/debian/ lenny-backports main contrib non-free
 
+
+################################################################################
+## Other 3rd party apt source...
 
 # 3d desktop
 #deb http://download.tuxfamily.org/shames/debian-lenny/desktopfx/unstable ./
 
-
-# ftp
-#deb ftp://ftp.jp.debian.org/debian sid main contrib
-
-
-# unstable source
-#deb http://debian.uchicago.edu/debian/ sid main non-free contrib
-#deb-src http://debian.uchicago.edu/debian/ sid main non-free contrib
-
-
 # tor source(3rd party apt source)
 #deb     http://mirror.noreply.org/pub/tor sid main
-
 
 # sources.list generated by apt-spy v3.1
 # sources in US
@@ -86,13 +69,4 @@
 #deb http://debian.osuosl.org/debian/ etch main non-free contrib
 #deb-src http://debian.osuosl.org/debian/ etch main non-free contrib
 # sources.list generated by apt-spy v3.1
-
-
-# sources in Asia
-#deb http://debian.wow-vision.com.sg/debian/ etch main non-free contrib
-#deb-src http://debian.wow-vision.com.sg/debian/ etch main non-free contrib
-
-#台湾的萤火飞（ Firefly Fonts ）字体: apt-get install ttf-arphic-newsung
-#deb http://apt.debian.org.tw unstable main
-#deb ftp://ftp.hk.debian.org/unofficial/firefly/binary-i386 ./
 

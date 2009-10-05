@@ -1,5 +1,6 @@
-ossxp-linux (1:1.26.215) unstable; urgency=low
+ossxp-linux (1:1.26.216) unstable; urgency=low
 
+  * new /etc/apt/sources.list example. (r216)
   * Overlap sftp setting cause ssh server hang. (r215)
   * Add kde-full for debian sid. (r214)
   * Add subjectAltName example for CA.sh
