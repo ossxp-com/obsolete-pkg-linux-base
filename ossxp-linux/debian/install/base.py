@@ -175,7 +175,6 @@ AllowGroups ssh sftp
 ## People belong to sftp group, can not access ssh, only provide sftp service
 ## People in this sftp group, can have a invaild shell: /bin/false,
 ## and user homedir must owned by root user.
-Subsystem sftp internal-sftp
 Match group sftp
     ChrootDirectory  %h
     X11Forwarding no
