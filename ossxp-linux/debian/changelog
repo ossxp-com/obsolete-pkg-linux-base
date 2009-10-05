@@ -1,17 +1,13 @@
-ossxp-linux (1:1.26.214) unstable; urgency=low
+ossxp-linux (1:1.26.215) unstable; urgency=low
 
-  * Add kde-full for debian sid.
-
- -- Jiang Xin <jiangxin@foo.bar>  Sun, 04 Oct 2009 15:09:06 +0800
-
-ossxp-linux (1:1.26.211) unstable; urgency=low
-
+  * Overlap sftp setting cause ssh server hang. (r215)
+  * Add kde-full for debian sid. (r214)
   * Add subjectAltName example for CA.sh
   * custom /etc/ssh/ssh_config file, for client side.
   * move certs for foo.bar to ossxp-ssl-foo-bar package.
   * move ca to ossxp-apache package.
 
- -- Jiang Xin <jiangxin@foo.bar>  Thu, 03 Sep 2009 16:53:09 +0800
+ -- Jiang Xin <jiangxin@foo.bar>  Mon, 05 Oct 2009 15:47:32 +0800
 
 ossxp-linux (1:1.26.207) unstable; urgency=low
 
