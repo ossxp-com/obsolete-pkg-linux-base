@@ -2,8 +2,7 @@
 
 PATH=/sbin:/bin:/usr/sbin:/usr/bin 
 
-function hack_hosts()
-{
+hack_hosts() {
     cf=/etc/hosts
 
     hn=backup-host1
