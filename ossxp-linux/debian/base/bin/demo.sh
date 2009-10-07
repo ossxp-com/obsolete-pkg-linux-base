@@ -2,7 +2,7 @@
 
 count=0
 
-function prompt()
+prompt()
 {
     eol=yes
     pause=
@@ -31,14 +31,14 @@ function prompt()
     if [ "$pause" = "yes" ]; then read ignore; fi
 }
 
-function help_msg()
+help_msg()
 {
     echo -e "[1mSyntax:[0m"
     echo -e "\t$0 start: switch to demo mode"
     echo -e "\t$0 stop:  quit demo mode"
 }
 
-function demo_start()
+demo_start()
 {
     prompt -N -n "Stop crontab ...\t"
     /etc/init.d/cron stop >/dev/null 2>&1
@@ -89,7 +89,7 @@ EOF
     prompt -p "done"
 }
 
-function demo_stop()
+demo_stop()
 {
     prompt -N -n "Start crontab ...\t"
     /etc/init.d/cron start >/dev/null 2>&1

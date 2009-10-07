@@ -4,7 +4,7 @@
 
 [ -x /bin/echo ] && alias echo=/bin/echo
 
-function is_prefork_mode()
+is_prefork_mode()
 {
     VER=$(LC_ALL=C apt-cache policy ossxp-apache2-mpm-prefork 2>/dev/null | grep Installed  -n | cut -d":" -f3 | sed -e 's/ //g')
     if [ -n "$VER" ] && [ "$VER" != "(none)" ]; then
@@ -20,7 +20,7 @@ function is_prefork_mode()
 }
 
 
-function usage()
+usage()
 {
     echo "Usage:"
     echo "    $SCRIPTNAME [--prefork|--worker] [--install|--uninstall] <server> ..."
@@ -41,7 +41,7 @@ function usage()
 }
 
 
-function real_actions
+real_actions()
 {
     PACKAGES=
 
@@ -64,7 +64,7 @@ function real_actions
 }
 
 
-function inst_apache
+inst_apache()
 {
     if [ "$PoW_MODE" = "--prefork" ]; then
 	MAIN_PACKAGES="ossxp-apache2-mpm-prefork ossxp-apache2.2-common 
@@ -83,7 +83,7 @@ function inst_apache
 }
 
 
-function inst_gosa
+inst_gosa()
 {
     MAIN_PACKAGES="ossxp-gosa ossxp-gosa-schema ossxp-ldap"
     INST_PACKAGES="
@@ -97,7 +97,7 @@ function inst_gosa
 }
 
 
-function inst_docbook
+inst_docbook()
 {
     MAIN_PACKAGES="ossxp-docbook"
     INST_PACKAGES=
@@ -106,7 +106,7 @@ function inst_docbook
 }
 
 
-function inst_php
+inst_php()
 {
     MAIN_PACKAGES="
 	    ossxp-php5-common@@PoW@@ ossxp-php5-common 
@@ -151,7 +151,7 @@ function inst_php
 }
 
 
-function inst_svn
+inst_svn()
 {
     MAIN_PACKAGES="ossxp-libsvn1 ossxp-libapache2-svn ossxp-libsvn-doc 
             ossxp-subversion ossxp-subversion-tools 
@@ -163,7 +163,7 @@ function inst_svn
 }
 
 
-function inst_mailman
+inst_mailman()
 {
     MAIN_PACKAGES="ossxp-mailman"
     INST_PACKAGES=
@@ -172,7 +172,7 @@ function inst_mailman
 }
 
 
-function inst_mysql
+inst_mysql()
 {
     MAIN_PACKAGES="mysql-server"
     INST_PACKAGES=
@@ -181,7 +181,7 @@ function inst_mysql
 }
 
 
-function inst_mwiki
+inst_mwiki()
 {
     MAIN_PACKAGES="ossxp-mediawiki ossxp-mediawiki-math"
     INST_PACKAGES=
@@ -190,7 +190,7 @@ function inst_mwiki
 }
 
 
-function inst_mantis
+inst_mantis()
 {
     MAIN_PACKAGES="ossxp-mantis"
     INST_PACKAGES=ossxp-linux-fonts
@@ -199,7 +199,7 @@ function inst_mantis
 }
 
 
-function inst_moin
+inst_moin()
 {
     MAIN_PACKAGES="ossxp-libapache2-mod-fastcgi 
         ossxp-libapache2-mod-python 
@@ -210,7 +210,7 @@ function inst_moin
 }
 
 
-function inst_phpbb
+inst_phpbb()
 {
     MAIN_PACKAGES="ossxp-phpbb 
 	ossxp-phpbb-avatars 

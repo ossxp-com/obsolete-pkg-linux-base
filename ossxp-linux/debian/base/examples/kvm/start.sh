@@ -34,7 +34,7 @@ VNC=yes
 
 fi
 
-function usage()
+usage()
 {
 trap - 0 1 2 13 15
 
@@ -60,7 +60,7 @@ Options:
 EOF
 }
 
-function GetMacAddr()
+GetMacAddr()
 {
     printf "52:54:00:12:34:%02x" $((255-$DISPNUM))
 }

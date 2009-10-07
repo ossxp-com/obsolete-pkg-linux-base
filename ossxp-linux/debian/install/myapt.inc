@@ -1,7 +1,7 @@
 ########################################
 # install packages only necessary
 ########################################
-function install_packages()
+install_packages()
 {
     unknown_list=
     upgrade_list=
@@ -66,7 +66,7 @@ function install_packages()
 ########################################
 # uninstall packages only necessary
 ########################################
-function uninstall_packages()
+uninstall_packages()
 {
     delete_list=
     ignore_list=

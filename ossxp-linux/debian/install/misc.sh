@@ -25,7 +25,7 @@ if [ -x /opt/ossxp/install/base.sh ]; then
     sh /opt/ossxp/install/base.sh
 fi
 
-function do_install()
+do_install()
 {
     # install packages
     #------------------------------------------------------------
@@ -33,7 +33,7 @@ function do_install()
     install_packages $PKG_LIST
 }
 
-function do_config()
+do_config()
 {
     #------------------------------------------------------------
     # sshfs(fuse-utils) needs this special file
