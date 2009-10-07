@@ -1,5 +1,6 @@
-ossxp-linux (1:1.26.216) unstable; urgency=low
+ossxp-linux (1:1.26.217) unstable; urgency=low
 
+  * dovecot and exim4 config examples was in other packages.
   * new /etc/apt/sources.list example. (r216)
   * Overlap sftp setting cause ssh server hang. (r215)
   * Add kde-full for debian sid. (r214)
