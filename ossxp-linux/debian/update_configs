@@ -1,0 +1,13 @@
+#!/bin/sh
+
+set -e
+
+BASEDIR=$(dirname $0)
+
+if lsb_release -i | grep -iq "debian$"; then
+    cp ${BASEDIR}/control.debian ${BASEDIR}/control
+    cp ${BASEDIR}/ossxp-linux-base.install.debian ${BASEDIR}/ossxp-linux-base.install
+elif lsb_release -i | grep -iq "ubuntu$"; then
+    cp ${BASEDIR}/control.debian ${BASEDIR}/control 
+    cp ${BASEDIR}/ossxp-linux-base.install.ubuntu ${BASEDIR}/ossxp-linux-base.install
+fi

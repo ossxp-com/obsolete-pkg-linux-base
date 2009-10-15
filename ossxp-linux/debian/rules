@@ -23,13 +23,8 @@ binary-fixup/ossxp-linux-base::
 	chmod -R 700 debian/ossxp-linux-base/etc/ossxp
 
 debian/control::
-	@if lsb_release -i | grep -iq "debian$$"; then \
-		cp $(CURDIR)/debian/control.debian $(CURDIR)/debian/control ; \
-		cp $(CURDIR)/debian/ossxp-linux-base.install.debian $(CURDIR)/debian/ossxp-linux-base.install ; \
-	elif lsb_release -i | grep -iq "ubuntu$$"; then \
-		cp $(CURDIR)/debian/control.debian $(CURDIR)/debian/control ; \
-		cp $(CURDIR)/debian/ossxp-linux-base.install.ubuntu $(CURDIR)/debian/ossxp-linux-base.install ; \
-	fi
+	#chmod a+x debian/update_configs
+	debian/update_configs
 
 .PHONY: debian/control
 # vim: noet

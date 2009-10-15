@@ -16,6 +16,7 @@
 ## ossxp packages
 #deb  http://user:pass@apt-source/clientid lenny main
 #deb  http://user:pass@apt-source/clientid sid   main
+deb http://update.bj.ossxp.com/update/all/debian lenny main contrib
 
 ## Debian official security update apt sources
 deb http://security.debian.org/ lenny/updates main
