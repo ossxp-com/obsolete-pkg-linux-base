@@ -1,6 +1,7 @@
-ossxp-linux (1:1.26.221) unstable; urgency=low
+ossxp-linux (1:1.26.222) unstable; urgency=low
 
   * add enhanced screen package: byobu or screen-profiles;
+  * for both debian and ubuntu;
 
  -- Jiang Xin <jiangxin@foo.bar>  Thu, 15 Oct 2009 21:46:14 +0800
 
