@@ -28,13 +28,15 @@ Actions:
 
 ############################################################
 PKG_LIST='''
-	acl, apt-show-versions, ascii, autofs, bsdutils, bridge-utils, bzip2, curl, cabextract, 
+	acl, apt-show-versions, ascii, autofs, bsdutils, bridge-utils, bzip2,
+	curl, cabextract, coreutils | shellutils, 
 	dstat, ethtool, etckeeper, file, fpdns, fping, fuse-utils, 
 	gnupg, htop, ia32-libs, ia32-libs-gtk, indent, iproute, 
 	less, locales, lynx, ntfs-3g, ntpdate, nmap, ngrep, 
 	openssl, p7zip-full, pciutils, perl, psmisc, preload, 
-	rdiff-backup, resolvconf, rsync, rar, saidar, screen, coreutils | shellutils, sharutils,
-	ssh, sshfs, star, sudo, sysstat, tcpdump, 
+	rdiff-backup, resolvconf, rsync, rar, saidar, 
+	byobu | screen,  screen-profiles, screen-profiles-extras,
+	sharutils, ssh, sshfs, star, sudo, sysstat, tcpdump, 
 	mercurial, memtester | sysutils, procinfo | sysutils, tofrodos | sysutils,
 	udev, unison, vim, vnstat, wget, zhcon, 
 	'''
@@ -212,15 +214,18 @@ Host *
 		patch['stamp_before'] = "##### ossxp_config_begin #####"
 		patch['stamp_end']    = "##### ossxp_config_end #####"
 		patch['append']    = '''
+## Install package 'screen-profiles*' or 'byotu' for lovely screen profiles
 #defscrollback 3000
 #vbell on
 #startup_message off
-
-# Set the caption on the bottom line
-caption always "%{= kw}%-Lw%{= BW}%n %t%{-}%+w %-= @%H - %Y/%m/%d, %C"
 '''
 		apt.config_file_append(CONFFILE, patch)	
 
+	if os.path.isfile('/usr/bin/byobu-config'):
+		os.system('/usr/bin/byobu-config')
+		print "Run byobu instead of screen for the first time."
+	elif os.path.isfile('/usr/bin/screen-profiles'):
+		os.system('/usr/bin/screen-profiles')
 
 	#------------------------------------------------------------
 	CONFFILE='/etc/skel/.indent.pro'

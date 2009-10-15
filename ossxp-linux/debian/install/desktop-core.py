@@ -29,10 +29,10 @@ Actions:
 ############################################################
 PKG_LIST='''
 	xorg | x-window-system-core, xdg-utils, menu, 
-	ttf-arphic-uming, ttf-arphic-ukai, ttf-bitstream-vera, 
-	ttf-arphic-newsung, wqy-bitmapfont, 
+	ttf-arphic-uming, ttf-arphic-ukai, ttf-bitstream-vera, ttf-arphic-newsung,
+	xfonts-wqy | wqy-bitmapfont, ttf-wqy-zenhei,
 	scim, scim-chinese, scim-pinyin, scim-tables-zh, fcitx, im-switch, 
-	discover1, hal-device-manager, 
+	discover1, 
 	'''
 ############################################################
 

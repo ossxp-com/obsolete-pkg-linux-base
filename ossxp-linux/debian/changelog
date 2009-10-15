@@ -1,3 +1,9 @@
+ossxp-linux (1:1.26.221) unstable; urgency=low
+
+  * add enhanced screen package: byobu or screen-profiles;
+
+ -- Jiang Xin <jiangxin@foo.bar>  Thu, 15 Oct 2009 21:46:14 +0800
+
 ossxp-linux (1:1.26.220) unstable; urgency=low
 
   * dash compliant script. (r220)
