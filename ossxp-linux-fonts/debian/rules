@@ -112,18 +112,8 @@ binary-arch: build-arch install-arch
 #binary: binary-arch binary-indep
 binary: install binary-indep binary-arch
 
-.PHONY: build clean binary-indep binary-arch binary install install-indep install-arch configure
+debian/control:
+	@echo "no update"
 
-install-ossxp: 
-	mkdir -p /wwwroot/htdocs/debian/pool/etch/i386/fonts
-	if [ ! -f /wwwroot/htdocs/debian/pool/etch/i386/fonts/ttf-arphic-newsung_1.3.0-1_all.deb ]; then \
-		cp debian/opensource/ttf-arphic-newsung_1.3.0-1_all.deb \
-			/wwwroot/htdocs/debian/pool/etch/i386/fonts/ ;\
-	fi
-	if [ ! -f /wwwroot/htdocs/debian/pool/etch/i386/fonts/wqy-bitmapfont_0.7.9-5_all.deb ]; then \
-		cp debian/opensource/wqy-bitmapfont_0.7.9-5_all.deb \
-			/wwwroot/htdocs/debian/pool/etch/i386/fonts/ ;\
-	fi
-	mv -f $(REALCURDIR)/../ossxp-linux-fonts_*.deb /wwwroot/htdocs/debian/pool/etch/i386/fonts || true
+.PHONY: debian/control build clean binary-indep binary-arch binary install install-indep install-arch configure
 
-	(cd /wwwroot/htdocs/debian ; make)
