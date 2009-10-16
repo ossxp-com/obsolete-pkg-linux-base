@@ -1,5 +1,6 @@
-ossxp-linux (1:1.26.223) unstable; urgency=low
+ossxp-linux (1:1.26.224) unstable; urgency=low
 
+  * add new locales for debian/ubuntu; (r224)
   * add enhanced screen package: byobu or screen-profiles;
   * for both debian and ubuntu;
   * update config file using script update_configs;

@@ -263,6 +263,14 @@ Host *
 			file.write(content)
 			file.close()
 
+	#------------------------------------------------------------
+	dist = os.popen("lsb_release -i").read().strip().lower()
+	if dist.endswith('ubuntu'):
+		for locale in [ 'zh_CN', 'zh_CN.GBK', 'zh_CN.UTF-8', 'zh_TW', 'en_US', 'en_US.UTF-8' ]:
+			os.system("locale-gen %s" % locale)
+	elif dist.endswith('debian'):
+			os.system("dpkg-reconfigure locales")
+
 def main(argv=None):
 	global interactive, dryrun, verbose
 
