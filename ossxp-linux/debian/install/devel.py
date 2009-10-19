@@ -29,7 +29,7 @@ Actions:
 ############################################################
 PKG_LIST='''
 	gcc, gcc-3.4, gdb, g++, make, patch, autoconf, automake, chrpath, cdbs, 
-	dh-make, debhelper, dh-buildinfo, dpkg-dev, dpkg-repack, dpatch, quilt, doxygen, 
+	dh-make, debhelper, dh-buildinfo, dpkg-dev, dpkg-repack, config-package-dev, dpatch, quilt, doxygen, 
 	java-package, kernel-package, fakeroot, module-init-tools, 
 	devscripts, fakeroot, hdparm, 
 	libtool, libc6-dev, libncurses5-dev, 
