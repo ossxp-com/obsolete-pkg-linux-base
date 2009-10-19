@@ -39,6 +39,7 @@ PKG_LIST='''
 	libsdl1.2debian, libsdl1.2debian-all, libsdl-image1.2, 
 	libsdl1.2-dev, libsdl-image1.2-dev, libasound2, libasound2-dev, 
 	lintian, linda, lsb-release, pkg-config, 
+	junit, ant, java-gcj-compat-dev, libjcommon-java, libjfreechart-java, libjdom1-java, libbackport-util-concurrent-java, 
 	manpages-dev, genisoimage | mkisofs, module-assistant, 
 	patchutils, pbuilder, python-dev, qemu, swig, shtool,
 	uuid-dev, xutils, zlib1g-dev, 
