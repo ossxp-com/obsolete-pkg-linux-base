@@ -44,6 +44,7 @@ PKG_LIST='''
 	manpages-dev, genisoimage | mkisofs, module-assistant, 
 	patchutils, pbuilder, python-dev, qemu, swig, shtool,
 	uuid-dev, xutils, zlib1g-dev, 
+    git-core, git-cvs, git-svn, gitk, mercurial, 
 	'''
 ############################################################
 
