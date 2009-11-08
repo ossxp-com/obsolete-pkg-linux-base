@@ -1,3 +1,9 @@
+ossxp-linux (1:1.26.230) unstable; urgency=low
+
+  * add git system configuration.
+
+ -- Jiang Xin <jiangxin@foo.bar>  Sun, 08 Nov 2009 16:09:33 +0800
+
 ossxp-linux (1:1.26.224-2) unstable; urgency=low
 
   * add new locales for debian/ubuntu; (r224)

@@ -91,6 +91,9 @@ def do_install():
 	apt.run( args+ [PKG_LIST] )
 
 
+def do_config():
+    pass
+
 def main(argv=None):
 	global interactive, dryrun, verbose
 

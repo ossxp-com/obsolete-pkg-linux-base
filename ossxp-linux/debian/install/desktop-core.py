@@ -75,6 +75,8 @@ def do_install():
 	print "[1m========== Install ossxp custom packages ==========[0m"
 	apt.run( args+ [PKG_LIST] )
 
+def do_config():
+    pass
 
 def main(argv=None):
 	global interactive, dryrun, verbose

@@ -31,7 +31,7 @@ PKG_LIST='''
 	acl, apt-show-versions, ascii, autofs, bsdutils, bridge-utils, bzip2,
 	curl, cabextract, coreutils | shellutils, 
 	dstat, ethtool, etckeeper, file, fpdns, fping, fuse-utils, 
-	gnupg, htop, ia32-libs, ia32-libs-gtk, indent, iproute, 
+	git-core, gnupg, htop, ia32-libs, ia32-libs-gtk, indent, iproute, 
 	less, locales, lynx, ntfs-3g, ntpdate, nmap, ngrep, 
 	openssl, p7zip-full, pciutils, perl, psmisc, preload, 
 	rdiff-backup, resolvconf, rsync, rar, saidar, 
@@ -269,7 +269,18 @@ Host *
 		for locale in [ 'zh_CN', 'zh_CN.GBK', 'zh_CN.UTF-8', 'zh_TW', 'en_US', 'en_US.UTF-8' ]:
 			os.system("locale-gen %s" % locale)
 	elif dist.endswith('debian'):
-			os.system("dpkg-reconfigure locales")
+			os.system("dpkg-reconfigure locales || true")
+
+	#------------------------------------------------------------
+	if os.path.isfile('/usr/bin/git'):
+		## aliases
+		os.system("git config --system alias.st status")
+		os.system("git config --system alias.ci commit")
+		os.system("git config --system alias.co checkout")
+		os.system("git config --system alias.br branch")
+		## ui.color
+		os.system('git config --system color.ui "auto"')
+
 
 def main(argv=None):
 	global interactive, dryrun, verbose

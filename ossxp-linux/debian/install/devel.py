@@ -44,7 +44,7 @@ PKG_LIST='''
 	manpages-dev, genisoimage | mkisofs, module-assistant, 
 	patchutils, pbuilder, python-dev, qemu, swig, shtool,
 	uuid-dev, xutils, zlib1g-dev, 
-    git-core, git-cvs, git-svn, gitk, mercurial, 
+    git-cvs, git-svn, gitk, mercurial, 
 	'''
 ############################################################
 
@@ -87,6 +87,8 @@ def do_install():
 	print "[1m========== Install ossxp custom packages ==========[0m"
 	apt.run( args+ [PKG_LIST] )
 
+def do_config():
+    pass
 
 def main(argv=None):
 	global interactive, dryrun, verbose
