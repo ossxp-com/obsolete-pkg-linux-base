@@ -1,3 +1,9 @@
+ossxp-linux (1:1.26.231) unstable; urgency=low
+
+  * Add make, gistore.
+
+ -- Jiang Xin <jiangxin@foo.bar>  Fri, 29 Jan 2010 17:03:01 +0800
+
 ossxp-linux (1:1.26.230) unstable; urgency=low
 
   * add git system configuration.

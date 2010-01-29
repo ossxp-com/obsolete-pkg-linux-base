@@ -10,6 +10,7 @@ build:
 clean:
 	-rm -f ../*changes ../*.deb 
 	-rm -rf debian/build
+	-sudo setfacl -Rb  ../debian
 
 dir: clean
 
