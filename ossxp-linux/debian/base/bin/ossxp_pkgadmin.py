@@ -29,14 +29,20 @@ options:
 import os, sys
 import getopt
 import re
+import subprocess
 
 COPYRIGHT="Copyright 2009, by Jiang Xin at OpenSourceXpress co. ltd."
 MACROS_FILE = '/etc/ossxp/packages/macros'
 PACKAGE_LIBS = ['/opt/ossxp/lib/packages', '/etc/ossxp/packages',]
+# Macros defined in pattern string
 PATTERN_MACRO_IN_REGEX = re.compile(r'\(\?P<([^>]+)>.*?\)')
+# Macros defined in replacement string
 PATTERN_MACRO_IN_REPL = re.compile(r'\\g<([^>]+)>')
-VALID_TYPES = ('ip', 'host', 'email', 'name', 'number', 'password', 'backup', 'others')
-IGNORE_TYPES = ('backup', 'directory')
+# Section with these types allow no patterns defined
+IGNORE_TYPES = ('backup', 'directory', 'mysql-backup', 'ldap-backup')
+# All valid section types, include IGNORE_TYPES
+VALID_TYPES = ('ip', 'host', 'email', 'name', 'number', 'password', 'others') + IGNORE_TYPES
+# macro begins with _, not treat as macro.
 PREFIX_NO_MACRO = "_"
 
 def _PRE_DEFINED_MACROS(filename=MACROS_FILE):
@@ -298,10 +304,40 @@ class PackageGroups(object):
         return set(files)
 
     def list_backups(self):
+        """
+        list backup directories.
+        """
+        def get_mysql_backup(name):
+            program="/opt/ossxp/bin/mysqlbackup"
+            if not name.startswith('/') and os.path.exists(program):
+                proc = subprocess.Popen([program, "--query", "target", name],
+                                        stdout=subprocess.PIPE, close_fds=True)
+                name2 = proc.stdout.read().rstrip()
+                proc.wait()
+                if proc.returncode == 0:
+                    name = name2
+            return name
+
+        def get_ldap_backup(name):
+            program="/opt/ossxp/bin/ldapbackup"
+            proc = subprocess.Popen([program, "--query", "target"],
+                                    stdout=subprocess.PIPE, close_fds=True)
+            name2 = proc.stdout.read().rstrip()
+            proc.wait()
+            if proc.returncode == 0:
+                name = name2
+            return name
+
         files = []
         backups = []
         for obj in self.get_config_obj_by_type('backup'):
             files.extend(obj.file_list)
+        for obj in self.get_config_obj_by_type('mysql-backup'):
+            for name in obj.file_list:
+                files.append(get_mysql_backup(name))
+        for obj in self.get_config_obj_by_type('ldap-backup'):
+            for name in obj.file_list:
+                files.append(get_ldap_backup(name))
         for item in sorted(files):
             alreadyin = False
             for bak in backups:
@@ -344,6 +380,9 @@ class PackageGroups(object):
     reference_macros = property(get_reference_macros)
 
     def _macros_precheck(self):
+        """
+        Check whether macros are defined in /etc/ossxp/packages/macros.
+        """
         not_defined_macros = self.reference_macros - set(self.pre_defined_macros.keys())
 
         macros_with_blank_value = filter(lambda kv: not kv[1], self.pre_defined_macros.items())
@@ -429,6 +468,12 @@ class PackageGroups(object):
 
 
     def change_config_files(self):
+        """
+        Change config files according to macros and rules...
+         * Macros are defined in /etc/ossxp/packages/macros.
+         * Rules are defined in /etc/ossxp/packages/*.conf and /opt/ossxp/lib/packages/*.conf.
+        """
+        #Check whether macros are defined.
         self._macros_precheck()
         for package_file_name, package in self.packages.items():
             for config_section in package.config_sections:

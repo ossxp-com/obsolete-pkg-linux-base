@@ -1,3 +1,9 @@
+ossxp-linux (1:1.27.1) unstable; urgency=low
+
+  * Add mysql and ldap backup handlers for ossxp_pkgadmin.py.
+
+ -- Jiang Xin <jiangxin@foo.bar>  Sun, 31 Jan 2010 16:40:07 +0800
+
 ossxp-linux (1:1.26.231) unstable; urgency=low
 
   * Add make, gistore.
