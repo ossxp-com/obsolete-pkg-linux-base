@@ -1,3 +1,10 @@
+ossxp-linux (1:1.27.2) unstable; urgency=low
+
+  * Backup /opt/ossxp/ssl
+  * Base install script check mtime for STAMPFILE.
+
+ -- Jiang Xin <jiangxin@foo.bar>  Wed, 24 Feb 2010 17:52:51 +0800
+
 ossxp-linux (1:1.27.1) unstable; urgency=low
 
   * Add mysql and ldap backup handlers for ossxp_pkgadmin.py.

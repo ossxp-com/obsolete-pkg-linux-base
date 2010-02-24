@@ -129,8 +129,9 @@ def main(argv=None):
 	for arg in args:
 		if arg in ('install'):
 			if os.path.exists(STAMPFILE):
-				print "%s already installed." % os.path.basename(sys.argv[0])
-				return(0)
+				if os.path.getmtime(STAMPFILE) > os.path.getmtime(__file__):
+					print "%s already installed." % os.path.basename(sys.argv[0])
+					return(0)
 
 			depends=["base.py"]
 			for pkg in depends:
@@ -141,7 +142,8 @@ def main(argv=None):
 			do_install()
 
 			os.system('touch %s' % STAMPFILE)
-		if arg in ('config'):
+
+		elif arg in ('config'):
 			do_config()
 
 
