@@ -30,6 +30,7 @@ import os, sys
 import getopt
 import re
 import subprocess
+import glob
 
 COPYRIGHT="Copyright 2009, by Jiang Xin at OpenSourceXpress co. ltd."
 MACROS_FILE = '/etc/ossxp/packages/macros'
@@ -64,7 +65,9 @@ MACROS = _PRE_DEFINED_MACROS()
 class ConfigSection(object):
 
     def __init__(self, name):
-        self.file_list = map(lambda x: x.strip(), name.split(','))
+        self.file_list = []
+        for item in name.split(','):
+            self.file_list.extend(glob.glob(item.strip()))
         self.desc = ''
         self.types = []
         self.regex = []
