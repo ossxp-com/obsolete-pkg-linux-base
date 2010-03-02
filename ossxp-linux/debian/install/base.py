@@ -218,6 +218,8 @@ Host *
 #defscrollback 3000
 #vbell on
 #startup_message off
+## Set the caption on the bottom line
+caption always "%{= kw}%-Lw%{= BW}%n %t%{-}%+w %-= @%H - %Y/%m/%d, %C"
 '''
 		apt.config_file_append(CONFFILE, patch)	
 

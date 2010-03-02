@@ -1,8 +1,9 @@
-ossxp-linux (1:1.27.4) unstable; urgency=low
+ossxp-linux (1:1.27.5) unstable; urgency=low
 
   * ossxp_pkgadmin.py glob match files/directories.
   * Backup .ssh directories.
   * apt-cacher-ng debian/ubuntu alternative sources.
+  * update screenrc file.
 
  -- Jiang Xin <jiangxin@foo.bar>  Tue, 02 Mar 2010 09:00:45 +0800
 
