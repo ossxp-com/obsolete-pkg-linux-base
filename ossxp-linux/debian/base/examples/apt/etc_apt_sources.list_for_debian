@@ -14,8 +14,8 @@
 ##Acquire::http { Proxy "http://apt-source:9999"; };
 
 ## ossxp packages
-#deb  http://user:pass@apt-source/clientid lenny main
-#deb  http://user:pass@apt-source/clientid sid   main
+#deb  http://user:pass@apt-source/update/clientid/debian lenny main contrib
+#deb  http://user:pass@apt-source/update/clientid/debian sid   main contrib
 deb http://update.bj.ossxp.com/update/all/debian lenny main contrib
 
 ## Debian official security update apt sources
@@ -26,8 +26,7 @@ deb-src http://security.debian.org/ lenny/updates main
 deb http://volatile.debian.org/debian-volatile lenny/volatile main
 deb-src http://volatile.debian.org/debian-volatile lenny/volatile main
 
-################################################################################
-
+#################### Offical mirrors ####################
 ## Debian official apt source
 #deb http://mirrors.geekbone.org/debian-volatile/  lenny/volatile  main contrib non-free
 #deb http://mirrors.geekbone.org/debian-security/  lenny/updates   main contrib non-free
@@ -37,24 +36,23 @@ deb-src http://volatile.debian.org/debian-volatile lenny/volatile main
 #deb http://mirrors.geekbone.org/debian/           unstable        main contrib non-free
 #deb http://mirrors.geekbone.org/debian/           experimental    main contrib non-free
 
-#deb http://debian.uchicago.edu/debian/            lenny           main non-free contrib
-#deb http://debian.uchicago.edu/debian-security/   lenny/updates   main non-free contrib
-#deb http://cudlug.cudenver.edu/debian/            lenny           main non-free contrib
+#################### Fast mirrors ####################
+#deb http://mirrors.sohu.com/debian/            stable main contrib non-free
+#deb http://mirrors.163.com/debian/             stable main contrib non-free
+#deb http://debian.cn99.com/debian/             stable main contrib non-free
+#deb http://www.anheng.com.cn/debian/           stable main contrib non-free
+#deb http://debian.ustc.edu.cn/debian/          stable main contrib non-free
+#deb http://mirror.dlut.edu.cn/debian/          stable main contrib non-free
+#deb ftp://ftp.tsinghua.edu.cn/mirror/debian/   stable main contrib non-free
+#deb http://debian.nctu.edu.tw/debian/          stable main contrib non-free
+#deb http://mirror.cs.umn.edu/debian/           stable main contrib non-free
+#deb http://ftp.debian.org.cn/mirror/debian/    stable main contrib non-free
 
-#deb ftp://ftp.jp.debian.org/debian sid main contrib
-
-#deb-src http://cudlug.cudenver.edu/debian/ etch main non-free contrib
-
-################################################################################
-
-## Debian backports
+#################### Debian backports ####################
 deb http://www.backports.org/debian/ etch-backports main contrib non-free
 deb http://www.backports.org/debian/ lenny-backports main contrib non-free
 
-
-################################################################################
-## Other 3rd party apt source...
-
+#################### 3-party packages ####################
 # 3d desktop
 #deb http://download.tuxfamily.org/shames/debian-lenny/desktopfx/unstable ./
 
