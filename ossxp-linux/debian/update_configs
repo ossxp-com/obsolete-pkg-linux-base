@@ -7,7 +7,9 @@ BASEDIR=$(dirname $0)
 if lsb_release -i | grep -iq "debian$"; then
     cp ${BASEDIR}/control.debian ${BASEDIR}/control
     cp ${BASEDIR}/ossxp-linux-base.install.debian ${BASEDIR}/ossxp-linux-base.install
+    sed -e 's/<DIST>/debian/g' < ${BASEDIR}/changelog.in > ${BASEDIR}/changelog
 elif lsb_release -i | grep -iq "ubuntu$"; then
     cp ${BASEDIR}/control.debian ${BASEDIR}/control 
     cp ${BASEDIR}/ossxp-linux-base.install.ubuntu ${BASEDIR}/ossxp-linux-base.install
+    sed -e 's/<DIST>/ubuntu/g' < ${BASEDIR}/changelog.in > ${BASEDIR}/changelog
 fi
