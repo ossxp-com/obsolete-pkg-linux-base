@@ -40,9 +40,9 @@ deb http://mirror.bj.ossxp.com/debian-backports/ lenny-backports main contrib no
 
 deb http://mirror.bj.ossxp.com/debian-volatile/ stable/volatile main contrib non-free
 
-deb http://mirror.bj.ossxp.com/debian-multimedia/ stable main contrib non-free
-deb http://mirror.bj.ossxp.com/debian-multimedia/ testing main contrib non-free
-deb http://mirror.bj.ossxp.com/debian-multimedia/ unstable main contrib non-free
+deb http://mirror.bj.ossxp.com/debian-multimedia/ stable main non-free
+deb http://mirror.bj.ossxp.com/debian-multimedia/ testing main non-free
+deb http://mirror.bj.ossxp.com/debian-multimedia/ unstable main non-free
 
 #deb-src http://mirror.bj.ossxp.com/debian/ stable main contrib non-free
 #deb-src http://mirror.bj.ossxp.com/debian/ testing main contrib non-free
