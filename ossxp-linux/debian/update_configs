@@ -5,11 +5,21 @@ set -e
 BASEDIR=$(dirname $0)
 
 if lsb_release -i | grep -iq "debian$"; then
-    cp ${BASEDIR}/control.debian ${BASEDIR}/control
-    cp ${BASEDIR}/ossxp-linux-base.install.debian ${BASEDIR}/ossxp-linux-base.install
-    sed -e 's/<DIST>/debian/g' < ${BASEDIR}/changelog.in > ${BASEDIR}/changelog
+  arch="debian"
 elif lsb_release -i | grep -iq "ubuntu$"; then
-    cp ${BASEDIR}/control.debian ${BASEDIR}/control 
-    cp ${BASEDIR}/ossxp-linux-base.install.ubuntu ${BASEDIR}/ossxp-linux-base.install
-    sed -e 's/<DIST>/ubuntu/g' < ${BASEDIR}/changelog.in > ${BASEDIR}/changelog
+  arch="ubuntu"
+else
+  echo "Unknown arch: $(lsb_release -i)"
+  exit 1
 fi
+
+for from in ${BASEDIR}/*.${arch}; do
+  to=${from%.${arch}}
+  cp $from $to
+done
+for from in ${BASEDIR}/*.in; do
+  if grep -q "<DIST>" $from; then
+    to=${from%.in}
+    sed -e "s/<DIST>/${arch}/g" < $from > $to
+  fi
+done
