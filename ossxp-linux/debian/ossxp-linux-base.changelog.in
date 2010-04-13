@@ -1,7 +1,7 @@
-ossxp-linux (1:1.31+<DIST>) unstable; urgency=low
+ossxp-linux (1:1.32+<DIST>) unstable; urgency=low
 
   * Config files for archvsync.
-  * New config files for apt-cacher-ng.
+  * Move apt-cacher-ng config files to package ossxp-apt-cacher-ng.
 
  -- Jiang Xin <jiangxin@ossxp.com>  Mon, 12 Apr 2010 16:25:30 +0800
 

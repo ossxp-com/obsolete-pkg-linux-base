@@ -7,4 +7,3 @@ debian/install/README   opt/ossxp/install/
 debian/package_info/*   opt/ossxp/lib/packages/
 debian/conf/etc/vim/*   etc/vim/
 debian/conf/etc/apt/*   etc/apt/
-debian/conf/etc/apt-cacher-ng   etc
