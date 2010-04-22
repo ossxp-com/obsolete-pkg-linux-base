@@ -31,8 +31,8 @@ PKG_LIST='''
 	xorg | x-window-system-core, xdg-utils, menu, 
 	ttf-arphic-uming, ttf-arphic-ukai, ttf-bitstream-vera, ttf-arphic-newsung,
 	xfonts-wqy | wqy-bitmapfont, ttf-wqy-zenhei,
-	scim, scim-chinese, scim-pinyin, scim-tables-zh, fcitx, im-switch, 
-	discover1, 
+	fcitx | scim, fcitx | scim-chinese, fcitx | scim-pinyin, fcitx | scim-tables-zh, im-switch, 
+	discover | discover1, 
 	'''
 ############################################################
 
@@ -44,7 +44,7 @@ import os, sys, re, string, getopt
 interactive = 1
 dryrun  = 0
 verbose = 1
-STAMPFILE = ".desktop.core.done"
+STAMPFILE = os.path.join(os.path.dirname(os.path.realpath(__file__)), '.%s.done' % os.path.splitext(os.path.basename(__file__))[0])
 
 
 def usage(code, msg=''):
@@ -123,7 +123,8 @@ def main(argv=None):
 
 			depends=["base.py"]
 			for pkg in depends:
-				cmd="python %s %s" % (pkg, string.join(argv[1:]," "))
+				cmd="python %s %s" % (os.path.join(os.path.dirname(os.path.realpath(__file__)), pkg),
+				                      string.join(argv[1:]," "))
 				print "[1mDepends on %s, run: %s[0m" % (pkg, cmd)
 				os.system(cmd)
 

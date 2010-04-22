@@ -44,7 +44,7 @@ PKG_LIST='''
 	manpages-dev, genisoimage | mkisofs, module-assistant, 
 	patchutils, pbuilder, python-dev, qemu, swig, shtool,
 	uuid-dev, xutils, zlib1g-dev, 
-    git-cvs, git-svn, gitk, mercurial, 
+	git-cvs, git-svn, gitk, mercurial, 
 	'''
 ############################################################
 
@@ -56,7 +56,7 @@ import os, sys, getopt, string
 interactive = 1
 dryrun  = 0
 verbose = 1
-STAMPFILE = ".devel.done"
+STAMPFILE = os.path.join(os.path.dirname(os.path.realpath(__file__)), '.%s.done' % os.path.splitext(os.path.basename(__file__))[0])
 
 
 def usage(code, msg=''):
@@ -135,7 +135,8 @@ def main(argv=None):
 
 			depends=["base.py"]
 			for pkg in depends:
-				cmd="python %s %s" % (pkg, string.join(argv[1:]," "))
+				cmd="python %s %s" % (os.path.join(os.path.dirname(os.path.realpath(__file__)), pkg),
+				                      string.join(argv[1:]," "))
 				print "[1mDepends on %s, run: %s[0m" % (pkg, cmd)
 				os.system(cmd)
 

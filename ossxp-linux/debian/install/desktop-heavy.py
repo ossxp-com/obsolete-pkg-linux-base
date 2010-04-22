@@ -28,7 +28,7 @@ Actions:
 
 ############################################################
 PKG_LIST='''
-	kde | kde-full, kdm, kde-i18n-zhcn, kde-i18n-zhtw, 
+	kde-full | kde | kde-minimal | kdesktop | gnome | gnome-desktop-environment, kdm, kde-i18n-zhcn, kde-i18n-zhtw, 
 	mozilla-firefox, mozilla-firefox-locale-zh-cn, 
 	mozilla-thunderbird, mozilla-thunderbird-inspector, mozilla-thunderbird-typeaheadfind, thunderbird-locale-zh-cn, 
 	cupsys-client, cupsys-driver-gutenprint, cupsys, cups-pdf, cupsys-bsd, printconf, xsane, 
@@ -59,7 +59,7 @@ import os, sys, getopt, string
 interactive = 1
 dryrun  = 0
 verbose = 1
-STAMPFILE = ".desktop.heavy.done"
+STAMPFILE = os.path.join(os.path.dirname(os.path.realpath(__file__)), '.%s.done' % os.path.splitext(os.path.basename(__file__))[0])
 
 
 def usage(code, msg=''):
@@ -139,7 +139,8 @@ def main(argv=None):
 
 			depends=["desktop-light.py"]
 			for pkg in depends:
-				cmd="python %s %s" % (pkg, string.join(argv[1:]," "))
+				cmd="python %s %s" % (os.path.join(os.path.dirname(os.path.realpath(__file__)), pkg),
+				                      string.join(argv[1:]," "))
 				print "[1mDepends on %s, run: %s[0m" % (pkg, cmd)
 				os.system(cmd)
 

@@ -29,16 +29,16 @@ Actions:
 ############################################################
 PKG_LIST='''
 	acl, apt-show-versions, ascii, autofs, bsdutils, bridge-utils, bzip2,
-	curl, cabextract, coreutils | shellutils, 
-	dstat, ethtool, file, fpdns, fping, fuse-utils, 
-	git-core, gnupg, htop, ia32-libs, ia32-libs-gtk, indent, iproute, 
-	less, locales, lynx, make, ntfs-3g, ntpdate, nmap, ngrep, 
-	openssl, p7zip-full, pciutils, perl, psmisc, preload, 
-	gistore | etckeeper | rdiff-backup, resolvconf, rsync, rar, saidar, 
+	curl, cabextract, coreutils | shellutils,
+	dstat, ethtool, file, fpdns, fping, fuse-utils,
+	git-core, gnupg, htop, ia32-libs, ia32-libs-gtk, indent, iproute,
+	less, locales, lynx, make, ntfs-3g, ntp | ntpdate, nmap, ngrep,
+	openssl, p7zip-full, pciutils, perl, psmisc, preload,
+	gistore | etckeeper | rdiff-backup, rsync, rar, saidar,
 	byobu | screen,  screen-profiles, screen-profiles-extras,
-	sharutils, ssh, sshfs, star, sudo, sysstat, tcpdump, 
+	sharutils, ssh, sshfs, star, sudo, sysstat, tcpdump,
 	mercurial, memtester | sysutils, procinfo | sysutils, tofrodos | sysutils,
-	udev, unison, vim, vnstat, wget, zhcon, 
+	udev, unison, vim, vnstat, wget, zhcon,
 	'''
 ############################################################
 
@@ -50,7 +50,7 @@ import os, sys, re, string, getopt, tempfile, shutil
 interactive = 1
 dryrun  = 0
 verbose = 0
-STAMPFILE = ".base.done"
+STAMPFILE = os.path.join(os.path.dirname(os.path.realpath(__file__)), '.%s.done' % os.path.splitext(os.path.basename(__file__))[0])
 
 
 def usage(code, msg=''):
@@ -96,7 +96,25 @@ def do_install():
 	list = apt.get_list(cmd)
 	apt.run( args+ [list] )
 
+def add_me_to_group( group ):
+	if not group:
+		raise Exception("no group defined.")
 
+	## Add group if not exist
+	found = False
+	f = open("/etc/group")
+	for line in f:
+		if line.startswith(group + ":"):
+			found = True
+			break
+	f.close()
+	if not found:
+		os.system("addgroup --system %s" % group)
+
+	## Add current user to group
+	userid=os.getenv("SUDO_USER", os.getenv("USER"))
+	if userid and userid != 'root':
+		os.system("adduser %s %s" % (userid, group))
 
 def do_config():
 	#------------------------------------------------------------
@@ -160,6 +178,9 @@ set -o vi
 '''
 		apt.config_file_append(CONFFILE, patch)	
 
+		## Add group sudo if not exist
+		add_me_to_group("sudo")
+
 	#------------------------------------------------------------
 	CONFFILE='/etc/ssh/sshd_config'
 	if os.path.exists(CONFFILE):
@@ -187,6 +208,9 @@ Match group sftp
 		#patch['trans_from'] = ['Protocol 2', 'PermitRootLogin no', 'PermitRootLogin no', 'UsePrivilegeSeparation yes']
 		#patch['trans_to']   = ['Protocol 2', 'PermitRootLogin no', 'PermitRootLogin no', 'UsePrivilegeSeparation yes']
 		apt.config_file_append(CONFFILE, patch)	
+
+		## Add group ssh if not exist
+		add_me_to_group("ssh")
 
 	#------------------------------------------------------------
 	CONFFILE='/etc/ssh/ssh_config'
@@ -294,7 +318,7 @@ def main(argv=None):
 		argv = sys.argv
 	try:
 	    opts, args = getopt.getopt(
-		argv[1:], "hivbnq", 
+		argv[1:], "hivbnq",
 		["help", "verbose", "quiet", "install", "remove", "interactive", "batch", "dryrun"])
 	except getopt.error, msg:
 		 return usage(1, msg)
@@ -338,4 +362,4 @@ def main(argv=None):
 if __name__ == "__main__":
 	sys.exit(main())
 
-# vim: noet
+# vim: noet ts=4 sw=4

@@ -194,32 +194,31 @@ def pre_check(packages):
             continue
         # pkg_a | pkg_b means install one of them
         split = item.split('|')
-        if len(split) > 1:
-            first_uninst_pkg = None
-            for pkg in split:
+        has_installed = False
+        for pkg in split:
+            pkg = pkg.strip()
+            if pkg.startswith("not_installed_"):
+                status = VERSION_NOTINST
+            elif pkg.startswith("current_installed_"):
+                status = VERSION_EQUAL
+            elif pkg.startswith("outofdate_installed_"):
+                status = VERSION_DIFF
+            elif pkg.startswith("cannot_installed_"):
+                status = VERSION_UNKNOWN
+            else:
                 pkg, status = check_package(pkg) 
-                # test if pkg is uptodate
-                if status == VERSION_EQUAL:
-                    uptodate_list.append(pkg)
-                    break
-                elif status == VERSION_DIFF:
-                    upgrade_list.append(pkg)
-                    break
-                elif status == VERSION_NOTINST:
-                    if not first_uninst_pkg:
-                        first_uninst_pkg = pkg
-                else:
-                    unknown_list.append(pkg)
-            if first_uninst_pkg:
-                notinst_list.append(first_uninst_pkg)
-        else:
-            pkg, status = check_package(split[0]) 
+
+            # test if pkg is uptodate
             if status == VERSION_EQUAL:
                 uptodate_list.append(pkg)
+                has_installed = True
             elif status == VERSION_DIFF:
                 upgrade_list.append(pkg)
+                has_installed = True
             elif status == VERSION_NOTINST:
-                notinst_list.append(pkg)
+                if not has_installed:
+                    has_installed = True
+                    notinst_list.append(pkg)
             else:
                 unknown_list.append(pkg)
 
@@ -324,9 +323,9 @@ def process_packages(package_list, install_mode=1, interactive=1, dryrun=1):
 
     if install_mode:
         if interactive:
-            cmd = "apt-get install %s" % string.join(lists[VERSION_NOTINST] + lists[VERSION_DIFF], " ")
+            cmd = "aptitude install -P %s" % string.join(lists[VERSION_NOTINST] + lists[VERSION_DIFF], " ")
         else:
-            cmd = "apt-get install --force-yes -y %s" % string.join(lists[VERSION_NOTINST] + lists[VERSION_DIFF], " ")
+            cmd = "aptitude install -y %s" % string.join(lists[VERSION_NOTINST] + lists[VERSION_DIFF], " ")
     else:
         if dryrun:
             cmd = "dpkg --dry-run --remove %s" % string.join(lists[VERSION_EQUAL] + lists[VERSION_DIFF], " ")
@@ -353,11 +352,28 @@ def main(argv=None):
     run(argv[1:])
 
 if __name__ == "__main__":
+    verbose = 1
+    print "run pre cannot_installed_a | cannot_installed_b"
+    pre_check("cannot_installed_a | cannot_installed_b")
+
+    print "run pre cannot_installed_a | not_installed_b"
+    pre_check("cannot_installed_a | not_installed_b")
+
+    print "run pre not_installed_a | not_installed_b"
+    pre_check("not_installed_a | not_installed_b")
+
+    print "run pre outofdate_installed_a | not_installed_b"
+    pre_check("outofdate_installed_a | not_installed_b")
+
+    print "run pre outofdate_installed_a | outofdate_installed_b"
+    pre_check("outofdate_installed_a | outofdate_installed_b")
+
     #pre_check("a, b, c, d | e, acl, kde, hal, libhal-storage1, libhal1, exim4-daemon-light , gnome") 
+    print "after pre_check"
 
     #process_packages ("a, b, c, d | e, acl, kde, hal, libhal-storage1, libhal1, exim4-daemon-light , gnome") 
     #process_packages ("a, b, c, d | e, acl, libhal1, gnome", '--remove') 
 
-    sys.exit(main())
+    #sys.exit(main())
 
 # vim: et ts=4 sw=4
