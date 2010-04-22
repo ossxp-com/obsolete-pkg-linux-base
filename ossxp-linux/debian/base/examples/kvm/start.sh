@@ -5,6 +5,7 @@
 CWD=$(cd `dirname $0`; pwd)
 LOCK_FILE=$CWD/LOCK_FILE
 KVMCMD=kvm
+[ "$(echo -e)" = "-e" ] && ECHO="echo" || ECHO="echo -e"
 
 VNCPORTCMD=/opt/ossxp/bin/vncport.py
 [ -x $VNCPORTCMD ] && $VNCPORTCMD -aq
@@ -214,7 +215,7 @@ fi
 
 for disk in $HDA $HDB $HDC $HDD; do
    if [ ! -z $disk ] && ( lsattr $disk 2>/dev/null| cut -d" " -f1 | grep -q "i" || ! test -w $disk ); then
-      echo -e "[1mImage($(basename $disk)) is readonly, using snapshot mode![0m"
+      $ECHO "[1mImage($(basename $disk)) is readonly, using snapshot mode![0m"
       opt_snapshot="-snapshot"
   fi
 done
@@ -301,8 +302,8 @@ echo "======================================================================"
 
 if [ ! -z "$opt_snapshot" ]; then
     echo ""
-    echo -e "[1mWarning: Running VM in 'snapshot' mode!!![0m"
-    echo -e "[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m"
+    $ECHO "[1mWarning: Running VM in 'snapshot' mode!!![0m"
+    $ECHO "[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m"
 fi
 
 #[ -t ] && (echo "press any key..."; read x; )

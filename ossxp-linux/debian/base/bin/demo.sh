@@ -1,12 +1,13 @@
 #!/bin/bash
 
 count=0
+[ "$(echo -e)" = "-e" ] && ECHO="echo" || ECHO="echo -e"
 
 prompt()
 {
     eol=yes
     pause=
-    echo -e -n "[1m"
+    $ECHO -n "[1m"
     while [ $# -gt 0 ]; do
         case $1 in
         -N)
@@ -24,18 +25,18 @@ prompt()
         esac
         shift
     done
-    if [ $count -gt 0 ]; then echo -n -e "{$count} "; fi
-    echo -n -e $*
-    echo -e -n "[0m"
+    if [ $count -gt 0 ]; then $ECHO -n "{$count} "; fi
+    $ECHO -n $*
+    $ECHO -n "[0m"
     if [ "$eol" = "yes" ]; then echo ""; fi
     if [ "$pause" = "yes" ]; then read ignore; fi
 }
 
 help_msg()
 {
-    echo -e "[1mSyntax:[0m"
-    echo -e "\t$0 start: switch to demo mode"
-    echo -e "\t$0 stop:  quit demo mode"
+    $ECHO "[1mSyntax:[0m"
+    $ECHO "\t$0 start: switch to demo mode"
+    $ECHO "\t$0 stop:  quit demo mode"
 }
 
 demo_start()

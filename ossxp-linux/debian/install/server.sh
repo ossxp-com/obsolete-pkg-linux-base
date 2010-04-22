@@ -2,7 +2,7 @@
 # include apt maintainance functions
 . /opt/ossxp/install/myapt.inc
 
-[ -x /bin/echo ] && alias echo=/bin/echo
+[ "$(echo -e)" = "-e" ] && ECHO="echo" || ECHO="echo -e"
 
 is_prefork_mode()
 {
@@ -22,21 +22,21 @@ is_prefork_mode()
 
 usage()
 {
-    echo "Usage:"
-    echo "    $SCRIPTNAME [--prefork|--worker] [--install|--uninstall] <server> ..."
-    echo "Available Servers:"
-    echo "    lamp --- mysql & apache & php"
-    echo "    apache"
-    echo "    php"
-    echo "    svn"
-    echo "    mailman"
-    echo "    mantis"
-    echo "    moin"
-    echo "    mwiki"
-    echo "    gosa"
-    echo "    docbook"
-    echo "    phpbb"
-    echo "Current PoW state: $PoW_MODE"
+    $ECHO "Usage:"
+    $ECHO "    $SCRIPTNAME [--prefork|--worker] [--install|--uninstall] <server> ..."
+    $ECHO "Available Servers:"
+    $ECHO "    lamp --- mysql & apache & php"
+    $ECHO "    apache"
+    $ECHO "    php"
+    $ECHO "    svn"
+    $ECHO "    mailman"
+    $ECHO "    mantis"
+    $ECHO "    moin"
+    $ECHO "    mwiki"
+    $ECHO "    gosa"
+    $ECHO "    docbook"
+    $ECHO "    phpbb"
+    $ECHO "Current PoW state: $PoW_MODE"
     exit 1
 }
 
@@ -46,13 +46,13 @@ real_actions()
     PACKAGES=
 
     if [ "$PoW_MODE" = "--prefork" ]; then
-	MAIN_PACKAGES=$(echo $MAIN_PACKAGES | sed -e 's/@@PoW@@/-prefork/g')
-	UNINST_PACKAGES=$(echo $UNINST_PACKAGES | sed -e 's/@@PoW@@/-prefork/g')
-	INST_PACKAGES=$(echo $INST_PACKAGES | sed -e 's/@@PoW@@/-prefork/g')
+	MAIN_PACKAGES=$($ECHO $MAIN_PACKAGES | sed -e 's/@@PoW@@/-prefork/g')
+	UNINST_PACKAGES=$($ECHO $UNINST_PACKAGES | sed -e 's/@@PoW@@/-prefork/g')
+	INST_PACKAGES=$($ECHO $INST_PACKAGES | sed -e 's/@@PoW@@/-prefork/g')
     else
-	MAIN_PACKAGES=$(echo $MAIN_PACKAGES | sed -e 's/@@PoW@@/-worker/g')
-	UNINST_PACKAGES=$(echo $UNINST_PACKAGES | sed -e 's/@@PoW@@/-worker/g')
-	INST_PACKAGES=$(echo $INST_PACKAGES | sed -e 's/@@PoW@@/-worker/g')
+	MAIN_PACKAGES=$($ECHO $MAIN_PACKAGES | sed -e 's/@@PoW@@/-worker/g')
+	UNINST_PACKAGES=$($ECHO $UNINST_PACKAGES | sed -e 's/@@PoW@@/-worker/g')
+	INST_PACKAGES=$($ECHO $INST_PACKAGES | sed -e 's/@@PoW@@/-worker/g')
     fi
 
     if [ "$UNINSTALL" = "yes" ]; then
@@ -226,7 +226,7 @@ inst_phpbb()
 ########################################
 
 if [ `id -u` -ne 0 ]; then
-  echo "you must be root to run this script!"
+  $ECHO "you must be root to run this script!"
   exit 1
 fi
 
@@ -266,7 +266,7 @@ while [ $# -gt 0 ]; do
         ;;
 
     -*)
-        echo -e "[1mError: unknown option: $1[0m"
+        $ECHO "[1mError: unknown option: $1[0m"
         usage
         ;;
 
@@ -317,7 +317,7 @@ while [ $# -gt 0 ]; do
         ;;
 
     *)
-        echo -e "[1mError: unknown command: $1[0m"
+        $ECHO "[1mError: unknown command: $1[0m"
         usage
         ;;
     esac

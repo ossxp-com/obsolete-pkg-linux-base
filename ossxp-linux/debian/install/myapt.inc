@@ -1,6 +1,9 @@
 ########################################
 # install packages only necessary
 ########################################
+
+[ "$(echo -e)" = "-e" ] && ECHO="echo" || ECHO="echo -e"
+
 install_packages()
 {
     unknown_list=
@@ -37,29 +40,29 @@ install_packages()
     done
 
     if [ ! -z "$ignore_list" ]; then
-        echo -e "[1mAlready installed packages :[0m"
-        echo $ignore_list
-        echo ""
+        $ECHO "[1mAlready installed packages :[0m"
+        $ECHO $ignore_list
+        $ECHO ""
     fi
     if [ ! -z "$unknown_list" ]; then
-        echo -e "[1mWarning: Not exist packages found : [0m"
-        echo $unknown_list
-        echo ""
+        $ECHO "[1mWarning: Not exist packages found : [0m"
+        $ECHO $unknown_list
+        $ECHO ""
     fi
     if [ -z "$upgrade_list" ]; then
-        echo -e "[1mNothing will be installed or upgraded.[0m"
-        echo ""
+        $ECHO "[1mNothing will be installed or upgraded.[0m"
+        $ECHO ""
     else
-        echo -e "[1mFollowing packages will be installed :[0m"
-        echo $upgrade_list
+        $ECHO "[1mFollowing packages will be installed :[0m"
+        $ECHO $upgrade_list
         read -p "Press any key ..." -s -n1
-        echo ""
+        $ECHO ""
 	if [ "$interactive" = "yes" ]; then
-            apt-get install $upgrade_list || echo -e "[1m[44minstall failed! [0m"
+            apt-get install $upgrade_list || $ECHO "[1m[44minstall failed! [0m"
 	else
-            apt-get install --force-yes -y $upgrade_list || echo -e "[1m[44minstall failed! [0m"
+            apt-get install --force-yes -y $upgrade_list || $ECHO "[1m[44minstall failed! [0m"
 	fi
-        echo ""
+        $ECHO ""
     fi
 }
 
@@ -107,30 +110,30 @@ uninstall_packages()
     done
 
     if [ ! -z "$ignore_list" ]; then
-        echo -e "Packages not yet installed :"
-        echo $ignore_list
-        echo ""
+        $ECHO "Packages not yet installed :"
+        $ECHO $ignore_list
+        $ECHO ""
     fi
     if [ -z "$delete_list" ]; then
-        echo -e "Nothing will be uninstalled."
-        echo ""
+        $ECHO "Nothing will be uninstalled."
+        $ECHO ""
     else
 	if [ "$purgemode" = "yes" ]; then
-          echo -e "[1mFollowing packages will be purged:[0m"
+          $ECHO "[1mFollowing packages will be purged:[0m"
 	else
-          echo -e "[1mFollowing packages will be uninstalled:[0m"
+          $ECHO "[1mFollowing packages will be uninstalled:[0m"
 	fi
-        echo $delete_list
+        $ECHO $delete_list
         read -p "Press any key ..." -s -n1
-        echo ""
+        $ECHO ""
 	if [ "$dryrun" = "yes" ]; then
             dpkg --dry-run --remove $delete_list
 	elif [ "$purgemode" = "yes" ]; then
-            dpkg --purge $delete_list || echo -e "[1m[44minstall failed! [0m"
+            dpkg --purge $delete_list || $ECHO "[1m[44minstall failed! [0m"
 	else
-            dpkg --remove $delete_list || echo -e "[1m[44minstall failed! [0m"
+            dpkg --remove $delete_list || $ECHO "[1m[44minstall failed! [0m"
 	fi
-        echo ""
+        $ECHO ""
     fi
 }
 

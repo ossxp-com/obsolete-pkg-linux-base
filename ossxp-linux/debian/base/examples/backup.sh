@@ -10,7 +10,7 @@
 
 set -e
 export PATH=/usr/bin:/usr/local/bin:/usr/sbin:/usr/local/sbin:/bin:/sbin
-
+[ "$(echo -e)" = "-e" ] && ECHO="echo" || ECHO="echo -e"
 is_batch="no"
 
 NO_YES()
@@ -119,7 +119,7 @@ HIECHO()
 	if [ "x$wall" = "xyes" ]; then
 		banner $* | wall
 	else
-		echo -e "${embegin}${sty1}${ps}$*${sty0}${emend}${back}${cr}"
+		$ECHO "${embegin}${sty1}${ps}$*${sty0}${emend}${back}${cr}"
 	fi
 }
 
@@ -246,7 +246,7 @@ EOF
 
 fn_version()
 {
-	echo "Version : \$Revision: 1.17 $"
+	$ECHO "Version : \$Revision: 1.17 $"
 	exit 0
 }
 
@@ -356,7 +356,7 @@ fn_backup()
 		HIECHO -nocr -nops "Backup ${source} into ${BACKUPFILE}...	"
 		tar -zchvf ${BACKUPFILE} ${source}  >/dev/null 2>&1 || success="no"
 		if [ "$success" = "no" ]; then
-			echo "" && HIECHO -nops "	no file need to backup"
+			$ECHO "" && HIECHO -nops "	no file need to backup"
 		else
 			( cd `dirname $BACKUPFILE`; md5 `basename $BACKUPFILE` > `basename $BACKUPFILE`.md5 )
 		fi
@@ -384,7 +384,7 @@ fn_backup()
 		rm -f $TMPFILE
 		
 		if [ "$success" = "no" ]; then
-			echo "" && HIECHO -nops "	no file need to backup"
+			$ECHO "" && HIECHO -nops "	no file need to backup"
 			rm -f ${BACKUPFILE}
 		else
 			( cd `dirname ${BACKUPFILE}`; md5 `basename ${BACKUPFILE}` > `basename ${BACKUPFILE}`.md5 )
@@ -401,7 +401,7 @@ fn_backup()
 		TMPFILE=`mktemp -q /tmp/backup_history.XXXXXXXXXX`
 		tempstr=`echo ${source} | sed -e 's/\//\\\\\//g' `
 		sed -e "/$tempstr/d" $history > $TMPFILE
-		echo $tsstring >> $TMPFILE
+		$ECHO $tsstring >> $TMPFILE
 		mv -f $TMPFILE $history
 	fi	
 }
