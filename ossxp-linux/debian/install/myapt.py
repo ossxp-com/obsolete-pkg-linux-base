@@ -29,6 +29,7 @@ list
 
 
 import os, sys, re, string, getopt, tempfile, shutil
+import unittest
 
 
 VERSION_EQUAL=0
@@ -195,32 +196,36 @@ def pre_check(packages):
         # pkg_a | pkg_b means install one of them
         split = item.split('|')
         has_installed = False
-        for pkg in split:
-            pkg = pkg.strip()
-            if pkg.startswith("not_installed_"):
-                status = VERSION_NOTINST
-            elif pkg.startswith("current_installed_"):
-                status = VERSION_EQUAL
-            elif pkg.startswith("outofdate_installed_"):
-                status = VERSION_DIFF
-            elif pkg.startswith("cannot_installed_"):
-                status = VERSION_UNKNOWN
-            else:
-                pkg, status = check_package(pkg) 
+        for pkgs in split:
+            pkgs_list = pkgs.split()
+            num_of_uninstalled = len(notinst_list)
+            for pkg in pkgs_list:
+                pkg = pkg.strip()
+                if pkg.startswith("not_installed_"):
+                    status = VERSION_NOTINST
+                elif pkg.startswith("current_installed_"):
+                    status = VERSION_EQUAL
+                elif pkg.startswith("outofdate_installed_"):
+                    status = VERSION_DIFF
+                elif pkg.startswith("cannot_installed_"):
+                    status = VERSION_UNKNOWN
+                else:
+                    pkg, status = check_package(pkg) 
 
-            # test if pkg is uptodate
-            if status == VERSION_EQUAL:
-                uptodate_list.append(pkg)
-                has_installed = True
-            elif status == VERSION_DIFF:
-                upgrade_list.append(pkg)
-                has_installed = True
-            elif status == VERSION_NOTINST:
-                if not has_installed:
+                # test if pkg is uptodate
+                if status == VERSION_EQUAL:
+                    uptodate_list.append(pkg)
                     has_installed = True
-                    notinst_list.append(pkg)
-            else:
-                unknown_list.append(pkg)
+                elif status == VERSION_DIFF:
+                    upgrade_list.append(pkg)
+                    has_installed = True
+                elif status == VERSION_NOTINST:
+                    if num_of_uninstalled == 0:
+                        notinst_list.append(pkg)
+                else:
+                    unknown_list.append(pkg)
+        if has_installed:
+            notinst_list = []
 
     vprint ("unknown_list: %s" % unknown_list)
     vprint ("upgrade_list: %s" % upgrade_list)
@@ -351,29 +356,79 @@ def main(argv=None):
         argv = sys.argv
     run(argv[1:])
 
-if __name__ == "__main__":
-    verbose = 1
-    print "run pre cannot_installed_a | cannot_installed_b"
-    pre_check("cannot_installed_a | cannot_installed_b")
+class MyTestCase (unittest.TestCase):
+    def testPreCheck(self):
+        pkglist = ""
+        r = pre_check(pkglist)
+        self.assertEqual(r[VERSION_EQUAL], [], "current... for: " + pkglist)
+        self.assertEqual(r[VERSION_UNKNOWN], [], "cannot... for: " + pkglist)
+        self.assertEqual(r[VERSION_DIFF], [], "outofdate... for: " + pkglist)
+        self.assertEqual(r[VERSION_NOTINST], [], "not... for: " + pkglist) 
 
-    print "run pre cannot_installed_a | not_installed_b"
-    pre_check("cannot_installed_a | not_installed_b")
+        pkglist = "cannot_installed_a | cannot_installed_b"
+        r = pre_check(pkglist)
+        self.assertEqual(r[VERSION_EQUAL], [], "current... for: " + pkglist)
+        self.assertEqual(r[VERSION_UNKNOWN], ["cannot_installed_a", "cannot_installed_b"], "cannot... for: " + pkglist)
+        self.assertEqual(r[VERSION_DIFF], [], "outofdate... for: " + pkglist)
+        self.assertEqual(r[VERSION_NOTINST], [], "not... for: " + pkglist) 
 
-    print "run pre not_installed_a | not_installed_b"
-    pre_check("not_installed_a | not_installed_b")
+        pkglist = "outofdate_installed_a | cannot_installed_b"
+        r = pre_check(pkglist)
+        self.assertEqual(r[VERSION_EQUAL], [], "current... for: " + pkglist)
+        self.assertEqual(r[VERSION_DIFF], ["outofdate_installed_a"], "outofdate... for: " + pkglist)
+        self.assertEqual(r[VERSION_UNKNOWN], ["cannot_installed_b"], "cannot... for: " + pkglist)
+        self.assertEqual(r[VERSION_NOTINST], [], "not... for: " + pkglist) 
 
-    print "run pre outofdate_installed_a | not_installed_b"
-    pre_check("outofdate_installed_a | not_installed_b")
+        pkglist = "cannot_installed_b | outofdate_installed_a"
+        r = pre_check(pkglist)
+        self.assertEqual(r[VERSION_EQUAL], [], "current... for: " + pkglist)
+        self.assertEqual(r[VERSION_DIFF], ["outofdate_installed_a"], "outofdate... for: " + pkglist)
+        self.assertEqual(r[VERSION_UNKNOWN], ["cannot_installed_b"], "cannot... for: " + pkglist)
+        self.assertEqual(r[VERSION_NOTINST], [], "not... for: " + pkglist) 
 
-    print "run pre outofdate_installed_a | outofdate_installed_b"
-    pre_check("outofdate_installed_a | outofdate_installed_b")
+        pkglist = "outofdate_installed_a | not_installed_b"
+        r = pre_check(pkglist)
+        self.assertEqual(r[VERSION_EQUAL], [], "current... for: " + pkglist)
+        self.assertEqual(r[VERSION_DIFF], ["outofdate_installed_a"], "outofdate... for: " + pkglist)
+        self.assertEqual(r[VERSION_UNKNOWN], [], "cannot... for: " + pkglist)
+        self.assertEqual(r[VERSION_NOTINST], [], "not... for: " + pkglist) 
 
-    #pre_check("a, b, c, d | e, acl, kde, hal, libhal-storage1, libhal1, exim4-daemon-light , gnome") 
-    print "after pre_check"
+        pkglist = "not_installed_b | outofdate_installed_a"
+        r = pre_check(pkglist)
+        self.assertEqual(r[VERSION_EQUAL], [], "current... for: " + pkglist)
+        self.assertEqual(r[VERSION_DIFF], ["outofdate_installed_a"], "outofdate... for: " + pkglist)
+        self.assertEqual(r[VERSION_UNKNOWN], [], "cannot... for: " + pkglist)
+        self.assertEqual(r[VERSION_NOTINST], [], "not... for: " + pkglist) 
 
-    #process_packages ("a, b, c, d | e, acl, kde, hal, libhal-storage1, libhal1, exim4-daemon-light , gnome") 
-    #process_packages ("a, b, c, d | e, acl, libhal1, gnome", '--remove') 
+        pkglist = "outofdate_installed_a outofdate_installed_b not_installed_c not_installed_d | outofdate_installed_x | cannot_installed_x | not_installed_x | not_installed_y | current_installed_a"
+        r = pre_check(pkglist)
+        self.assertEqual(r[VERSION_EQUAL], ["current_installed_a"], "current... for: " + pkglist + " is: " + ", ".join(r[VERSION_EQUAL]))
+        self.assertEqual(r[VERSION_DIFF], ["outofdate_installed_a", "outofdate_installed_b", "outofdate_installed_x"], "outofdate... for: " + pkglist + " is: " + ", ".join(r[VERSION_DIFF]))
+        self.assertEqual(r[VERSION_UNKNOWN], ["cannot_installed_x"], "cannot... for: " + pkglist + " is: " + ", ".join(r[VERSION_UNKNOWN]))
+        self.assertEqual(r[VERSION_NOTINST], [], "not... for: " + pkglist + " is: " + ", ".join(r[VERSION_NOTINST])) 
 
-    #sys.exit(main())
+        pkglist = "current_installed_a | outofdate_installed_a outofdate_installed_b not_installed_c not_installed_d | outofdate_installed_x | cannot_installed_x | not_installed_x | not_installed_y"
+        r = pre_check(pkglist)
+        self.assertEqual(r[VERSION_EQUAL], ["current_installed_a"], "current... for: " + pkglist + " is: " + ", ".join(r[VERSION_EQUAL]))
+        self.assertEqual(r[VERSION_DIFF], ["outofdate_installed_a", "outofdate_installed_b", "outofdate_installed_x"], "outofdate... for: " + pkglist + " is: " + ", ".join(r[VERSION_DIFF]))
+        self.assertEqual(r[VERSION_UNKNOWN], ["cannot_installed_x"], "cannot... for: " + pkglist + " is: " + ", ".join(r[VERSION_UNKNOWN]))
+        self.assertEqual(r[VERSION_NOTINST], [], "not... for: " + pkglist + " is: " + ", ".join(r[VERSION_NOTINST])) 
+
+        pkglist = "not_installed_a | current_installed_a | outofdate_installed_a outofdate_installed_b not_installed_c not_installed_d | outofdate_installed_x | cannot_installed_x | not_installed_x | not_installed_y"
+        r = pre_check(pkglist)
+        self.assertEqual(r[VERSION_EQUAL], ["current_installed_a"], "current... for: " + pkglist + " is: " + ", ".join(r[VERSION_EQUAL]))
+        self.assertEqual(r[VERSION_DIFF], ["outofdate_installed_a", "outofdate_installed_b", "outofdate_installed_x"], "outofdate... for: " + pkglist + " is: " + ", ".join(r[VERSION_DIFF]))
+        self.assertEqual(r[VERSION_UNKNOWN], ["cannot_installed_x"], "cannot... for: " + pkglist + " is: " + ", ".join(r[VERSION_UNKNOWN]))
+        self.assertEqual(r[VERSION_NOTINST], [], "not... for: " + pkglist + " is: " + ", ".join(r[VERSION_NOTINST])) 
+
+        pkglist = "cannot_installed_a | not_installed_a not_installed_b not_installed_c | cannot_installed_x | not_installed_x | not_installed_y"
+        r = pre_check(pkglist)
+        self.assertEqual(r[VERSION_EQUAL], [], "current... for: " + pkglist + " is: " + ", ".join(r[VERSION_EQUAL]))
+        self.assertEqual(r[VERSION_DIFF], [], "outofdate... for: " + pkglist + " is: " + ", ".join(r[VERSION_DIFF]))
+        self.assertEqual(r[VERSION_UNKNOWN], ["cannot_installed_a", "cannot_installed_x"], "cannot... for: " + pkglist + " is: " + ", ".join(r[VERSION_UNKNOWN]))
+        self.assertEqual(r[VERSION_NOTINST], ["not_installed_a", "not_installed_b", "not_installed_c"], "not... for: " + pkglist + " is: " + ", ".join(r[VERSION_NOTINST])) 
+
+if __name__ == '__main__':
+    unittest.main()
 
 # vim: et ts=4 sw=4

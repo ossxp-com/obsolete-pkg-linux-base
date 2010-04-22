@@ -35,7 +35,7 @@ PKG_LIST='''
 	less, locales, lynx, make, ntfs-3g, ntp | ntpdate, nmap, ngrep,
 	openssl, p7zip-full, pciutils, perl, psmisc, preload,
 	gistore | etckeeper | rdiff-backup, rsync, rar, saidar,
-	byobu | screen,  screen-profiles, screen-profiles-extras,
+	byobu | screen screen-profiles screen-profiles-extras,
 	sharutils, ssh, sshfs, star, sudo, sysstat, tcpdump,
 	mercurial, memtester | sysutils, procinfo | sysutils, tofrodos | sysutils,
 	udev, unison, vim, vnstat, wget, zhcon,

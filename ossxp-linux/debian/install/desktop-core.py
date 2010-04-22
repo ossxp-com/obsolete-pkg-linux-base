@@ -31,7 +31,7 @@ PKG_LIST='''
 	xorg | x-window-system-core, xdg-utils, menu, 
 	ttf-arphic-uming, ttf-arphic-ukai, ttf-bitstream-vera, ttf-arphic-newsung,
 	xfonts-wqy | wqy-bitmapfont, ttf-wqy-zenhei,
-	fcitx | scim, fcitx | scim-chinese, fcitx | scim-pinyin, fcitx | scim-tables-zh, im-switch, 
+	fcitx | scim scim-chinese scim-pinyin scim-tables-zh, im-switch, 
 	discover | discover1, 
 	'''
 ############################################################
