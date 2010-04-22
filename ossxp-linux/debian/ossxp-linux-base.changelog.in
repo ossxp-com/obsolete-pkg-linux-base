@@ -1,3 +1,9 @@
+ossxp-linux (1:1.36+<DIST>) unstable; urgency=low
+
+  * Add ossxp-update sources.list
+
+ -- Jiang Xin <jiangxin@ossxp.com>  Thu, 22 Apr 2010 16:15:35 +0800
+
 ossxp-linux (1:1.35+<DIST>) unstable; urgency=low
 
   * Enhanced package list support.

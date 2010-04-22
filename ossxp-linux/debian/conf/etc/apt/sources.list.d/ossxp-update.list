@@ -1,0 +1,7 @@
+## for debian
+#deb http://UID:PASSWD@update.ossxp.com/CLIENTID/debian/ stable  main contrib non-free
+#deb http://UID:PASSWD@update.ossxp.com/CLIENTID/debian/ testing main contrib non-free
+
+## for ubuntu 
+#deb http://UID:PASSWD@update.ossxp.com/CLIENTID/ubuntu/ karmic main restricted multiverse universe
+#deb http://UID:PASSWD@update.ossxp.com/CLIENTID/ubuntu/ lucid  main restricted multiverse universe
