@@ -183,23 +183,26 @@ def check_package(pkg):
     return (pkg,status)
 
 
-def pre_check(packages):
-    package_list = packages.split(',')
+def pre_check(pset_list):
+    """
+    pset_list = "pset, pkg pkg | pkg, pset"
+    pset      = "pkg1 pkg2 | pkg3 | pkg4"
+    pgroup    = "pkg [pkg ...]"
+    """
     uptodate_list=[]
     upgrade_list=[]
     notinst_list=[]
     unknown_list=[]
-    for item in package_list:
-        item = item.strip()
-        if len(item) == 0:
+    for pset in pset_list.split(','):
+        pset = pset.strip()
+        if len(pset) == 0:
             continue
         # pkg_a | pkg_b means install one of them
-        split = item.split('|')
         has_installed = False
-        for pkgs in split:
-            pkgs_list = pkgs.split()
-            num_of_uninstalled = len(notinst_list)
-            for pkg in pkgs_list:
+        pset_notinst_list = []
+        for pgroup in pset.split('|'):
+            num_of_uninstalled = len(pset_notinst_list)
+            for pkg in pgroup.split():
                 pkg = pkg.strip()
                 if pkg.startswith("not_installed_"):
                     status = VERSION_NOTINST
@@ -221,11 +224,11 @@ def pre_check(packages):
                     has_installed = True
                 elif status == VERSION_NOTINST:
                     if num_of_uninstalled == 0:
-                        notinst_list.append(pkg)
+                        pset_notinst_list.append(pkg)
                 else:
                     unknown_list.append(pkg)
-        if has_installed:
-            notinst_list = []
+        if not has_installed and pset_notinst_list:
+            notinst_list.extend( pset_notinst_list )
 
     vprint ("unknown_list: %s" % unknown_list)
     vprint ("upgrade_list: %s" % upgrade_list)
@@ -427,6 +430,13 @@ class MyTestCase (unittest.TestCase):
         self.assertEqual(r[VERSION_DIFF], [], "outofdate... for: " + pkglist + " is: " + ", ".join(r[VERSION_DIFF]))
         self.assertEqual(r[VERSION_UNKNOWN], ["cannot_installed_a", "cannot_installed_x"], "cannot... for: " + pkglist + " is: " + ", ".join(r[VERSION_UNKNOWN]))
         self.assertEqual(r[VERSION_NOTINST], ["not_installed_a", "not_installed_b", "not_installed_c"], "not... for: " + pkglist + " is: " + ", ".join(r[VERSION_NOTINST])) 
+
+        pkglist = "cannot_installed_a | not_installed_a not_installed_b not_installed_c | cannot_installed_x | not_installed_x | not_installed_y, not_installed_f, not_installed_g, current_installed_a"
+        r = pre_check(pkglist)
+        self.assertEqual(r[VERSION_EQUAL], ["current_installed_a"], "current... for: " + pkglist + " is: " + ", ".join(r[VERSION_EQUAL]))
+        self.assertEqual(r[VERSION_DIFF], [], "outofdate... for: " + pkglist + " is: " + ", ".join(r[VERSION_DIFF]))
+        self.assertEqual(r[VERSION_UNKNOWN], ["cannot_installed_a", "cannot_installed_x"], "cannot... for: " + pkglist + " is: " + ", ".join(r[VERSION_UNKNOWN]))
+        self.assertEqual(r[VERSION_NOTINST], ["not_installed_a", "not_installed_b", "not_installed_c", "not_installed_f", "not_installed_g"], "not... for: " + pkglist + " is: " + ", ".join(r[VERSION_NOTINST])) 
 
 if __name__ == '__main__':
     unittest.main()
