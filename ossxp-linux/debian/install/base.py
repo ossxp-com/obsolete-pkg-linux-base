@@ -14,6 +14,8 @@ Options:
         Run in batch mode
     -n|--dryrun
         Dryrun mode: acturally, do not run
+    -f|--force
+        Force install
     -v|--verbose
         Verbose mode: more debug message
     -q|--quiet
@@ -311,6 +313,8 @@ caption always "%{= kw}%-Lw%{= BW}%n %t%{-}%+w %-= @%H - %Y/%m/%d, %C"
 def main(argv=None):
 	global interactive, dryrun, verbose
 
+	force = False
+
 	if os.getuid() != 0:
 		return usage(1, "Error: not try this, only root user can!")
 
@@ -318,8 +322,8 @@ def main(argv=None):
 		argv = sys.argv
 	try:
 	    opts, args = getopt.getopt(
-		argv[1:], "hivbnq",
-		["help", "verbose", "quiet", "install", "remove", "interactive", "batch", "dryrun"])
+		argv[1:], "hivbnqf",
+		["help", "verbose", "quiet", "install", "remove", "interactive", "batch", "dryrun", "force"])
 	except getopt.error, msg:
 		 return usage(1, msg)
 
@@ -332,6 +336,8 @@ def main(argv=None):
 			interactive = 0
 		elif opt in ('-n', '--dryrun'):
 			dryrun = 1
+		elif opt in ('-f', '--force'):
+			force = True
 		elif opt in ('-v', '--verbose'):
 			verbose = 1
 			apt.verbose = 1
@@ -346,7 +352,7 @@ def main(argv=None):
 
 	for arg in args:
 		if arg in ('install'):
-			if os.path.exists(STAMPFILE):
+			if not force and os.path.exists(STAMPFILE):
 				if os.path.getmtime(STAMPFILE) > os.path.getmtime(__file__):
 					print "%s already installed." % os.path.basename(sys.argv[0])
 					return(0)

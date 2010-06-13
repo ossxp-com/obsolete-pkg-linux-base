@@ -10,6 +10,7 @@ Architecture: all
 Section: ossxp
 Priority: optional
 Depends: python
+Recommends: ossxp-stylesheet-lightbox, ossxp-javascript-lightbox
 Suggests: ossxp-linux-desktop-light, localepurge
 Description: basic linux tools.
  Useful console tools, such as bzip2, p7zip, vim, ...

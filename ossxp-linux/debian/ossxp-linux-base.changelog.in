@@ -1,6 +1,8 @@
-ossxp-linux (1:1.41+<DIST>) unstable; urgency=low
+ossxp-linux (1:1.42+<DIST>) unstable; urgency=low
 
   * Install lsb-release package.
+  * Add ossxp-stylesheet-*, ossxp-javascript* to recommends list.
+  * Add --force option
 
  -- Jiang Xin <jiangxin@ossxp.com>  Sun, 13 Jun 2010 09:26:27 +0800
 
