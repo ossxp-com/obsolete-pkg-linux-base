@@ -1,3 +1,9 @@
+ossxp-linux (1:1.41+<DIST>) unstable; urgency=low
+
+  * Install lsb-release package.
+
+ -- Jiang Xin <jiangxin@ossxp.com>  Sun, 13 Jun 2010 09:26:27 +0800
+
 ossxp-linux (1:1.40+<DIST>) unstable; urgency=low
 
   * Add docbones pdf config file to /opt/ossxp/conf/pdf/ossxp.style

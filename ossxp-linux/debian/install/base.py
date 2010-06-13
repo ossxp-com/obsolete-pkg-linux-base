@@ -32,7 +32,7 @@ PKG_LIST='''
 	curl, cabextract, coreutils | shellutils,
 	dstat, ethtool, file, fpdns, fping, fuse-utils,
 	git-core, gnupg, htop, ia32-libs, ia32-libs-gtk, indent, iproute,
-	less, locales, lynx, make, ntfs-3g, ntp | ntpdate, nmap, ngrep,
+	less, locales, lynx, lsb-release, make, ntfs-3g, ntp | ntpdate, nmap, ngrep,
 	openssl, p7zip-full, pciutils, perl, psmisc, preload,
 	gistore | etckeeper | rdiff-backup, rsync, rar, saidar,
 	byobu | screen screen-profiles screen-profiles-extras,
