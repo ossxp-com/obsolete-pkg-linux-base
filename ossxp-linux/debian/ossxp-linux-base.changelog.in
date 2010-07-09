@@ -1,3 +1,9 @@
+ossxp-linux (1:1.44~<DIST>) unstable; urgency=low
+
+  * Add ossxp-keyring as pre-depends.
+
+ -- Jiang Xin <jiangxin@ossxp.com>  Fri, 09 Jul 2010 08:19:31 +0800
+
 ossxp-linux (1:1.43+<DIST>) unstable; urgency=low
 
   * Fixed wrong apt.conf.d config files on lower aptitude, such

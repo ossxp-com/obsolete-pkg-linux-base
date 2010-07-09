@@ -120,11 +120,6 @@ def add_me_to_group( group ):
 
 def do_config():
 	#------------------------------------------------------------
-	CONFFILE='/opt/ossxp/conf/public.key'
-	if os.path.exists(CONFFILE):
-		os.system('apt-key add %s' % CONFFILE)
-	
-	#------------------------------------------------------------
 	CONFFILE='/etc/inputrc'
 	if os.path.exists(CONFFILE):
 		patch = {}

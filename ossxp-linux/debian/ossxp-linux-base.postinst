@@ -63,8 +63,6 @@ case "$1" in
     ;;
 esac
 
-apt-key add /opt/ossxp/conf/public.key
-
 SCRIPT=/opt/ossxp/install/base.py
 [ -x $SCRIPT ] && $SCRIPT config
 

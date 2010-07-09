@@ -5,12 +5,20 @@ Maintainer: Jiang Xin <worldhello.net@gmail.com>
 Build-Depends: debhelper (>= 5.0), cdbs (>= 0.4.43)
 Standards-Version: 1.0.0
 
+Package: ossxp-keyring
+Architecture: all
+Section: ossxp
+Priority: optional
+Suggests: ossxp-linux-base
+Description: OSSXP archive keyring
+ Keyring used for ossxp package verify.
+
 Package: ossxp-linux-base
 Architecture: all
 Section: ossxp
 Priority: optional
-Depends: python
-Recommends: ossxp-stylesheet-lightbox, ossxp-javascript-lightbox
+Pre-Depends: ossxp-keyring, python
+Recommends: ossxp-stylesheet-lightbox, ossxp-javascript-lightbox, ossxp-linux-fonts
 Suggests: ossxp-linux-desktop-light, localepurge
 Description: basic linux tools.
  Useful console tools, such as bzip2, p7zip, vim, ...
@@ -47,7 +55,7 @@ Architecture: all
 Section: ossxp
 Priority: optional
 Depends: ossxp-linux-desktop-core, ossxp-linux-desktop-light
-Suggests: ossxp-linux-fonts
+Recommends: ossxp-linux-fonts
 Description: Desktop Environment heavy (KDE)
  Desktop Environment KDE
 
