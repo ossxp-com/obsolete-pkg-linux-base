@@ -1,1 +1,1 @@
-debian/conf/keyrings/ossxp-keyring.key opt/ossxp/lib/keyrings
+debian/conf/keyrings/ossxp-keyring.gpg opt/ossxp/lib/keyrings
