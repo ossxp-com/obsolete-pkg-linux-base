@@ -18,8 +18,10 @@ for from in ${BASEDIR}/*.${arch}; do
   cp $from $to
 done
 for from in ${BASEDIR}/*.in; do
+  to=${from%.in}
   if grep -q "<DIST>" $from; then
-    to=${from%.in}
     sed -e "s/<DIST>/${arch}/g" < $from > $to
+  else
+    cp $from $to
   fi
 done
