@@ -1,3 +1,9 @@
+ossxp-linux (1:1.45~<DIST>) unstable; urgency=low
+
+  * Remove pdf ossxp.style into ossxp-stylesheet-common package
+
+ -- Jiang Xin <jiangxin@ossxp.com>  Tue, 27 Jul 2010 20:06:13 +0800
+
 ossxp-linux (1:1.44~<DIST>) unstable; urgency=low
 
   * Add ossxp-keyring as pre-depends.
