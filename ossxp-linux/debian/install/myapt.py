@@ -29,6 +29,7 @@ list
 
 
 import os, sys, re, string, getopt, tempfile, shutil
+import re
 import unittest
 
 
@@ -241,35 +242,86 @@ def pre_check(pset_list):
     return r
 
 
-def config_file_append(conffile, patch):
-    if not os.path.exists(conffile):
-        return 1
-    if not patch.has_key('stamp_before') or not patch['stamp_before'] or not patch.has_key('stamp_end') or not patch['stamp_end']:
-        return 2
-
-    buff = open(conffile).read()
-
-    if patch.has_key('precheck_deny') and patch['precheck_deny']:
-        if re.search(patch['precheck_deny'], buff, re.DOTALL):
-            vprint ("Match %s, not modify config file %s" % (patch['precheck_deny'], conffile) )
-            return 0
-    if patch.has_key('precheck_pass') and patch['precheck_pass']:
-        if not re.search(patch['precheck_pass'], buff, re.DOTALL):
-            vprint ("Not match %s, not modify config file %s" % (patch['precheck_deny'], conffile) )
-            return 0
-
-    p = re.compile('^(.*)%s.*%s(.*)$' % (patch['stamp_before'],patch['stamp_end']), re.DOTALL)
-    m = p.match(buff)
-
-    if m:
-        vprint ("Find stamp_before and stamp_end in %s" % conffile)
-        buff=m.group(1) + patch['stamp_before'] + patch['append'] + patch['stamp_end'] + m.group(2)
-    else:
-        vprint ("Not find stamp tag, append to file %s" % conffile)
-        buff=buff + patch['stamp_before'] + patch['append'] + patch['stamp_end'] + '\n'
     
+def hack_config_file(conffile, options, must_exists=True):
+    def lines_match(lines, needle, begin=None):
+        found = False
+        lineno = begin and int(begin) or 0
+        for line in lines[lineno:]:
+            if hasattr( needle, 'search'):
+                if needle.search( line ):
+                    found = True
+                    break
+            else:
+                if needle in line:
+                    found = True
+                    break
+            lineno += 1
+
+        if found:
+            return lineno
+        else:
+            return None
+
+
+    def insert_at(lines, after=None, before=None):
+        lineno = None
+        if after:
+            if not isinstance( after, (list, dict) ):
+                after = [ after ]
+            lineno_after = None
+            for needle in after:
+                lineno_after = lines_match(lines, needle)
+                if lineno_after is not None:
+                    lineno_after += 1
+                    break
+            lineno = lineno_after
+
+        if before:
+            if not isinstance( before, (list, dict) ):
+                before = [ before ]
+            lineno_before = None
+            for needle in before:
+                lineno_before = lines_match(lines, needle, begin=lineno)
+                if lineno_before is not None:
+                    break
+            lineno = lineno_before
+        return lineno
+
+    if must_exists and not os.path.exists(conffile):
+        print "[1m%s not exists, hacked FAILED![0m" % conffile
+        return 1
+
+    if not options:
+        print "[1m%s not hacked, because nothing I can do![0m" % conffile
+        return 0
+
+    lines = open(conffile).read().splitlines()
+
+    for item in options:
+        key = item[0]
+        opt = item[1]
+
+        must_not  = opt.get('must-not')
+        must_have = opt.get('must-have')
+        after     = opt.get('after')
+        before    = opt.get('before')
+
+        if must_not and lines_match(lines, must_not) is not None:
+            continue
+        if must_have and not lines_match(lines, must_have) is None:
+            continue
+
+        if key == 'add':
+            lineno = insert_at(lines, after=after, before=before)
+            if opt.get('contents'):
+                if lineno is None:
+                    lines.append( opt.get('contents') )
+                else:
+                    lines.insert( lineno, opt.get('contents') )
+
     fd, tmpfile = tempfile.mkstemp(suffix=".tmp", text=True)
-    os.write(fd,buff)
+    os.write(fd, "\n".join(lines) + "\n")
     os.close(fd)
     diff=os.popen('diff -u %s %s' % (conffile, tmpfile)).read()
     if len(diff) > 0:
@@ -282,16 +334,14 @@ def config_file_append(conffile, patch):
                 vprint ("%s not modified." % conffile)
                 break
             elif choice in ['y', 'Y']:
+                # set orignal owner and permission
+                os.system( "chown --reference %s %s" % (conffile, tmpfile) )
+                os.system( "chmod --reference %s %s" % (conffile, tmpfile) )
                 shutil.move(tmpfile, conffile)
-                if patch.has_key('filemod') and patch['filemod']:
-                    os.chmod( conffile, int(patch['filemod'],8) )
-                    vprint ("change filemode to %d" % int(patch['filemod']) )
-                else:
-                    os.chmod( conffile, 0644 )
-                    vprint ("change filemode to 0664")
-
                 vprint ("[1m%s modified successful.[0m" % conffile)
                 break
+    else:
+        print "[1m%s already hacked, not touched.[0m" % conffile
 
 
 def process_packages(package_list, install_mode=1, interactive=1, dryrun=1):
@@ -437,6 +487,59 @@ class MyTestCase (unittest.TestCase):
         self.assertEqual(r[VERSION_DIFF], [], "outofdate... for: " + pkglist + " is: " + ", ".join(r[VERSION_DIFF]))
         self.assertEqual(r[VERSION_UNKNOWN], ["cannot_installed_a", "cannot_installed_x"], "cannot... for: " + pkglist + " is: " + ", ".join(r[VERSION_UNKNOWN]))
         self.assertEqual(r[VERSION_NOTINST], ["not_installed_a", "not_installed_b", "not_installed_c", "not_installed_f", "not_installed_g"], "not... for: " + pkglist + " is: " + ", ".join(r[VERSION_NOTINST])) 
+
+
+    def testHackConffile(self):
+        conffile = "%s_unittest_%d" %( __file__, os.getpid())
+
+        fp = open(conffile, 'w')
+        fp.write("""
+1. # Authentication
+2. PermitRootLogin yes
+3. 
+4. this is end of orignal file.
+""")
+        fp.close()
+        os.chmod(conffile, 0610)
+
+        options = []
+        options.append(
+		    ('add', {'must-not': 'AllowGroups',
+				 'contents': '''
+AllowGroups ssh sftp
+''',
+		    		 'after': [ 'PermitRootLogin', '# Authentication' ],
+		    		},
+		    ) )
+
+	options.append(
+		('add', {'must-not': 'Match group sftp',
+				 'contents': '''
+Match group sftp
+    ...
+## END OF File or another Match conditional block
+'''
+				},
+		) )
+
+        hack_config_file( conffile, options )
+        self.assert_( os.stat( conffile ).st_mode == 0100610, "file permission changed!" )
+        hack_config_file( conffile, options )
+        self.assert_( os.stat( conffile ).st_mode == 0100610, "file permission changed!" )
+
+        fp = open(conffile, 'w')
+        fp.write("""
+1. PermitRootLogin yes
+2. # Authentication
+3. 
+4. this is end of orignal file.
+""")
+        fp.close()
+        os.chmod(conffile, 0600)
+
+        hack_config_file( conffile, options )
+        self.assert_( os.stat( conffile ).st_mode == 0100600, "file permission changed!" )
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,3 +1,9 @@
+ossxp-linux (1:1.46~<DIST>) unstable; urgency=low
+
+  * New base.py which hack config files properly.
+
+ -- Jiang Xin <jiangxin@ossxp.com>  Fri, 20 Aug 2010 21:12:08 +0800
+
 ossxp-linux (1:1.45~<DIST>) unstable; urgency=low
 
   * Remove pdf ossxp.style into ossxp-stylesheet-common package

@@ -47,6 +47,7 @@ PKG_LIST='''
 
 import myapt as apt
 import os, sys, re, string, getopt, tempfile, shutil
+import subprocess
 
 
 interactive = 1
@@ -119,138 +120,203 @@ def add_me_to_group( group ):
 		os.system("adduser %s %s" % (userid, group))
 
 def do_config():
-	#------------------------------------------------------------
-	CONFFILE='/etc/inputrc'
-	if os.path.exists(CONFFILE):
-		patch = {}
-		patch['filemod'] = "644"
-		patch['precheck_deny'] = "set completion-ignore-case on"
-		patch['stamp_before'] = "##### ossxp_config_begin #####"
-		patch['stamp_end']    = "##### ossxp_config_end #####"
-		patch['append']    = '''
-set bell-style visible
-set completion-ignore-case on
-set editing-mode vi
-'''
-		apt.config_file_append(CONFFILE, patch)	
+	do_config_inputrc()
+	do_config_bash()
+	do_config_sudo()
+	do_config_ssh()
+	do_config_sshd()
+	do_config_screenrc()
+	do_config_indent_pro()
+	do_config_increase_loopdev()
+	do_config_resolvconf()
+	do_config_locales()
+	do_config_git()
 
-	#------------------------------------------------------------
-	CONFFILE='/etc/bash.bashrc'
-	if not os.path.exists(CONFFILE):
-		CONFFILE='/etc/profile'
-	if os.path.exists(CONFFILE):
-		patch = {}
-		patch['filemod'] = "644"
-		patch['precheck_deny'] = "set -o vi"
-		patch['stamp_before'] = "##### ossxp_config_begin #####"
-		patch['stamp_end']    = "##### ossxp_config_end #####"
-		if os.path.exists('/etc/bash_completion'):
-			patch['append']    = '''
+
+def do_config_inputrc():
+	options = []
+	options.append(
+		('add', {'must-not': 'bell-style',
+				 'contents': 'set bell-style visible',
+				},
+		) )
+
+	options.append(
+		('add', {'must-not': 'completion-ignore-case',
+				 'contents': 'set completion-ignore-case on',
+				},
+		) )
+
+	options.append(
+		('add', {'must-not': 'editing-mode',
+				 'contents': 'set editing-mode vi',
+				},
+		) )
+
+	apt.hack_config_file( '/etc/inputrc', options )
+
+
+def do_config_bash():
+	options = []
+	options.append(
+		('add', {'must-not': 'bash_completion',
+				 'contents': '''
 if [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
 fi
-set -o vi
-alias svnclean='svn st | grep "^?" | sed -e "s/?//g" | xargs -I {} -i bash -c "echo delete {}; rm -rf {}"'
-alias ll='ls -al --color=auto'
-'''
-		else:
-			patch['append']    = '''
-set -o vi
-'''
-		apt.config_file_append(CONFFILE, patch)	
+''',
+				},
+		) )
 
-	#------------------------------------------------------------
-	CONFFILE='/etc/sudoers'
-	if os.path.exists(CONFFILE):
-		patch = {}
-		patch['filemod'] = "440"
-		patch['precheck_deny'] = "ossxp_config_begin"
-		patch['stamp_before'] = "##### ossxp_config_begin #####"
-		patch['stamp_end']    = "##### ossxp_config_end #####"
-		patch['append']    = '''
-%sudo      ALL = NOPASSWD: ALL
+	options.append(
+		('add', {'must-not': re.compile('set\s+.*\s+vi'),
+				 'contents': 'set -o vi',
+				},
+		) )
 
-#User_Alias	FULLTIMERS = admin1,admin2
-#FULLTIMERS	ALL = NOPASSWD: ALL
-'''
-		apt.config_file_append(CONFFILE, patch)	
+	options.append(
+		('add', {'must-not': 'svnclean',
+				 'contents': '''
+#alias svnclean='svn st | grep "^?" | sed -e "s/?//g" | xargs -I {} -i bash -c "echo delete {}; rm -rf {}"'
+''',
+				},
+		) )
 
-		## Add group sudo if not exist
-		add_me_to_group("sudo")
+	options.append(
+		('add', {'must-not': 'alias ll',
+				 'contents': """alias ll='ls -al --color=auto'""",
+				},
+		) )
 
-	#------------------------------------------------------------
-	CONFFILE='/etc/ssh/sshd_config'
-	if os.path.exists(CONFFILE):
-		patch = {}
-		patch['filemod'] = "644"
-		patch['precheck_deny'] = "ossxp_config_begin"
-		patch['stamp_before'] = "##### ossxp_config_begin #####"
-		patch['stamp_end']    = "##### ossxp_config_end #####"
-		patch['append']    = '''
+	CONFFILE='/etc/bash.bashrc'
+	if not os.path.exists(CONFFILE):
+		CONFFILE='/etc/profile'
+	apt.hack_config_file( CONFFILE, options )
+
+
+def do_config_sudo():
+	options = []
+	options.append(
+		('add', {'must-not': re.compile('^%sudo'),
+				 'contents': '%sudo      ALL = NOPASSWD: ALL',
+				 'after': [ re.compile('#+\s*%sudo'), 
+				 			'# Uncomment to allow members of',
+							'# User privilege specification' ],
+				},
+		) )
+
+	options.append(
+		('add', {'must-not': re.compile('User_Alias\s+FULLTIMERS'),
+				 'contents': '#User_Alias	FULLTIMERS = admin1,admin2',
+				 'after': [ 'Host alias specification',
+							'User privilege specification' ],
+				},
+		) )
+
+	options.append(
+		('add', {'must-not': re.compile('FULLTIMERS\s+ALL\s*='),
+				 'contents': '#FULLTIMERS	ALL = NOPASSWD: ALL',
+				 'after': 'User privilege specification',
+				},
+		) )
+
+	apt.hack_config_file( '/etc/sudoers', options )
+
+	## Add group sudo if not exist
+	add_me_to_group("sudo")
+
+
+
+def do_config_sshd():
+	options = []
+	options.append(
+		('add', {'must-not': 'AllowGroups',
+				 'contents': '''
 ## Only allow login if users belong to these groups.
 ## User shouldn't be in both groups, or user can not login using ssh.
 ## Person in sftp group can only use chroot sftp service.
 AllowGroups ssh sftp
+''',
+				 'after': [ 'PermitRootLogin', '# Authentication' ],
+				},
+		) )
 
+	options.append(
+		('add', {'must-not': 'Match group sftp',
+				 'contents': '''
 ## People belong to sftp group, can not access ssh, only provide sftp service
 ## People in this sftp group, can have a invaild shell: /bin/false,
 ## and user homedir must owned by root user.
-Match group sftp
-    ChrootDirectory  %h
-    X11Forwarding no
-    AllowTcpForwarding no
-    ForceCommand internal-sftp
+#Match group sftp
+#    ChrootDirectory  %h
+#    X11Forwarding no
+#    AllowTcpForwarding no
+#    ForceCommand internal-sftp
 ## END OF File or another Match conditional block
 '''
-		#patch['trans_from'] = ['Protocol 2', 'PermitRootLogin no', 'PermitRootLogin no', 'UsePrivilegeSeparation yes']
-		#patch['trans_to']   = ['Protocol 2', 'PermitRootLogin no', 'PermitRootLogin no', 'UsePrivilegeSeparation yes']
-		apt.config_file_append(CONFFILE, patch)	
+				},
+		) )
 
-		## Add group ssh if not exist
-		add_me_to_group("ssh")
+	apt.hack_config_file( '/etc/ssh/sshd_config', options )
 
-	#------------------------------------------------------------
-	CONFFILE='/etc/ssh/ssh_config'
-	if os.path.exists(CONFFILE):
-		patch = {}
-		patch['filemod'] = "644"
-		patch['precheck_deny'] = "ossxp_config_begin"
-		patch['stamp_before'] = "##### ossxp_config_begin #####"
-		patch['stamp_end']    = "##### ossxp_config_end #####"
-		patch['append']    = '''
+	## Add group ssh if not exist
+	add_me_to_group("ssh")
+
+
+def do_config_ssh():
+	options = []
+	options.append(
+		('add', {'must-not': 'Host *',
+				 'contents': '''
 Host *
     CheckHostIP no
     ForwardX11 yes
     HashKnownHosts no
     StrictHostKeyChecking no
-'''
-		apt.config_file_append(CONFFILE, patch)	
+''',
+				},
+		) )
+	apt.hack_config_file( '/etc/ssh/ssh_config', options )
 
-	#------------------------------------------------------------
-	CONFFILE='/etc/screenrc'
-	if os.path.exists(CONFFILE):
-		patch = {}
-		patch['filemod'] = "644"
-		patch['precheck_deny'] = "caption always"
-		patch['stamp_before'] = "##### ossxp_config_begin #####"
-		patch['stamp_end']    = "##### ossxp_config_end #####"
-		patch['append']    = '''
-## Install package 'screen-profiles*' or 'byotu' for lovely screen profiles
-#defscrollback 3000
-#vbell on
-#startup_message off
-## Set the caption on the bottom line
-caption always "%{= kw}%-Lw%{= BW}%n %t%{-}%+w %-= @%H - %Y/%m/%d, %C"
-'''
-		apt.config_file_append(CONFFILE, patch)	
 
-	if os.path.isfile('/usr/bin/byobu-config'):
-		os.system('/usr/bin/byobu-config')
-		print "Run byobu instead of screen for the first time."
-	elif os.path.isfile('/usr/bin/screen-profiles'):
-		os.system('/usr/bin/screen-profiles')
+def do_config_screenrc():
+	options = []
+	options.append(
+		('add', {'must-not': 'defscrollback',
+				 'contents': '#defscrollback 3000',
+				},
+		) )
+	options.append(
+		('add', {'must-not': 'vbell',
+				 'contents': '#vbell on',
+				},
+		) )
+	options.append(
+		('add', {'must-not': 'defscrollback',
+				 'contents': '#defscrollback 3000',
+				},
+		) )
+	options.append(
+		('add', {'must-not': 'startup_message',
+				 'contents': '#startup_message off',
+				},
+		) )
+	options.append(
+		('add', {'must-not': 'caption always',
+				 'contents': '''caption always "%{= kw}%-Lw%{= BW}%n %t%{-}%+w %-= @%H - %Y/%m/%d, %C"''',
+				},
+		) )
 
-	#------------------------------------------------------------
+	apt.hack_config_file( '/etc/screenrc', options )
+
+	#if os.path.isfile('/usr/bin/byobu-config'):
+	#	os.system('/usr/bin/byobu-config')
+	#	print "Run byobu instead of screen for the first time."
+	#elif os.path.isfile('/usr/bin/screen-profiles'):
+	#	os.system('/usr/bin/screen-profiles')
+
+
+def do_config_indent_pro():
 	CONFFILE='/etc/skel/.indent.pro'
 	if not os.path.exists(CONFFILE):
 		content = '''
@@ -262,7 +328,8 @@ caption always "%{= kw}%-Lw%{= BW}%n %t%{-}%+w %-= @%H - %Y/%m/%d, %C"
 		file.write(content)
 		file.close()
 
-	#------------------------------------------------------------
+
+def do_config_increase_loopdev():
 	if not os.path.exists('/dev/loop63'):
 		for i in range(8,64):
 			if os.path.exists('/dev/loop%d' % i):
@@ -272,7 +339,8 @@ caption always "%{= kw}%-Lw%{= BW}%n %t%{-}%+w %-= @%H - %Y/%m/%d, %C"
 			cmd = "chown root.disk /dev/loop%d" % i
 			os.system(cmd)
 
-	#------------------------------------------------------------
+
+def do_config_resolvconf():
 	CONFFILE='/etc/resolvconf/resolv.conf.d/tail'
 	if os.path.exists(os.path.dirname(CONFFILE)):
 		if not os.path.exists(CONFFILE) or os.path.getsize(CONFFILE)==0:
@@ -286,15 +354,30 @@ caption always "%{= kw}%-Lw%{= BW}%n %t%{-}%+w %-= @%H - %Y/%m/%d, %C"
 			file.write(content)
 			file.close()
 
-	#------------------------------------------------------------
-	dist = os.popen("lsb_release -i").read().strip().lower()
-	if dist.endswith('ubuntu'):
-		for locale in [ 'zh_CN', 'zh_CN.GBK', 'zh_CN.UTF-8', 'zh_TW', 'en_US', 'en_US.UTF-8' ]:
-			os.system("locale-gen %s" % locale)
-	elif dist.endswith('debian'):
-			os.system("dpkg-reconfigure locales || true")
 
-	#------------------------------------------------------------
+def do_config_locales():
+	locales = [ 'zh_CN', 'zh_CN.GBK', 'zh_CN.UTF-8', 'zh_TW',
+				'en_US', 'en_US.UTF-8' ]
+	installed = output = subprocess.Popen([ "locale", "-a" ], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True ).communicate()[0]
+	installed = installed.lower().replace('-','').splitlines()
+
+	uninstalled = [ l for l in locales if l.lower().replace('-','') not in installed ]
+	if uninstalled:
+		print "Some locale %s not installed, begin install locales:" % uninstalled
+		print "Press any key to continue..."
+		ignore = raw_input()
+
+		dist = os.popen("lsb_release -i").read().strip().lower()
+		if dist.endswith('ubuntu'):
+			for locale in locales:
+				os.system("locale-gen %s" % locale)
+		elif dist.endswith('debian'):
+				os.system("dpkg-reconfigure locales || true")
+	else:
+		print "[1mAll needed locale installed[0m"
+
+
+def do_config_git():
 	if os.path.isfile('/usr/bin/git'):
 		## aliases
 		os.system("git config --system alias.st status")
@@ -304,7 +387,7 @@ caption always "%{= kw}%-Lw%{= BW}%n %t%{-}%+w %-= @%H - %Y/%m/%d, %C"
 		## ui.color
 		os.system('git config --system color.ui "auto"')
 
-
+##---------------------------------------------------------------------
 def main(argv=None):
 	global interactive, dryrun, verbose
 
