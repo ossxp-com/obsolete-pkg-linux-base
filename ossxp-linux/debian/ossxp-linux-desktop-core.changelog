@@ -1,0 +1,279 @@
+ossxp-linux (1:1.40) unstable; urgency=low
+
+  * Set default input method to ibus.
+
+ -- Jiang Xin <jiangxin@ossxp.com>  Thu, 09 Sep 2010 18:06:39 +0800
+
+ossxp-linux (1:1.39+<DIST>) unstable; urgency=low
+
+  * add --force option.
+
+ -- Jiang Xin <jiangxin@ossxp.com>  Sun, 13 Jun 2010 10:01:28 +0800
+
+ossxp-linux (1:1.38+<DIST>) unstable; urgency=low
+
+  * Dash/bash compatible echo command.
+
+ -- Jiang Xin <jiangxin@ossxp.com>  Thu, 22 Apr 2010 17:51:10 +0800
+
+ossxp-linux (1:1.35+<DIST>) unstable; urgency=low
+
+  * Enhanced package list support.
+
+ -- Jiang Xin <jiangxin@ossxp.com>  Thu, 22 Apr 2010 16:15:35 +0800
+
+ossxp-linux (1:1.29+<DIST>) unstable; urgency=low
+
+  * Add platform distribution name to package version.
+
+ -- Jiang Xin <jiangxin@ossxp.com>  Tue, 02 Mar 2010 21:35:17 +0800
+
+ossxp-linux (1:1.27.5) unstable; urgency=low
+
+  * ossxp_pkgadmin.py glob match files/directories.
+  * Backup .ssh directories.
+  * apt-cacher-ng debian/ubuntu alternative sources.
+  * update screenrc file.
+
+ -- Jiang Xin <jiangxin@foo.bar>  Tue, 02 Mar 2010 09:00:45 +0800
+
+ossxp-linux (1:1.27.2) unstable; urgency=low
+
+  * Backup /opt/ossxp/ssl
+  * Base install script check mtime for STAMPFILE.
+
+ -- Jiang Xin <jiangxin@foo.bar>  Wed, 24 Feb 2010 17:52:51 +0800
+
+ossxp-linux (1:1.27.1) unstable; urgency=low
+
+  * Add mysql and ldap backup handlers for ossxp_pkgadmin.py.
+
+ -- Jiang Xin <jiangxin@foo.bar>  Sun, 31 Jan 2010 16:40:07 +0800
+
+ossxp-linux (1:1.26.231) unstable; urgency=low
+
+  * Add make, gistore.
+
+ -- Jiang Xin <jiangxin@foo.bar>  Fri, 29 Jan 2010 17:03:01 +0800
+
+ossxp-linux (1:1.26.230) unstable; urgency=low
+
+  * add git system configuration.
+
+ -- Jiang Xin <jiangxin@foo.bar>  Sun, 08 Nov 2009 16:09:33 +0800
+
+ossxp-linux (1:1.26.224-2) unstable; urgency=low
+
+  * add new locales for debian/ubuntu; (r224)
+  * add enhanced screen package: byobu or screen-profiles;
+  * for both debian and ubuntu;
+  * update config file using script update_configs;
+
+ -- Jiang Xin <jiangxin@foo.bar>  Thu, 15 Oct 2009 21:46:14 +0800
+
+ossxp-linux (1:1.26.220) unstable; urgency=low
+
+  * dash compliant script. (r220)
+  * dovecot and exim4 config examples was in other packages.
+  * new /etc/apt/sources.list example. (r216)
+  * Overlap sftp setting cause ssh server hang. (r215)
+  * Add kde-full for debian sid. (r214)
+  * Add subjectAltName example for CA.sh
+  * custom /etc/ssh/ssh_config file, for client side.
+  * move certs for foo.bar to ossxp-ssl-foo-bar package.
+  * move ca to ossxp-apache package.
+
+ -- Jiang Xin <jiangxin@foo.bar>  Mon, 05 Oct 2009 15:47:32 +0800
+
+ossxp-linux (1:1.26.207) unstable; urgency=low
+
+  * Bugfix: add -extension v3_ca when generate cacert.pem
+    using CA.sh. Without these optoins, the cert can not
+    be used as root CA cert for Internet Explorer.
+  * Add ossxp-ca.crt to /opt/ossxp/ssl/ca
+  * Add key/cert of ossxp.com to /opt/ossxp/ssl/certs/foo.bar
+  * Add apt-cacher-ng client side config file.
+
+ -- Jiang Xin <jiangxin@foo.bar>  Sun, 30 Aug 2009 15:03:02 +0800
+
+ossxp-linux (1:1.26.203) unstable; urgency=low
+
+  * Add /opt/ossxp/doc
+  * Add notes in /etc/resolvconf/resolv.conf.d/tail.
+  * Add chroot sftp service in /etc/ssh/sshd_config
+
+ -- Jiang Xin <jiangxin@foo.bar>  Tue, 14 Jul 2009 09:41:17 +0800
+
+ossxp-linux (1:1.26.197) unstable; urgency=low
+
+  * Change default cert valid date to 10 years.
+  * Move apache default authz config to pkg-apache package.
+  * Add vim local rc.
+  * Add welknown host to /etc/hosts.
+
+ -- Jiang Xin <jiangxin@foo.bar>  Wed, 01 Jul 2009 15:23:32 +0800
+
+ossxp-linux (1:1.26.180) unstable; urgency=low
+
+  * maradns related files move to ossxp-maradns package.
+  * add xorg into desktop-core.py packages.
+
+ -- Jiang Xin <jiangxin@foo.bar>  Tue, 30 Jun 2009 11:24:23 +0800
+
+ossxp-linux (1:1.26.176) unstable; urgency=low
+
+  * Add more loop device in /dev.
+  * add authz_host defaults in /etc/apache2/include/authz_host.
+  * add mercurial/etckeeper to base.py.
+  * remove duplicate items from backups.
+  * new maradns init.d script, which can update mararc with dynamic
+    bind ip addresses.
+
+ -- Jiang Xin <jiangxin@foo.bar>  Sun, 28 Jun 2009 18:55:00 +0800
+
+ossxp-linux (1:1.26.160) unstable; urgency=low
+
+  * In package info file, one section may have multiple files.
+  * Set /etc/ossxp permissions.
+
+ -- Jiang Xin <jiangxin@foo.bar>  Sun, 14 Jun 2009 17:52:14 +0800
+
+ossxp-linux (1:1.26.156) unstable; urgency=low
+
+  * add ossxp_pkgadmin.py
+  * add package info for linux base system.
+
+ -- Jiang Xin <jiangxin@foo.bar>  Thu, 11 Jun 2009 16:15:54 +0800
+
+ossxp-linux (1:1.26.137) unstable; urgency=low
+
+  * Better support for alternative packages.
+
+ -- Jiang Xin <jiangxin@foo.bar>  Wed, 03 Jun 2009 18:50:24 +0800
+
+ossxp-linux (1:1.26.132) unstable; urgency=low
+
+  * maintain using hg;
+  * add demo.sh for setup environment for demostration;
+
+ -- Jiang Xin <jiangxin@foo.bar>  Sun, 01 Mar 2009 09:11:46 +0800
+
+ossxp-linux (1.26.4980) unstable; urgency=low
+
+  * add svnclean alias
+
+ -- Jiang Xin <jiangxin@foo.bar>  Fri, 03 Oct 2008 15:46:22 +0800
+
+ossxp-linux (1.25+10) unstable; urgency=low
+
+  * split host str max to 3 parts. user:pass@url is a valid url now.
+  * add shtool, manpages-dev  in develop package;
+
+ -- Jiang Xin <jiangxin@foo.bar>  Mon, 24 Mar 2008 13:45:20 +0800
+
+ossxp-linux (1.25+8) unstable; urgency=low
+
+  * add /opt/ossxp/install/README, guide for new installer.
+  * new kvm config file in /opt/ossxp/examples/kvm/config.vm
+
+ -- Jiang Xin <jiangxin@foo.bar>  Mon, 24 Mar 2008 13:45:20 +0800
+
+ossxp-linux (1.25+7) unstable; urgency=low
+
+  * remove flexbackup, use ossxp-backup instead;
+  * apache,php packages refactor;
+  * add nettest.py for base;
+
+ -- Jiang Xin <jiangxin@foo.bar>  Fri, 12 Oct 2007 01:19:08 +0800
+
+ossxp-linux (1.25) unstable; urgency=low
+
+  * rewrite in python.
+  * add similar package test, exim4-daemon-heavy will not removed.
+  * bugfix: set proper config file mode.
+  * add /etc/apt/apt.conf.d/01defaultrelease for mix distribution.
+
+ -- Jiang Xin <jiangxin@foo.bar>  Wed, 10 Oct 2007 23:37:30 +0800
+
+ossxp-linux (1.23) unstable; urgency=low
+
+  * add remove function into server.sh;
+
+ -- Jiang Xin <jiangxin@foo.bar>  Fri, 05 Oct 2007 14:18:15 +0800
+
+ossxp-linux (1.22) unstable; urgency=low
+
+  * new install scripts: use apt-cache policy to check package version;
+  * add interactive install mode in apt.inc;
+
+ -- Jiang Xin <jiangxin@foo.bar>  Fri, 05 Oct 2007 14:18:15 +0800
+
+ossxp-linux (1.20) unstable; urgency=low
+
+  * add qemu, mkisofs, and laptop acpi/keyboards custum scripts.
+
+ -- Jiang Xin <jiangxin@foo.bar>  Mon, 10 Sep 2007 12:37:03 +0800
+
+ossxp-linux (1.19) unstable; urgency=low
+
+  * add ascii,ia32-libs,dstat,htop,saidar,vnstat,kchmviewer 
+
+ -- Jiang Xin <jiangxin@foo.bar>  Sun, 29 Jul 2007 22:06:09 +0800
+
+ossxp-linux (1.18) unstable; urgency=low
+
+  * add crontab backup script;
+  * add CA scripts;
+  * add cabextract, curl;
+
+ -- Jiang Xin <jiangxin@foo.bar>  Sat, 12 May 2007 08:38:06 +0800
+
+ossxp-linux (1.16) unstable; urgency=low
+
+  * run config in postinst;
+  * new deployment in /opt/ossxp;
+
+ -- Jiang Xin <jiangxin@foo.bar>  Mon, 15 Jan 2007 12:36:52 +0800
+
+ossxp-linux (1.12) unstable; urgency=low
+
+  * move some pacakge to misc.sh; (1.12)
+  * add backup.sh, flexbackup; (1.10)
+  * add gq meld; (1.10)
+  * .postinst bugfix;
+  * install tor+privoxy;
+  * enable bash_completion;
+  * move depends to postinst;
+
+ -- Jiang Xin <jiangxin@foo.bar>  Mon, 15 Jan 2007 12:36:52 +0800
+
+ossxp-linux (2:1.3.1) unstable; urgency=low
+
+  * modify system config files;
+
+ -- Jiang Xin <jiangxin@foo.bar>  Mon, 08 Jan 2007 02:37:22 +0800
+
+meta-ossxp (2:1.3) unstable; urgency=low
+
+  * change package name;
+
+ -- Jiang Xin <jiangxin@foo.bar>  Mon, 08 Jan 2007 02:37:22 +0800
+
+meta-custom (2:1.2) unstable; urgency=low
+
+  * add custom-server-lamp package;
+
+ -- Jiang Xin <jiangxin@foo.bar>  Fri, 05 Jan 2007 10:39:02 +0800
+
+meta-custom (2:1.1) unstable; urgency=low
+
+  * Remove msttcorefonts, duplicated items;
+
+ -- Jiang Xin <jiangxin@foo.bar>  Fri, 03 Jan 2007 10:39:02 +0800
+
+meta-custom (1.0) unstable; urgency=low
+
+  * Initial version. debian custom installation meta-package.
+
+ -- Jiang Xin <jiangxin@foo.bar>  Wed, 10 May 2006 19:35:02 -0400
+
