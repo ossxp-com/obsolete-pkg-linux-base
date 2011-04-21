@@ -1,143 +1,233 @@
 #!/bin/sh
 #
-# CA - wrapper around ca to make it easier to use ... basically ca requires
-#      some setup stuff to be done before you can use it and this makes
-#      things easier between now and when Eric is convinced to fix it :-)
-#
-# CA -newca ... will setup the right stuff
-# CA -newreq ... will generate a certificate request 
-# CA -sign ... will sign the generated request and output 
-#
-# At the end of that grab newreq.pem and newcert.pem (one has the key 
-# and the other the certificate) and cat them together and that is what
-# you want/need ... I'll make even this a little cleaner later.
-#
-#
-# 12-Jan-96 tjh    Added more things ... including CA -signcert which
-#                  converts a certificate to a request and then signs it.
-# 10-Jan-96 eay    Fixed a few more bugs and added the SSLEAY_CONFIG
-#		   environment variable so this can be driven from
-#		   a script.
-# 25-Jul-96 eay    Cleaned up filenames some more.
-# 11-Jun-96 eay    Fixed a few filename missmatches.
-# 03-May-96 eay    Modified to use 'ssleay cmd' instead of 'cmd'.
-# 18-Apr-96 tjh    Original hacking
-#
-# Tim Hudson
-# tjh@cryptsoft.com
-#
+# Port CA.sh from Tim Hudson, tjh@cryptsoft.com
+# Using certtool form gnutls.
+# Copyright Jiang Xin, 2011
 
-# default openssl.cnf file has setup as per the following
-# demoCA ... where everything is stored
+CATOP=/etc/certtool
+SERIAL_FILE=${CATOP}/sn/sn.txt
+CAKEY=${CATOP}/private/cakey.pem
+CAREQ=${CATOP}/ca/careq.pem
+CACRT=${CATOP}/ca/cacert.pem
+CERTTOOL=certtool
+PROG=$(basename $0)
 
-SSLEAY_CONFIG="-config /opt/ossxp/conf/ssl/openssl.cnf"
-UNPROTECTED="-nodes"
+DAYS=3650
 
-if [ -z "$OPENSSL" ]; then OPENSSL=openssl; fi
+######################################
+# functions
+######################################
 
-DAYS="-days 3650"	# 10 year
-CADAYS="-days 7300"	# 20 years
-REQ="$OPENSSL req $SSLEAY_CONFIG"
-CA="$OPENSSL ca $SSLEAY_CONFIG"
-VERIFY="$OPENSSL verify"
-X509="$OPENSSL x509"
+die()
+{
+	echo "Error: $*"
+	exit 1
+}
 
-CATOP=/opt/ossxp/demoCA
-CAKEY=./cakey.pem
-CAREQ=./careq.pem
-CACERT=./cacert.pem
-
-for i
-do
-case $i in
--\?|-h|-help)
-    echo "usage: CA -newcert|-newreq|-newca|-sign|-verify" >&2
-    exit 0
-    ;;
--newcert) 
-    # create a certificate
-    $REQ -new -x509 $UNPROTECTED -keyout newkey.pem -out newcert.pem $DAYS
-    RET=$?
-    echo "Certificate is in newcert.pem, private key is in newkey.pem"
-    ;;
--newreq) 
-    # create a certificate request
-    $REQ -new $UNPROTECTED -keyout newkey.pem -out newreq.pem $DAYS
-    RET=$?
-    echo "Request is in newreq.pem, private key is in newkey.pem"
-    ;;
--newca)     
-    # if explicitly asked for or it doesn't exist then setup the directory
-    # structure that Eric likes to manage things 
-    NEW="1"
-    if [ "$NEW" -o ! -f ${CATOP}/serial ]; then
-	# create the directory hierarchy
-	mkdir ${CATOP} 
-	mkdir ${CATOP}/certs 
-	mkdir ${CATOP}/crl 
-	mkdir ${CATOP}/newcerts
-	mkdir ${CATOP}/private
-	echo "00" > ${CATOP}/serial
-	touch ${CATOP}/index.txt
-    fi
-    if [ ! -f ${CATOP}/private/$CAKEY ]; then
-	echo "CA certificate filename (or enter to create)"
-	read FILE
-
-	# ask user for existing CA certificate
-	if [ "$FILE" ]; then
-	    cp $FILE ${CATOP}/private/$CAKEY
-	    RET=$?
-	else
-	    echo "Making CA certificate ..."
-	    $REQ -new -keyout ${CATOP}/private/$CAKEY \
-			   -out ${CATOP}/$CAREQ
-	    $CA -out ${CATOP}/$CACERT $CADAYS -batch \
-			   -keyfile ${CATOP}/private/$CAKEY -selfsign \
-			   -extensions v3_ca \
-			   -infiles ${CATOP}/$CAREQ 
-	    RET=$?
+get_serial()
+{
+	[ -w ${SERIAL_FILE} ] || die "serial file not exist or can not modified. (${SERIAL_FILE})"
+	SERIAL=$(tail -1 ${SERIAL_FILE})
+	if [ "x${SERIAL}" = "x" ]; then
+		SERIAL=1000
 	fi
-    fi
-    ;;
--xsign)
-    $CA -policy policy_anything -infiles newreq.pem 
-    RET=$?
-    ;;
--sign|-signreq) 
-    $CA -policy policy_anything -out newcert.pem -infiles newreq.pem
-    RET=$?
-    cat newcert.pem
-    echo "Signed certificate is in newcert.pem"
-    ;;
--signcert) 
-    echo "Cert passphrase will be requested twice - bug?"
-    $X509 -x509toreq -in newreq.pem -signkey newreq.pem -out tmp.pem
-    $CA -policy policy_anything -out newcert.pem -infiles tmp.pem
-    cat newcert.pem
-    echo "Signed certificate is in newcert.pem"
-    ;;
--verify) 
-    shift
-    if [ -z "$1" ]; then
-	    $VERIFY -CAfile $CATOP/$CACERT newcert.pem
-	    RET=$?
-    else
-	for j
-	do
-	    $VERIFY -CAfile $CATOP/$CACERT $j
-	    if [ $? != 0 ]; then
-		    RET=$?
-	    fi
-	done
-    fi
+}
+
+update_serial()
+{
+	SERIAL=$((${SERIAL}+1))
+	echo $SERIAL > ${SERIAL_FILE}
+}
+
+dump_template()
+{
+
+	if [ $# -gt 0 ]; then
+		DOMAIN_NAME="$1"
+	else
+		DOMAIN_NAME="YOUR.DOM.AIN"
+	fi
+
+	cat <<EOF
+# X.509 Certificate options
+#
+# DN options
+
+# The organization of the subject.
+organization = "<Your_Organization_name>"
+
+# The organizational unit of the subject.
+unit = "R&D Dept."
+
+# The locality of the subject.
+locality = "Beijing"
+
+# The state of the certificate owner.
+state = "Beijing"
+
+# The country of the subject. Two letter code.
+country = CN
+
+# The common name of the certificate owner.
+cn = "${DOMAIN_NAME}"
+
+# A user id of the certificate owner.
+#uid = "clauper"
+
+# If the supported DN OIDs are not adequate you can set
+# any OID here.
+# For example set the X.520 Title and the X.520 Pseudonym
+# by using OID and string pairs.
+#dn_oid = "2.5.4.12" "Dr." "2.5.4.65" "jackal"
+
+# The serial number of the certificate
+serial = ${SERIAL}
+
+# In how many days, counting from today, this certificate will expire.
+expiration_days = ${DAYS}
+
+# X.509 v3 extensions
+
+# A dnsname in case of a WWW server.
+dns_name = "www.${DOMAIN_NAME}"
+dns_name = "*.${DOMAIN_NAME}"
+
+# An IP address in case of a server.
+#ip_address = "192.168.1.1"
+
+# An email in case of a person
+email = "<Your_Email_Here>"
+
+# An URL that has CRLs (certificate revocation lists)
+# available. Needed in CA certificates.
+#crl_dist_points = "http://www.getcrl.crl/getcrl/"
+
+# Whether this is a CA certificate or not
+#ca
+
+# Whether this certificate will be used for a TLS client
+tls_www_client
+
+# Whether this certificate will be used for a TLS server
+tls_www_server
+
+# Whether this certificate will be used to sign data (needed
+# in TLS DHE ciphersuites).
+signing_key
+
+# Whether this certificate will be used to encrypt data (needed
+# in TLS RSA ciphersuites). Note that it is preferred to use different
+# keys for encryption and signing.
+encryption_key
+
+# Whether this key will be used to sign other certificates.
+#cert_signing_key
+
+# Whether this key will be used to sign CRLs.
+#crl_signing_key
+
+# Whether this key will be used to sign code.
+#code_signing_key
+
+# Whether this key will be used to sign OCSP data.
+#ocsp_signing_key
+
+# Whether this key will be used for time stamping.
+#time_stamping_key
+EOF
+}
+
+usage()
+{
+		cat >&2 << EOF
+Usage:
+    $PROG --init
+                      If CA not setup yet.
+
+    $PROG --newkey
+                      Step 1 to generate a new key/cert pair.
+
+    $PROG --newreq <domain.name>
+                      Step 2 to generate a new key/cert pair.
+
+    $PROG --sign
+                      Step 3 to generate a new key/cert pair.
+
+    $PROG --verify
+                      Show certs.
+EOF
+    exit 0
+}
+
+# Get initial serial number from SERIAL_FILE
+
+TEMPLATE=new.txt
+NEWKEY=new.key
+NEWREQ=new.req
+NEWCRT=new.crt
+
+if [ $# -eq 0 ]; then usage ; fi
+
+get_serial
+
+while [ $# -gt 0 ]; do
+case $1 in
+-\?|-h|--help)
+    usage
     exit 0
     ;;
+-newreq|--newreq) 
+    # create a req template file, go edit it.
+    shift
+    [ ! -f $NEWKEY ] && die "Key file ($NEWKEY) does not exit, run $PROG -newkey first."
+    if [ ! -f $TEMPLATE ]; then
+			dump_template $1 > $TEMPLATE
+		fi
+
+		echo "Now a EDITEMPLATEOR will startup to edit file $TEMPLATE..."
+		echo "Press any key..."
+		read
+		vi $TEMPLATE
+    [ -f $TEMPLATE ] && echo "Now execute: $PROG --sign to create cert file."
+    exit 0
+    ;;
+-newkey|--newkey) 
+    # create a private key
+    [ -f $NEWKEY ] && die "Key file ($NEWKEY) already exists."
+		$CERTTOOL --generate-privkey --outfile $NEWKEY
+    echo "Private key is in $NEWKEY."
+    exit 0
+    ;;
+-sign|--sign) 
+    # sign a cert.
+    [ -f $NEWCRT ] && die "Cert file ($NEWCRT) already exists."
+		# $CERTTOOL --generate-certificate --load-privkey $NEWKEY  \
+    #           --outfile $NEWCRT --load-ca-certificate $CACRT \
+    #           --load-ca-privkey $CAKEY
+    if [ -f $TEMPLATE ]; then
+      $CERTTOOL --generate-certificate --load-privkey $NEWKEY  \
+                --template $TEMPLATE --outfile $NEWCRT \
+                --load-ca-certificate $CACRT --load-ca-privkey $CAKEY
+      if [ $? == 0 ]; then
+        update_serial
+      fi
+    else
+      die "Generate a template file using: $PROG --newreq"
+    fi
+    echo "Cert is in $NEWCRT, private key is $NEWKEY"
+    ;;
+--verify) 
+    echo "not implement yet."
+   ;;
 *)
-    echo "Unknown arg $i";
-    exit 1
+    usage "Unknown arg $i";
     ;;
 esac
+shift
 done
+
+
+
 exit $RET
 
+# vim: et ts=2 sw=2
