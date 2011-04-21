@@ -1,0 +1,17 @@
+[ossxp]
+name=OSSXP Packages for Enterprise Linux 5 - $basearch
+baseurl=http://bj.ossxp.com/centos/stable/$basearch
+failovermethod=priority
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OSSXP
+proxy=_none_
+
+[ossxp-source]
+name=Extra Packages for Enterprise Linux 5 - $basearch - Source
+baseurl=http://bj.ossxp.com/centos/stable/SRPMS
+failovermethod=priority
+enabled=0
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OSSXP
+proxy=_none_

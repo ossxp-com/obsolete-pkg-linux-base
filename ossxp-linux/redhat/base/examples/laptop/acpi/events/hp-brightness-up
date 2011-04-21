@@ -1,0 +1,2 @@
+event=video LCD 00000086 00000000
+action=/etc/acpi/hpbrightnessup.sh

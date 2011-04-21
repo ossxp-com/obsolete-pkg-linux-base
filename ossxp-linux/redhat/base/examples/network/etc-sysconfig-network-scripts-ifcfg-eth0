@@ -1,0 +1,6 @@
+# Intel Corporation 82540EM Gigabit Ethernet Controller
+DEVICE=eth0
+BOOTPROTO=dhcp
+HWADDR=08:00:27:A2:A2:F6
+ONBOOT=yes
+TYPE=Ethernet

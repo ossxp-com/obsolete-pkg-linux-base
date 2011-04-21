@@ -1,0 +1,11 @@
+# Intel Corporation 82540EM Gigabit Ethernet Controller
+DEVICE=eth1
+BOOTPROTO=none
+ONBOOT=yes
+HWADDR=08:00:27:10:a2:47
+NETMASK=255.255.255.0
+IPADDR=192.168.99.21
+TYPE=Ethernet
+USERCTL=no
+IPV6INIT=no
+PEERDNS=yes

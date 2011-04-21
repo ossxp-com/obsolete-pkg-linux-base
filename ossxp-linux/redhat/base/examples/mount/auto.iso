@@ -1,0 +1,28 @@
+#
+# $Id$
+#
+# This is an automounter map and it has the following format
+# key [ -mount-options-separated-by-comma ] location
+# Details may be found in the autofs(5) manpage
+
+
+# the following entries are samples to pique your imagination
+#cd		-fstype=iso9660,ro,nosuid,nodev	:/dev/cdrom
+#linux		-ro,soft,intr		ftp.example.org:/pub/linux
+#boot		-fstype=ext2		:/dev/hda1
+#floppy		-fstype=auto		:/dev/fd0
+#floppy		-fstype=ext2		:/dev/fd0
+#e2floppy	-fstype=ext2		:/dev/fd0
+#jaz		-fstype=ext2		:/dev/sdc1
+#removable	-fstype=ext2		:/dev/hdd
+
+#debian i386 images
+debian_etch-cd1		-fstype=auto,loop,ro	:/data/_ISO/debian_etch/debian-40r0-i386-DVD-1.iso
+debian_etch-cd2		-fstype=auto,loop,ro	:/data/_ISO/debian_etch/debian-40r0-i386-DVD-2.iso
+debian_etch-cd3		-fstype=auto,loop,ro	:/data/_ISO/debian_etch/debian-40r0-i386-DVD-3.iso
+
+#debian amd64 images
+debian_etch_amd64-cd1	-fstype=auto,loop,ro	:/data/_ISO/debian_etch_amd64/debian-40r0-amd64-DVD-1.iso
+debian_etch_amd64-cd2	-fstype=auto,loop,ro	:/data/_ISO/debian_etch_amd64/debian-40r0-amd64-DVD-2.iso
+debian_etch_amd64-cd3	-fstype=auto,loop,ro	:/data/_ISO/debian_etch_amd64/debian-40r0-amd64-DVD-3.iso
+

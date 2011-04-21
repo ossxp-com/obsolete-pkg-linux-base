@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+
+<definition>
+
+  <config model="Compaq Presario V3000 keyboard">
+  <!--
+  Image at:
+  http://www.sanwasupply.co.jp/product/syohin.asp?code=FA-DESKP&mode=main&cate=1
+  -->
+  
+    <Email        keycode="159"/>
+    <Help         keycode="245"/>
+    <WebBrowser   keycode="178"/>
+
+    <PowerDown    keycode="222"/>
+    <Sleep        keycode="223"/>
+    <ScreenSaver  keycode="146"/>
+
+    <VolDown      keycode="174"/>
+    <VolUp        keycode="176"/>
+    <Mute         keycode="160"/>
+    <Play         keycode="162"/>
+    <Stop         keycode="164"/>
+    <NextTrack    keycode="153"/>
+    <PrevTrack    keycode="144"/>
+
+  
+<!--
+    <Search         keycode="154"/>
+    <NewsReader     keycode="155"/>
+-->
+    <!-- Feel free to customize these -->
+
+<!--
+    <userdef keycode="146" command="/usr/bin/xscreensaver-command -activate">ScreenSaver</userdef>
+    <userdef keycode="147" command="/usr/bin/licq">LICQ</userdef>
+    <userdef keycode="148" command="/usr/bin/gnumeric">Gnumeric</userdef>
+    <userdef keycode="149" command="/usr/bin/gedit">Gedit</userdef>
+--> 
+  </config>
+
+  <contributor>
+    <name>Jiang Xin</name>
+    <email>worldhello.net@gmail.com</email>
+  </contributor>
+
+</definition>

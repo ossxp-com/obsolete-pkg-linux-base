@@ -1,0 +1,16 @@
+$TTL            3600
+@               IN      SOA     ns1.foo.bar.      jiangxin.foo.bar. (
+                        2007082902 ; serial
+                        300 ; refresh
+                        300 ; retry
+                        7200000 ; expire
+                        3600 ; default_ttl
+                        )
+@               IN      NS      ns1.foo.bar.
+@               IN      MX      5       mail.foo.bar.
+@               IN      A       10.0.0.2
+mail            IN      A       10.0.0.2
+
+ns1             IN      CNAME   mail
+svn             IN      CNAME   mail
+*               IN      CNAME   mail

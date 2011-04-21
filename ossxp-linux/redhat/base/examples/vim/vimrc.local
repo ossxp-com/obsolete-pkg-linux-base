@@ -1,0 +1,20 @@
+set modeline
+syntax on
+set background=dark
+set ts=4
+set sw=4
+set expandtab
+set incsearch
+
+set smarttab
+" set smartindent
+
+set paste
+set ts=2
+set sw=2
+set et
+
+set undofile
+set undodir=~/vim-tmp
+set undolevels=500
+

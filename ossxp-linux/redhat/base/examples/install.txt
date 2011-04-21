@@ -1,0 +1,196 @@
+== Modify config files ==
+ * /etc/hosts
+   {{{
+       192.168.0.120   apt-source
+   }}}
+
+ * /etc/apt/sources.list
+   {{{
+       deb http://apt-source/debian/lenny/i386/dvd1/ lenny main contrib
+       deb http://apt-source/debian/lenny/i386/dvd2/ lenny main contrib
+       deb http://apt-source/debian/lenny/i386/dvd3/ lenny main contrib
+       deb http://apt-source/debian/lenny/i386/dvd4/ lenny main contrib
+       deb http://apt-source/debian/lenny/i386/dvd5/ lenny main contrib
+       deb http://apt-source/debian/lenny/i386/dvd6/ lenny main contrib
+
+       deb http://apt-source/update/jiangxin/ sid main
+
+       deb http://apt-source:9999/debian/                      lenny main contrib non-free
+       deb http://apt-source:9999/security/                    stable/updates main
+    }}}
+
+== Install ossxp packages ==
+ * ossxp-secure-basic
+   {{{
+       $ sudo /opt/ossxp/install/base.py install config
+   }}}
+ * ossxp-secure-opensesame
+
+ * ossxp-secure-fw-shorewall
+   * Enable shorewall: /etc/default/shorewall
+   * Config files: /etc/shorewall/rules, /etc/shorewall/macro.XXX.in
+   * Add hostname referenced by macro.xxx.in to /etc/hosts.
+   * Open Ports
+     * 80/443
+     * 25/465
+     * 110/995
+     * 143/993
+   * Example rules:
+     {{{
+        Ping/ACCEPT     net     $FW
+        DNS/ACCEPT      net     $FW
+        HTTP/ACCEPT     net     $FW
+        HTTPS/ACCEPT    net     $FW
+        SMTP/ACCEPT     net     $FW
+        SMTPS/ACCEPT    net     $FW
+        POP3/ACCEPT     net     $FW
+        POP3S/ACCEPT    net     $FW
+        IMAP/ACCEPT     net     $FW
+        IMAPS/ACCEPT    net     $FW
+     }}}
+ * ossxp-apache2
+   May already installed, which is depends by ossxp-secure-opensesame
+ * Create certificates
+   {{{
+       $ sudo /opt/ossxp/bin/CA.sh -newca
+
+       # create new cert for *.foo.bar
+       $ sudo /opt/ossxp/bin/CA.sh -newreq
+       $ sudo /opt/ossxp/bin/CA.sh -sign
+
+       # create new cert for mail.foo.bar
+       $ sudo /opt/ossxp/bin/CA.sh -newreq
+       $ sudo /opt/ossxp/bin/CA.sh -sign
+   }}}
+
+== Backup services ==
+ * etckeeper & hg
+   * vi /etc/etckeeper/etckeeper.conf
+   * sudo etckeeper init
+   * sudo etckeeper commit initialized
+ * ossxp-backup
+   * apt-get install ossxp-backup
+   * edit /etc/cron.d/ossxp-backup
+
+== Install DNS services ==
+ * ossxp-maradns
+   * config files: /etc/init.d/maradns, /etc/init.d/mararc, /etc/init.d/db.*
+   * restart maradns will bind to all network interfaces.
+     (hacked maradns init file)
+   * add record for host: cosignd.foo.bar
+   * add host: cosignd.foo.bar, to /etc/hosts also
+     
+== Install Email services ==
+ * ossxp-mail
+   * Add new domain, add a file under: /etc/exim4/virtual/
+   * Edit /etc/exim4/conf.d/main/00_exim4-config_localmacros
+   * Create certificated file:
+     * /etc/exim4/exim.crt
+     * /etc/exim4/exim.key
+   * open port 465 for smtp over ssl
+     * /etc/default/exim4
+       {{{
+        SMTPLISTENEROPTIONS='-oX 465:25 -oP  /var/run/exim4/exim.pid'
+       }}}
+ * ossxp-mail-dovecot
+
+
+== Install LDAP services ==
+=== Ldap master ===
+Ldap master provide both ldap query and ldap maintenance.
+Install both slapd and gosa on this server.
+
+ * Install ossxp-gosa
+   ldap is installed automatically.
+   {{{
+       $ sudo apt-get install ossxp-gosa ossxp-gosa-schema
+   }}}
+ * Add admin account for ldap:
+   * cn=ldapadmin,dc=foo,dc=bar
+   * generate password using : 'slapdpasswd'
+   * Ldap config fie reference: /opt/ossxp/examples/ldap/
+ * Create a readonly account, which has right to read password.
+   * cn=readonly,dc=foo,dc=bar
+   * using tools: slapcat, slapadd
+ * edit /etc/default/slapd:
+   {{{
+        SLAPD_SERVICES="ldap:/// ldaps:/// ldapi:///"
+   }}}
+
+ * Open web browser, visit:
+   http://members.foo.bar/members
+
+=== Ldap client ===
+Ldap client sync with ldap master. Ldap mirror only provide ldap query.
+ * Install ossxp-ldap
+   * reference file: /opt/ossxp/examples/ldap/
+
+== Install Email services based on LDAP ==
+ * exim4
+   * $ apt-get install ossxp-mail-ldap
+ * dovecot 
+   * /etc/dovecot/dovecot.conf
+   * /etc/dovecot/dovecot-ldap.conf
+   * reference: /opt/ossxp/examples/dovecot
+
+
+== Install CoSign daemon/cgi/filter ==
+ * Install Cosign deamon, cgi and filter on weblogin server
+   {{{
+       $ apt-get install ossxp-cosign-daemon  ossxp-cosign-cgi ossxp-cosign-filter
+   }}}
+ * Use different login/logout templates
+   {{{
+       $ rm -rf /opt/cosign/lib/templates-local
+       $ cp -a  /opt/cosign/lib/templates_google /opt/cosign/lib/templates-local
+   }}}
+
+== Tune services work with CoSign ==
+ * GOsa
+   * edit config file /opt/gosa/conf/gosa.conf
+
+== Mailman ==
+ * Install
+   * apt-get install ossxp-mailman
+ * Set hostname for mailman
+   * /opt/mailman/conf/mm_cfg.py
+ * Set auth config for mailman
+   * /opt/mailman/conf/auth_cfg.py
+ * Initial mailman password
+   * /opt/mailman/bin/mmsitepass
+ * Check permissions
+   * /opt/mailman/bin/check_perms -f
+ * Create list: Mailman
+   * /opt/mailman/bin/newlist Mailman -e root@foo.bar
+
+== MoinMoin ==
+ * Install
+   * apt-get install ossxp-moinmoin
+ * Configuration
+   * edit /opt/moin/sites/default/conf/wikiconfig.py
+     * enable cosign login
+     * add your account as superuser, and have page admin rights.
+   * link packages*.zip to /opt/moin/share/underlay/pages/WikiSandBox/attachments
+   * login and view attachment of WikiSandBox page.
+   * install these packages.
+
+== Subversion ==
+ * ossxp-svn-server
+
+== pySvnManager ==
+ * Install python-ldap
+   * apt-get install python-ldap
+ * Install python-pylons >= 0.9.7
+   * apt-get install -t sid python-pylons
+ * Install pysvnmanager
+   * apt-get install pysvnmanager
+
+== WebSvn ==
+ * ossxp-websvn
+
+== StatSvn ==
+ * ossxp-statsvn
+
+== Trac ==
+ * ossxp-trac-all
+

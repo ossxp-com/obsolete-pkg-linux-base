@@ -1,0 +1,25 @@
+修改 IP 地址，除了修改机器的IP地址本身外，还有一些相关的配置需要考虑修改：
+
+ * /etc/network/interfaces
+   * IP 地址/网关/DNS 都在这里修改
+
+ * /etc/hosts
+   * 定义的和备份/LDAP镜像/CoSign Client 的相关 IP 地址需要修改
+   * 这些主机名和 IP 用于设定 shorewall 防火墙
+ 
+ * /etc/maradns/db.*
+   * DNS 记录需要修改噢
+   * Maradns 绑定的 IP 地址，会在网卡重启后自动更新，因此需要重启网卡，
+     并重启 Maradns 服务
+
+ * /etc/shorewall/rules
+   * 防火墙配置文件，可能要随着网络拓扑的改变而改变
+
+ * /etc/ossxp/packages/macro
+   * 该宏文件中可以包含部分 IP 地址
+   * 用命令 ossxp_pkgadmin.py 来生成该宏文件，或者应用新配置
+
+ * 重启服务
+   * /etc/init.d/ossxp-cosign-daemon restart
+   * /etc/init.d/maradns restart
+   * /etc/init.d/apache2 restart

@@ -1,0 +1,61 @@
+修改域名，将会有很多配置需要随之调整，大部分可以用宏替换自动完成，小部分可能要手动编辑
+
+ * /etc/ossxp/packages/macro
+   * 该宏文件可以通过宏替换，完成大部分配置文件的修改
+   * 用命令 ossxp_pkgadmin.py 来生成该宏文件，或者应用新配置
+
+ * /etc/hosts, /etc/shorewall/macro.*.in
+   * 定义的和备份/LDAP镜像/CoSign Client 的相关 IP 地址需要修改
+   * 这些主机名和 IP 用于设定 shorewall 防火墙
+
+ * /etc/network/interfaces
+   * 缺省域名。可以用宏替换自动完成
+
+ * /etc/maradns/mararc, * /etc/maradns/db.*
+   * 域名和 db 文件映射，必须手动完成
+   * 一些域名不要更改： cosignd.foo.bar， 注意添加在 db 文件的最后
+
+ * 邮件系统
+   * 修改 /etc/exim4/virtual/ 下的文件名，和新域名相同
+   * 修改邮件存储目录 /var/mail/exim/ 下的目录名称
+   * $ sudo dpkg-reconfigure exim4-config
+   * $ sudo /etc/init.d/dovecot restart
+   * $ sudo /etc/init.d/exim4 restart
+
+ * LDAP 中用户的邮件地址
+   离线操作：
+   * $ slapcat -b 'suffix' > export.ldif
+   * $ sed -i -e 's/@old/@new/' export.ldif
+   * $ create a new ldap databae.
+   * $ slapadd -b 'suffix'< export.ldif
+
+ * 邮件列表
+   * 逐个以管理员登录修改邮件列表设置
+   * bin/withlist -l -r fix_url <列表名称>
+   * bin/arch --wipe <列表名称>
+     注意对于空列表，会因为找不到 .mbox 文件而挂起
+
+ * Subversion 邮件通知
+   * 如果包含多个 pySvnManager 站点，创建文件 /etc/ossxp/packages/pysvnmanager.conf。
+     其中包含文件 /opt/pysvnmanager/<SiteName>/config/localconfig.py 的正则匹配
+   * 参考文件 /opt/ossxp/lib/packages/pysvnmanager.conf
+
+ * Trac 邮件通知
+   * 如果不是在 /etc/trac/*.ini 中定义的, 创建文件 /etc/ossxp/packages/trac.conf。
+     其中包含文件 /opt/trac/sites/<EnvName>/conf/trac.ini 的正则匹配
+   * 参考文件 /opt/ossxp/lib/packages/ossxp-trac.conf
+
+ * Wiki 邮件通知
+   * 如果包含多个站点文件，创建文件 /etc/ossxp/packages/moinmoin.conf。
+     其中包含文件 /opt/moin/sites/<EnvName>/conf/wikiconfig.py 的正则匹配
+   * 参考文件 /opt/ossxp/lib/packages/ossxp-moinmoin.conf
+
+ * 重启服务
+   * /etc/init.d/ossxp-cosign-daemon restart
+   * /etc/init.d/maradns restart
+   * /etc/init.d/ossxp-mailman restart
+   * /etc/init.d/apache2 restart
+   * /etc/init.d/shorewall restart
+   * /etc/init.d/pysvnmanager restart
+   * /etc/init.d/dovecot restart
+   * /etc/init.d/exim4   restart
