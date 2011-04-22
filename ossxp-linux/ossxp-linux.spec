@@ -70,7 +70,7 @@ Summary: Ossxp servers
 Group: System Environment/Base 
 Requires: ossxp-linux-base
 
-%description devel
+%description server
  Ossxp servers, such as ossxp-apache2, php5, mailman, subversion...
 
 %prep
