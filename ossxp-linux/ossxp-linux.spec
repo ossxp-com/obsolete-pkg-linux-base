@@ -75,29 +75,14 @@ Requires: ossxp-linux-base
 
 %prep
 %setup -q  -c -T
-install -pm 644 %{SOURCE0} .
-install -pm 644 %{SOURCE1} .
-install -pm 644 %{SOURCE2} .
-
-%build
-
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
 %{__python} install.py $RPM_BUILD_ROOT
 
-#GPG Key
-install -Dpm 644 %{SOURCE0} \
-    $RPM_BUILD_ROOT%{_sysconfdir}/pki/rpm-gpg/RPM-GPG-KEY-OSSXP
-
-# yum
-install -dm 755 $RPM_BUILD_ROOT%{_sysconfdir}/yum.repos.d
-install -pm 644 %{SOURCE2} \
-    $RPM_BUILD_ROOT%{_sysconfdir}/yum.repos.d
-
 %clean
-rm -rf $RPM_BUILD_ROOT
+#rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
