@@ -18,16 +18,9 @@ BuildArch:     noarch
 This package contains the configuration for OSSXP CentOS/RHEL repository
 GPG key as well as configuration for yum.
 
-
 %package -n ossxp-release
-Name:           ossxp-release       
-Version:        5
-Release:        1
 Summary:        OSSXP Packages for Enterprise Linux repository configuration
-
 Group:          System Environment/Base 
-License:        GPL 
-URL:            http://update.ossxp.com/centos
 
 %description -n ossxp-release
 This package contains the configuration for OSSXP CentOS/RHEL repository
@@ -93,7 +86,6 @@ Requires: ossxp-linux-base
 
 %install
 rm -rf $RPM_BUILD_ROOT
-
 %{__python} install.py $RPM_BUILD_ROOT
 
 %clean
