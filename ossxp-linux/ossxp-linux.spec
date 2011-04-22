@@ -94,7 +94,7 @@ rm -rf $RPM_BUILD_ROOT
 %files -n ossxp-release
 %defattr(-,root,root,-)
 %config(noreplace) /etc/yum.repos.d/ossxp.repo
-/etc/pki/rpm-gpg/RPM-GPG-OSSXP
+/etc/pki/rpm-gpg/RPM-GPG-KEY-OSSXP
 
 %files base
 %defattr(-,root,root,-)
