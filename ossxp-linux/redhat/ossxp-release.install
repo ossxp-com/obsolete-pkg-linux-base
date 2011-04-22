@@ -1,0 +1,2 @@
+redhat/RPM-GPG-KEY-OSSXP etc/pki/rpm-gpg/
+redhat/conf/ossxp.repo   etc/yum.repos.d/
