@@ -84,12 +84,20 @@ rm -rf $RPM_BUILD_ROOT
 %clean
 #rm -rf $RPM_BUILD_ROOT
 
-%files
+%files base
 %defattr(-,root,root,-)
-%doc GPL
-%config(noreplace) /etc/yum.repos.d/*
-/etc/pki/rpm-gpg/*
+/opt/ossxp/install
+/opt/ossxp/lib/packages
+/etc/vim
+/etc/ossxp
 
+%files server
+%defattr(-,root,root,-)
+/opt/ossxp/install/server.sh
+
+%files desktop-core
+%defattr(-,root,root,-)
+/opt/ossxp/install/tor+privoxy.sh
 
 %changelog
 * Thu Apr 21 2011 Jiang Xin <worldhello dot net at gmail dot com>

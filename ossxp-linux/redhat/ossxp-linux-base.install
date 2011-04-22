@@ -6,5 +6,3 @@ redhat/install/README   opt/ossxp/install/
 redhat/package_info/*   opt/ossxp/lib/packages/
 redhat/conf/etc/vim/*   etc/vim/
 redhat/conf/etc/ossxp/* etc/ossxp/
-redhat/conf/etc/apt/sources.list.d/*     etc/apt/sources.list.d/
-redhat/conf/etc/apt/apt.conf.d/02proxy   etc/apt/apt.conf.d/
