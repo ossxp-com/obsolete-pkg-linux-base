@@ -100,7 +100,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 /opt/ossxp/examples
 /opt/ossxp/install
-/opt/ossxp/lib/packages
+/opt/ossxp/lib/packages/ossxp-linux-base.conf
 /etc/vim
 /etc/ossxp
 
