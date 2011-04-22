@@ -5,9 +5,10 @@ import os
 
 
 def install_file(build_root):
-    for filename in os.listdir("redhat"):
+    dir_name = "redhat"
+    for filename in os.listdir(dir_name):
         if filename.endswith('.install'):
-            for line in open(os.path.join('debian', filename)):
+            for line in open(os.path.join(dir_name, filename)):
                 source,dist = line.split()
                 dist = os.path.join(build_root, dist.lstrip('/'))
                 if not os.path.exists(dist):
