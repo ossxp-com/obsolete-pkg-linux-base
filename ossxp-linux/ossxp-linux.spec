@@ -7,10 +7,7 @@ Group:          System Environment/Base
 License:        GPL 
 URL:            http://update.ossxp.com/centos
 
-Source0:        http://update.ossxp.com/centos/RPM-GPG-KEY-OSSXP
-Source1:        GPL
-Source2:        ossxp.repo
-
+Source:         %{name}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:     noarch
@@ -20,6 +17,56 @@ BuildArch:     noarch
 %description
 This package contains the configuration for OSSXP CentOS/RHEL repository
 GPG key as well as configuration for yum.
+
+%package base
+Summary: basic linux tools.
+Group: System Environment/Base 
+
+%description base
+ Useful console tools, such as bzip2, p7zip, vim, ...
+
+%package laptop
+Summary: laptop utilis.
+Group: System Environment/Base 
+Requires: ossxp-linux-base
+
+%description laptop
+ Useful laptop utilis, such as uswsusp, acpi, ...
+
+%package desktop-core
+Summary: Desktop Environment Core (zh_CN support)
+Requires: ossxp-linux-base
+
+%description desktop-core
+ X11 core with chinese support. add some utilities also.
+
+%package: desktop-light
+Summary: Desktop Environment lightweight (xfce4)
+Requires: ossxp-linux-desktop-core
+
+%description desktop-light
+ Light-weight Desktop Environment, using xfce4 
+
+%package: desktop-heavy
+Summary: Desktop Environment heavy (KDE)
+Requires: ossxp-linux-desktop-core, ossxp-linux-desktop-light
+
+%description desktop-heavy
+ Desktop Environment KDE
+
+%package: devel
+Summary: Developer packages
+Requires: ossxp-linux-base
+
+%description devel
+ Developer packages...
+
+%package: server
+Summary: Ossxp servers
+Requires: ossxp-linux-base
+
+%description devel
+ Ossxp servers, such as ossxp-apache2, php5, mailman, subversion...
 
 %prep
 %setup -q  -c -T
@@ -32,6 +79,8 @@ install -pm 644 %{SOURCE2} .
 
 %install
 rm -rf $RPM_BUILD_ROOT
+
+%{__python} install.py $RPM_BUILD_ROOT
 
 #GPG Key
 install -Dpm 644 %{SOURCE0} \

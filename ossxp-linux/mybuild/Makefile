@@ -12,6 +12,16 @@ clean:
 	-rm -rf debian/build
 	-sudo setfacl -Rb  ../debian
 
+branch=master
+name=ossxp-linux
+version=5
+
+rpm:tar
+	rpmbuild --sign -ta $(name)-$(version).tar.gz
+
+tar:
+	git archive --prefix=$(name)-$(version)/ $(branch) | gzip > $(name)-$(version).tar.gz
+
 dir: clean
 
 .PHONY: all clean dir
