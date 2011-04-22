@@ -35,6 +35,7 @@ Requires: ossxp-linux-base
 
 %package desktop-core
 Summary: Desktop Environment Core (zh_CN support)
+Group: System Environment/Base 
 Requires: ossxp-linux-base
 
 %description desktop-core
@@ -42,6 +43,7 @@ Requires: ossxp-linux-base
 
 %package: desktop-light
 Summary: Desktop Environment lightweight (xfce4)
+Group: System Environment/Base 
 Requires: ossxp-linux-desktop-core
 
 %description desktop-light
@@ -49,6 +51,7 @@ Requires: ossxp-linux-desktop-core
 
 %package: desktop-heavy
 Summary: Desktop Environment heavy (KDE)
+Group: System Environment/Base 
 Requires: ossxp-linux-desktop-core, ossxp-linux-desktop-light
 
 %description desktop-heavy
@@ -56,6 +59,7 @@ Requires: ossxp-linux-desktop-core, ossxp-linux-desktop-light
 
 %package: devel
 Summary: Developer packages
+Group: System Environment/Base 
 Requires: ossxp-linux-base
 
 %description devel
@@ -63,6 +67,7 @@ Requires: ossxp-linux-base
 
 %package: server
 Summary: Ossxp servers
+Group: System Environment/Base 
 Requires: ossxp-linux-base
 
 %description devel

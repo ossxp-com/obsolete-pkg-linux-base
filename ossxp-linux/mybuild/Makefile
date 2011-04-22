@@ -20,7 +20,7 @@ rpm:tar
 	rpmbuild --sign -ta $(name)-$(version).tar.gz
 
 tar:
-	git archive --prefix=$(name)-$(version)/ $(branch) | gzip > $(name)-$(version).tar.gz
+	cd ..;git archive --prefix=$(name)-$(version)/ $(branch) | gzip > $(name)-$(version).tar.gz
 
 dir: clean
 
