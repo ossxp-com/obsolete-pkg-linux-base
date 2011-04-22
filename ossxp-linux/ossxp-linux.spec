@@ -74,7 +74,7 @@ Requires: ossxp-linux-base
  Ossxp servers, such as ossxp-apache2, php5, mailman, subversion...
 
 %prep
-%setup -q  -c -T
+%setup -q
 
 %install
 rm -rf $RPM_BUILD_ROOT
