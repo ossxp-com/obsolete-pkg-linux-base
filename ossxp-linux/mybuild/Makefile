@@ -17,7 +17,7 @@ name=ossxp-linux
 version=5
 
 rpm:tar
-	rpmbuild --sign -ta $(name)-$(version).tar.gz
+	cd ..;rpmbuild --sign -ta $(name)-$(version).tar.gz
 
 tar:
 	cd ..;git archive --prefix=$(name)-$(version)/ $(branch) | gzip > $(name)-$(version).tar.gz

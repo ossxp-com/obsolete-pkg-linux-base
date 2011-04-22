@@ -41,7 +41,7 @@ Requires: ossxp-linux-base
 %description desktop-core
  X11 core with chinese support. add some utilities also.
 
-%package: desktop-light
+%package desktop-light
 Summary: Desktop Environment lightweight (xfce4)
 Group: System Environment/Base 
 Requires: ossxp-linux-desktop-core
@@ -49,7 +49,7 @@ Requires: ossxp-linux-desktop-core
 %description desktop-light
  Light-weight Desktop Environment, using xfce4 
 
-%package: desktop-heavy
+%package desktop-heavy
 Summary: Desktop Environment heavy (KDE)
 Group: System Environment/Base 
 Requires: ossxp-linux-desktop-core, ossxp-linux-desktop-light
@@ -57,7 +57,7 @@ Requires: ossxp-linux-desktop-core, ossxp-linux-desktop-light
 %description desktop-heavy
  Desktop Environment KDE
 
-%package: devel
+%package devel
 Summary: Developer packages
 Group: System Environment/Base 
 Requires: ossxp-linux-base
@@ -65,7 +65,7 @@ Requires: ossxp-linux-base
 %description devel
  Developer packages...
 
-%package: server
+%package server
 Summary: Ossxp servers
 Group: System Environment/Base 
 Requires: ossxp-linux-base
