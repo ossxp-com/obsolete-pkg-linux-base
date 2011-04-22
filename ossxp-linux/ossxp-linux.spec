@@ -86,7 +86,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files base
 %defattr(-,root,root,-)
-/opt/ossxp/example
+/opt/ossxp/examples
 /opt/ossxp/install
 /opt/ossxp/lib/packages
 /etc/vim
