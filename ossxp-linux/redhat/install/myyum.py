@@ -31,6 +31,9 @@ import os, sys, re, string, getopt, tempfile, shutil
 import re
 import unittest
 import yum
+sys.path.append('/usr/share/yum-cli')
+import cli
+import yummain
 
 
 VERSION_EQUAL=0
@@ -38,7 +41,6 @@ VERSION_DIFF=1
 VERSION_UNKNOWN=2
 VERSION_NOTINST=3
 verbose=0
-
 
 def vprint(str):
     global verbose
@@ -137,40 +139,8 @@ def get_list(cmd):
             package_list = "%s, %s" % (package_list, line)
     return package_list
 
-
 def get_pkg_status(pkg):
-    policy = os.popen('LANG=C apt-cache policy %s 2>/dev/null' % pkg, 'r').read()
-    if len(policy) == 0:
-        vprint ("Package %s does not exist!" % pkg)
-        return VERSION_UNKNOWN
-
-    match=re.search('^[\s]*Installed:[\s]*(.*)$', policy, re.M)
-    if match:
-        inst_version = match.group(1)
-    else:
-        return VERSION_UNKNOWN
-    
-    match=re.search('^[\s]*Candidate:[\s]*(.*)$', policy, re.M)
-    if match:
-        cand_version = match.group(1)
-    else:
-        return VERSION_UNKNOWN
-
-    if cand_version == '(none)':
-        cand_version = None
-        return VERSION_UNKNOWN
-
-    if inst_version == '(none)':
-        inst_version = None
-        return VERSION_NOTINST
-
-    if inst_version != cand_version:
-        vprint ("Package %s should be upgrade." % pkg)
-        return VERSION_DIFF
-    else:
-        vprint ("Package %s already installed." % pkg)
-        return VERSION_EQUAL
-
+    return myb.get_pkg_status(pkg)
 
 def check_package(pkg):
     pkg = pkg.strip()
@@ -182,7 +152,6 @@ def check_package(pkg):
                     return (item, status)
     status = get_pkg_status(pkg)
     return (pkg,status)
-
 
 def pre_check(pset_list):
     """
@@ -241,8 +210,6 @@ def pre_check(pset_list):
         VERSION_NOTINST: notinst_list }
     return r
 
-
-    
 def hack_config_file(conffile, options, must_exists=True):
     def lines_match(lines, needle, begin=None):
         found = False
@@ -343,66 +310,8 @@ def hack_config_file(conffile, options, must_exists=True):
     else:
         print "[1m%s already hacked, not touched.[0m" % conffile
 
-
 def process_packages(package_list, install_mode=1, interactive=1, dryrun=1):
-    lists = pre_check(package_list)
-    if install_mode:
-        if lists[VERSION_UNKNOWN]:
-            print "These packages are not found for this distrabution:"
-            print lists[VERSION_UNKNOWN]
-        if lists[VERSION_EQUAL]:
-            print "Already installed packages:"
-            print lists[VERSION_EQUAL]
-        if lists[VERSION_NOTINST]:
-            print "[1mThese packages will be installed as new:[0m"
-            print lists[VERSION_NOTINST]
-        if lists[VERSION_DIFF]:
-            print "[1mThese packages will be upgrade:[0m"
-            print lists[VERSION_DIFF]
-
-        if not lists[VERSION_NOTINST] and not lists[VERSION_DIFF]:
-            print "No packages will be installed."
-            return
-    else:
-        if lists[VERSION_UNKNOWN]:
-            print "These packages are not found for this distrabution:"
-            print lists[VERSION_UNKNOWN]
-        if lists[VERSION_NOTINST]:
-            print "[1mThese packages not installed yet:[0m"
-            print lists[VERSION_NOTINST]
-        if lists[VERSION_EQUAL] or lists[VERSION_DIFF]:
-            print "These packages will be REMOVED!!!:"
-            print lists[VERSION_EQUAL]
-            print lists[VERSION_DIFF]
-
-        if not lists[VERSION_EQUAL] and not lists[VERSION_DIFF]:
-            print "No packages will be removed."
-            return
-
-    if install_mode:
-        if interactive:
-            cmd = "aptitude install -P %s" % string.join(lists[VERSION_NOTINST] + lists[VERSION_DIFF], " ")
-        else:
-            cmd = "aptitude install -y %s" % string.join(lists[VERSION_NOTINST] + lists[VERSION_DIFF], " ")
-    else:
-        if dryrun:
-            cmd = "dpkg --dry-run --remove %s" % string.join(lists[VERSION_EQUAL] + lists[VERSION_DIFF], " ")
-        else:
-            cmd = "dpkg --remove %s" % string.join(lists[VERSION_EQUAL] + lists[VERSION_DIFF], " ")
-
-
-    print "Will running: [1m%s[0m" % cmd
-    if interactive:
-        raw_input ("Press any key...")
-    print "install_mod: %d, dryrun:%d" % (install_mode, dryrun)
-    if install_mode:
-        if not dryrun:
-            vprint ( "Running: %s" % cmd)
-            os.system(cmd)
-    else:
-        vprint ( "Running: %s" % cmd)
-        os.system(cmd)
-        
+    myb.process_packages(package_list,install_mode,interactive,dryrun)
 
 def main(argv=None):
     if argv is None:
@@ -410,7 +319,7 @@ def main(argv=None):
     run(argv[1:])
 
 class MyTestCase (unittest.TestCase):
-    def testPreCheck(self):
+    def _testPreCheck(self):
         pkglist = ""
         r = pre_check(pkglist)
         self.assertEqual(r[VERSION_EQUAL], [], "current... for: " + pkglist)
@@ -488,8 +397,7 @@ class MyTestCase (unittest.TestCase):
         self.assertEqual(r[VERSION_UNKNOWN], ["cannot_installed_a", "cannot_installed_x"], "cannot... for: " + pkglist + " is: " + ", ".join(r[VERSION_UNKNOWN]))
         self.assertEqual(r[VERSION_NOTINST], ["not_installed_a", "not_installed_b", "not_installed_c", "not_installed_f", "not_installed_g"], "not... for: " + pkglist + " is: " + ", ".join(r[VERSION_NOTINST])) 
 
-
-    def testHackConffile(self):
+    def _testHackConffile(self):
         conffile = "%s_unittest_%d" %( __file__, os.getpid())
 
         fp = open(conffile, 'w')
@@ -540,14 +448,145 @@ Match group sftp
         hack_config_file( conffile, options )
         self.assert_( os.stat( conffile ).st_mode == 0100600, "file permission changed!" )
 
-class Test(yum.YumBase):
+    def testyum(self):
+        #MyYumBase()
+        #ybc.provides(['yum'])
+        #ybc.provides(['python'])
+        #ybc.installPkgs(['libuser'])
+        #myb.test()
+        pass
+
+    def test_check_packages(self):
+        pkg = "yum"
+        pkg,status = check_package(pkg)
+        self.assertEqual(VERSION_EQUAL, status, "current... for: " + pkg)
+
+        pkg = "abc"
+        pkg,status = check_package(pkg)
+        self.assertEqual(VERSION_UNKNOWN, status, "current... for: " + pkg)
+
+        pkg = "epel-release"
+        pkg,status = check_package(pkg)
+        self.assertEqual(VERSION_DIFF, status, "current... for: " + pkg)
+
+        pkg = "etckeeper"
+        pkg,status = check_package(pkg)
+        self.assertEqual(VERSION_NOTINST, status, "current... for: " + pkg)
+
+    def test_process_packages(self):
+        interactive = 1
+        dryrun = 0
+        package_list = "weechat"
+        process_packages(package_list, install_mode=1, interactive=interactive, dryrun=dryrun)
+
+class MyYumBase(yum.YumBase):
     def __init__(self):
         yum.YumBase.__init__(self)
-        i=0
-        for pkg in self.rpmdb:
-            print pkg.name + " " + pkg.description
-            i += 1
-        print str(i) + " packages"
+
+    def test(self):
+        #i=0
+        #for pkg in self.rpmdb:
+        #    print pkg.name + " " + pkg.description
+        #    i += 1
+        #print str(i) + " packages"
+        #self.rpmdb.getPkgList()
+        #searchPackageProvides()
+        #searchGenerator(searchlist,args)
+        #searchPackages()
+        #self.remove(po)
+
+        searchlist = ['name']
+        args = ["libuser" ]
+        matching = self.searchGenerator(searchlist, args)
+        for (po, matched_value) in matching:
+            print po.name + " " + po.description
+            if po.name == 'libuser':
+                self.install(po)
+        self.buildTransaction()
+        self.processTransaction()
+
+    def get_pkg_status(self,pkg):
+        if self.rpmdb.installed(pkg):
+            pl = self.doPackageLists('updates')
+            exactmatch, matched, unmatched = yum.packages.parsePackages(pl.updates, [pkg])
+            exactmatch = yum.misc.unique(exactmatch)
+            if exactmatch:
+                vprint ("Package %s should be upgrade." % pkg)
+                return VERSION_DIFF
+            else:
+                vprint ("Package %s already installed." % pkg)
+                return VERSION_EQUAL
+        self.pl = self.doPackageLists('available')
+        exactmatch, matched, unmatched = yum.packages.parsePackages(self.pl.available, [pkg])
+        exactmatch = yum.misc.unique(exactmatch)
+        if exactmatch:
+            vprint ("Package %s has not yet installed!" % pkg)
+            return VERSION_NOTINST
+        else:
+            vprint ("Package %s does not exist!" % pkg)
+            return VERSION_UNKNOWN
+
+    def process_packages(self,package_list, install_mode=1, interactive=1, dryrun=1):
+        lists = pre_check(package_list)
+        if install_mode:
+            if lists[VERSION_UNKNOWN]:
+                print "These packages are not found for this distrabution:"
+                print lists[VERSION_UNKNOWN]
+            if lists[VERSION_EQUAL]:
+                print "Already installed packages:"
+                print lists[VERSION_EQUAL]
+            if lists[VERSION_NOTINST]:
+                print "[1mThese packages will be installed as new:[0m"
+                print lists[VERSION_NOTINST]
+            if lists[VERSION_DIFF]:
+                print "[1mThese packages will be upgrade:[0m"
+                print lists[VERSION_DIFF]
+
+            if not lists[VERSION_NOTINST] and not lists[VERSION_DIFF]:
+                print "No packages will be installed."
+                return
+        else:
+            if lists[VERSION_UNKNOWN]:
+                print "These packages are not found for this distrabution:"
+                print lists[VERSION_UNKNOWN]
+            if lists[VERSION_NOTINST]:
+                print "[1mThese packages not installed yet:[0m"
+                print lists[VERSION_NOTINST]
+            if lists[VERSION_EQUAL] or lists[VERSION_DIFF]:
+                print "These packages will be REMOVED!!!:"
+                print lists[VERSION_EQUAL]
+                print lists[VERSION_DIFF]
+
+            if not lists[VERSION_EQUAL] and not lists[VERSION_DIFF]:
+                print "No packages will be removed."
+                return
+
+        if install_mode:
+            if interactive:
+                cmd = "yum install %s" % string.join(lists[VERSION_NOTINST] + lists[VERSION_DIFF], " ")
+            else:
+                cmd = "yum install -y %s" % string.join(lists[VERSION_NOTINST] + lists[VERSION_DIFF], " ")
+        else:
+            if dryrun:
+                cmd = "dpkg --dry-run --remove %s" % string.join(lists[VERSION_EQUAL] + lists[VERSION_DIFF], " ")
+            else:
+                cmd = "dpkg --remove %s" % string.join(lists[VERSION_EQUAL] + lists[VERSION_DIFF], " ")
+
+
+        print "Will running: [1m%s[0m" % cmd
+        if interactive:
+            raw_input ("Press any key...")
+        print "install_mod: %d, dryrun:%d" % (install_mode, dryrun)
+        if install_mode:
+            if not dryrun:
+                vprint ( "Installing these packages: %s" % cmd)
+        else:
+            vprint ( "Removing these packages: %s" % cmd)
+
+        sys.argv = cmd.split()
+        yummain.user_main(sys.argv[1:])
+
+myb = MyYumBase()
 
 if __name__ == '__main__':
     unittest.main()
