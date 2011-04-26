@@ -479,9 +479,9 @@ Match group sftp
         package_list = "weechat"
         process_packages(package_list, install_mode=1, interactive=interactive, dryrun=dryrun)
 
-class MyYumBase(yum.YumBase):
+class MyYumBase(cli.YumBaseCli):
     def __init__(self):
-        yum.YumBase.__init__(self)
+        cli.YumBaseCli.__init__(self)
 
     def test(self):
         #i=0
@@ -580,11 +580,17 @@ class MyYumBase(yum.YumBase):
         if install_mode:
             if not dryrun:
                 vprint ( "Installing these packages: %s" % cmd)
+                pkg_list = lists[VERSION_NOTINST] + lists[VERSION_DIFF]
+                self.installPkgs(pkg_list)
         else:
             vprint ( "Removing these packages: %s" % cmd)
+            pkg_list = self.pl.available, lists[VERSION_EQUAL] + lists[VERSION_DIFF]
+            self.erasePkgs(pkg_list)
 
-        sys.argv = cmd.split()
-        yummain.user_main(sys.argv[1:])
+        self.buildTransaction()
+        #ybc.conf.setConfigOption('assumeyes',True)
+        self.doTransaction()
+
 
 myb = MyYumBase()
 
