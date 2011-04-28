@@ -40,7 +40,7 @@ VERSION_EQUAL=0
 VERSION_DIFF=1
 VERSION_UNKNOWN=2
 VERSION_NOTINST=3
-verbose=0
+verbose=1
 
 def vprint(str):
     global verbose
@@ -456,7 +456,7 @@ Match group sftp
         #myb.test()
         pass
 
-    def test_check_packages(self):
+    def _test_check_packages(self):
         pkg = "yum"
         pkg,status = check_package(pkg)
         self.assertEqual(VERSION_EQUAL, status, "current... for: " + pkg)
@@ -476,7 +476,7 @@ Match group sftp
     def test_process_packages(self):
         interactive = 1
         dryrun = 0
-        package_list = "weechat"
+        package_list = "weechat|abc, hello world|man,libuser"
         process_packages(package_list, install_mode=1, interactive=interactive, dryrun=dryrun)
 
 class MyYumBase(cli.YumBaseCli):
@@ -505,6 +505,43 @@ class MyYumBase(cli.YumBaseCli):
         self.buildTransaction()
         self.processTransaction()
 
+    def get_pkg_list(self,pset_list):
+        pkg_list = []
+        for pset in pset_list.split(','):
+            pset = pset.strip()
+            if len(pset) == 0:
+                continue
+            # pkg_a | pkg_b means install one of them
+            has_installed = False
+            for pgroup in pset.split('|'):
+                tmp_list = [ pkg.strip() for pkg in pgroup.split() ]
+                pkg_list.extend(tmp_list)
+        return pkg_list
+
+    def divide_package(self,pkg_list):
+        pl = self.doPackageLists(pkgnarrow='all',patterns=pkg_list)
+        print [ pkg.name for pkg in pl.reinstall_available ]
+        print [ pkg.name for pkg in  pl.old_available ]
+        print [ pkg.name for pkg in pl.obsoletesTuples ]
+        print [ pkg.name for pkg in pl.recent ]
+        print [ pkg.name for pkg in pl.extras ]
+
+        uptodate_list = []
+        upgrade_list = []
+        #[ upgrade_list.append(pkg.name) if pkg in pl.available for pkg in pl.installed else uptodate_list.append(pkg.name) ]
+        notinst_list = [ pkg.name for pkg in pl.available ]
+        unknown_list = [ pkg.name for pkg in pl.obsoletes ]
+
+        vprint ("unknown_list: %s" % unknown_list)
+        vprint ("upgrade_list: %s" % upgrade_list)
+        vprint ("uptodate_list: %s" % uptodate_list)
+        vprint ("notinst_list: %s" % notinst_list)
+        r = {   VERSION_EQUAL: uptodate_list,
+            VERSION_DIFF: upgrade_list,
+            VERSION_UNKNOWN: unknown_list,
+            VERSION_NOTINST: notinst_list }
+        return r
+
     def get_pkg_status(self,pkg):
         if self.rpmdb.installed(pkg):
             pl = self.doPackageLists('updates')
@@ -527,7 +564,8 @@ class MyYumBase(cli.YumBaseCli):
             return VERSION_UNKNOWN
 
     def process_packages(self,package_list, install_mode=1, interactive=1, dryrun=1):
-        lists = pre_check(package_list)
+        pkg_list = self.get_pkg_list(package_list)
+        lists = self.divide_package(pkg_list)
         if install_mode:
             if lists[VERSION_UNKNOWN]:
                 print "These packages are not found for this distrabution:"

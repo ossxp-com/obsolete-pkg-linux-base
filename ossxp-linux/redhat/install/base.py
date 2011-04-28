@@ -45,7 +45,7 @@ PKG_LIST='''
 ############################################################
 
 
-import myapt as apt
+import myyum as apt
 import os, sys, re, string, getopt, tempfile, shutil
 import subprocess
 
@@ -84,6 +84,7 @@ def do_install():
 	print "[1m========== Install ossxp custom packages ==========[0m"
 	apt.run( args+ [PKG_LIST] )
 
+"""
 	print "[1m========== Install debian standard packages ==========[0m"
 	cmd = 'aptitude search -F "%p" ~pstandard'
 	list = apt.get_list(cmd)
@@ -98,6 +99,7 @@ def do_install():
 	cmd = 'aptitude search -F "%p" ~pimportant'
 	list = apt.get_list(cmd)
 	apt.run( args+ [list] )
+"""
 
 def add_me_to_group( group ):
 	if not group:
