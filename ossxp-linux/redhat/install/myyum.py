@@ -33,6 +33,7 @@ import unittest
 import yum
 sys.path.append('/usr/share/yum-cli')
 import cli
+import sets
 
 VERSION_EQUAL=0
 VERSION_DIFF=1
@@ -526,14 +527,14 @@ class MyYumBase(cli.YumBaseCli):
         #print [ pkg.name for pkg in pl.extras ]
         #print [ pkg.name for pkg in pl.obsoletes ]
 
-        pl.installed = [ pkg.name for pkg in pl.installed ]
-        pl.available = [ pkg.name for pkg in pl.available ]
+        pkg_sets = sets.Set(pkg_list)
+        installed_sets = sets.Set( [ pkg.name for pkg in pl.installed ] )
+        available_sets = sets.Set( [ pkg.name for pkg in pl.available ] )
 
-        uptodate_list = [ pkg for pkg in pl.installed if pkg not in pl.available ]
-        upgrade_list = [ pkg for pkg in pl.installed if pkg in pl.available ]
-        notinst_list = [ pkg for pkg in pl.available if pkg not in pl.installed ]
-
-        unknown_list = [ pkg for pkg in pkg_list if pkg not in pl.available + pl.installed ]
+        uptodate_list = installed_sets - available_sets
+        upgrade_list = installed_sets & available_sets
+        notinst_list = available_sets - installed_sets
+        unknown_list = pkg_sets - installed_sets - available_sets
 
         print len(pkg_list)
         print len(uptodate_list)
