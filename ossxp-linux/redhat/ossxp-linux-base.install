@@ -4,5 +4,5 @@ redhat/install/myapt.py   opt/ossxp/install/
 redhat/install/misc.sh  opt/ossxp/install/
 redhat/install/README   opt/ossxp/install/
 redhat/package_info/*   opt/ossxp/lib/packages/
-redhat/conf/etc/vim/*   etc/vim/
+redhat/conf/etc/vim*   etc/
 redhat/conf/etc/ossxp/* etc/ossxp/
