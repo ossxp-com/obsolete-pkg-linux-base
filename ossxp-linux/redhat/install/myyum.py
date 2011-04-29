@@ -33,14 +33,12 @@ import unittest
 import yum
 sys.path.append('/usr/share/yum-cli')
 import cli
-import yummain
-
 
 VERSION_EQUAL=0
 VERSION_DIFF=1
 VERSION_UNKNOWN=2
 VERSION_NOTINST=3
-verbose=1
+verbose=0
 
 def vprint(str):
     global verbose
@@ -520,17 +518,30 @@ class MyYumBase(cli.YumBaseCli):
 
     def divide_package(self,pkg_list):
         pl = self.doPackageLists(pkgnarrow='all',patterns=pkg_list)
-        print [ pkg.name for pkg in pl.reinstall_available ]
-        print [ pkg.name for pkg in  pl.old_available ]
-        print [ pkg.name for pkg in pl.obsoletesTuples ]
-        print [ pkg.name for pkg in pl.recent ]
-        print [ pkg.name for pkg in pl.extras ]
 
-        uptodate_list = []
-        upgrade_list = []
-        #[ upgrade_list.append(pkg.name) if pkg in pl.available for pkg in pl.installed else uptodate_list.append(pkg.name) ]
-        notinst_list = [ pkg.name for pkg in pl.available ]
-        unknown_list = [ pkg.name for pkg in pl.obsoletes ]
+        #print [ pkg.name for pkg in pl.reinstall_available ]
+        #print [ pkg.name for pkg in  pl.old_available ]
+        #print [ pkg.name for pkg in pl.obsoletesTuples ]
+        #print [ pkg.name for pkg in pl.recent ]
+        #print [ pkg.name for pkg in pl.extras ]
+        #print [ pkg.name for pkg in pl.obsoletes ]
+
+        pl.installed = [ pkg.name for pkg in pl.installed ]
+        pl.available = [ pkg.name for pkg in pl.available ]
+
+        uptodate_list = [ pkg for pkg in pl.installed if pkg not in pl.available ]
+        upgrade_list = [ pkg for pkg in pl.installed if pkg in pl.available ]
+        notinst_list = [ pkg for pkg in pl.available if pkg not in pl.installed ]
+
+        unknown_list = [ pkg for pkg in pkg_list if pkg not in pl.available + pl.installed ]
+
+        print len(pkg_list)
+        print len(uptodate_list)
+        print len(upgrade_list)
+        print len(notinst_list)
+        print len(unknown_list)
+
+        raw_input("pasue...")
 
         vprint ("unknown_list: %s" % unknown_list)
         vprint ("upgrade_list: %s" % upgrade_list)
