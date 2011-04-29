@@ -1,6 +1,6 @@
 redhat/base/*   opt/ossxp/
-redhat/install/myapt.inc  opt/ossxp/install/
-redhat/install/myapt.py   opt/ossxp/install/
+redhat/install/myyum.inc  opt/ossxp/install/
+redhat/install/myyum.py   opt/ossxp/install/
 redhat/install/misc.sh  opt/ossxp/install/
 redhat/install/README   opt/ossxp/install/
 redhat/package_info/*   opt/ossxp/lib/packages/

@@ -1,7 +1,7 @@
 #!/bin/sh -e
 
 # include apt maintainance functions
-. /opt/ossxp/install/myapt.inc
+. /opt/ossxp/install/myyum.inc
 
 ########################################
 # User defined packages list

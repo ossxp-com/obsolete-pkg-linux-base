@@ -1,6 +1,6 @@
 #!/bin/sh -e
 # include apt maintainance functions
-. /opt/ossxp/install/myapt.inc
+. /opt/ossxp/install/myyum.inc
 
 [ "$(echo -e)" = "-e" ] && ECHO="echo" || ECHO="echo -e"
 

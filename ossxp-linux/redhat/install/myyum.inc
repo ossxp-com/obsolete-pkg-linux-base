@@ -58,9 +58,9 @@ install_packages()
         read -p "Press any key ..." -s -n1
         $ECHO ""
 	if [ "$interactive" = "yes" ]; then
-            apt-get install $upgrade_list || $ECHO "[1m[44minstall failed! [0m"
+            yum install $upgrade_list || $ECHO "[1m[44minstall failed! [0m"
 	else
-            apt-get install --force-yes -y $upgrade_list || $ECHO "[1m[44minstall failed! [0m"
+            yum install -y $upgrade_list || $ECHO "[1m[44minstall failed! [0m"
 	fi
         $ECHO ""
     fi
@@ -131,7 +131,7 @@ uninstall_packages()
 	elif [ "$purgemode" = "yes" ]; then
             dpkg --purge $delete_list || $ECHO "[1m[44minstall failed! [0m"
 	else
-            dpkg --remove $delete_list || $ECHO "[1m[44minstall failed! [0m"
+            rpm -e $delete_list || $ECHO "[1m[44minstall failed! [0m"
 	fi
         $ECHO ""
     fi
