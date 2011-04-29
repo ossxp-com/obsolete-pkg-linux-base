@@ -536,14 +536,6 @@ class MyYumBase(cli.YumBaseCli):
         notinst_list = available_sets - installed_sets
         unknown_list = pkg_sets - installed_sets - available_sets
 
-        print len(pkg_list)
-        print len(uptodate_list)
-        print len(upgrade_list)
-        print len(notinst_list)
-        print len(unknown_list)
-
-        raw_input("pasue...")
-
         vprint ("unknown_list: %s" % unknown_list)
         vprint ("upgrade_list: %s" % upgrade_list)
         vprint ("uptodate_list: %s" % uptodate_list)
