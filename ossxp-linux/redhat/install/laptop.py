@@ -34,7 +34,7 @@ PKG_LIST='''
 ############################################################
 
 
-import myapt as apt
+import myyum as pkm
 import os, sys, re, string, getopt
 
 
@@ -70,7 +70,7 @@ def do_install():
 	args.append('--install')
 		
 	print "[1m========== Install ossxp custom packages ==========[0m"
-	apt.run( args+ [PKG_LIST] )
+	pkm.run( args+ [PKG_LIST] )
 
 def do_config():
     pass
@@ -105,10 +105,10 @@ def main(argv=None):
 			force = True
 		elif opt in ('-v', '--verbose'):
 			verbose = 1
-			apt.verbose = 1
+			pkm.verbose = 1
 		elif opt in ('-q', '--quiet'):
 			verbose = 0
-			apt.verbose = 0
+			pkm.verbose = 0
 		else:
 			return usage(1, "Wrong options: %s %s", (opt,arg))
 

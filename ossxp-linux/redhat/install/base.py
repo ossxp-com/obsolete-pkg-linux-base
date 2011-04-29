@@ -45,7 +45,7 @@ PKG_LIST='''
 ############################################################
 
 
-import myyum as apt
+import myyum as pkm
 import os, sys, re, string, getopt, tempfile, shutil
 import subprocess
 
@@ -82,7 +82,7 @@ def do_install():
 	args.append('--install')
 		
 	print "[1m========== Install ossxp custom packages ==========[0m"
-	apt.run( args+ [PKG_LIST] )
+	pkm.run( args+ [PKG_LIST] )
 
 """
 	print "[1m========== Install debian standard packages ==========[0m"
@@ -155,7 +155,7 @@ def do_config_inputrc():
 				},
 		) )
 
-	apt.hack_config_file( '/etc/inputrc', options )
+	pkm.hack_config_file( '/etc/inputrc', options )
 
 
 def do_config_bash():
@@ -193,7 +193,7 @@ fi
 	CONFFILE='/etc/bash.bashrc'
 	if not os.path.exists(CONFFILE):
 		CONFFILE='/etc/profile'
-	apt.hack_config_file( CONFFILE, options )
+	pkm.hack_config_file( CONFFILE, options )
 
 
 def do_config_sudo():
@@ -222,7 +222,7 @@ def do_config_sudo():
 				},
 		) )
 
-	apt.hack_config_file( '/etc/sudoers', options )
+	pkm.hack_config_file( '/etc/sudoers', options )
 
 	## Add group sudo if not exist
 	add_me_to_group("sudo")
@@ -259,7 +259,7 @@ AllowGroups ssh sftp
 				},
 		) )
 
-	apt.hack_config_file( '/etc/ssh/sshd_config', options )
+	pkm.hack_config_file( '/etc/ssh/sshd_config', options )
 
 	## Add group ssh if not exist
 	add_me_to_group("ssh")
@@ -278,7 +278,7 @@ Host *
 ''',
 				},
 		) )
-	apt.hack_config_file( '/etc/ssh/ssh_config', options )
+	pkm.hack_config_file( '/etc/ssh/ssh_config', options )
 
 
 def do_config_screenrc():
@@ -309,7 +309,7 @@ def do_config_screenrc():
 				},
 		) )
 
-	apt.hack_config_file( '/etc/screenrc', options )
+	pkm.hack_config_file( '/etc/screenrc', options )
 
 	#if os.path.isfile('/usr/bin/byobu-config'):
 	#	os.system('/usr/bin/byobu-config')
@@ -420,10 +420,10 @@ def main(argv=None):
 			force = True
 		elif opt in ('-v', '--verbose'):
 			verbose = 1
-			apt.verbose = 1
+			pkm.verbose = 1
 		elif opt in ('-q', '--quiet'):
 			verbose = 0
-			apt.verbose = 0
+			pkm.verbose = 0
 		else:
 			return usage(1, "Wrong options: %s %s", (opt,arg))
 
