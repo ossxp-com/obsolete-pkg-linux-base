@@ -101,7 +101,7 @@ rm -rf $RPM_BUILD_ROOT
 /opt/ossxp/examples
 /opt/ossxp/install
 /opt/ossxp/lib/packages/ossxp-linux-base.conf
-/etc/vim
+/etc/vimrc.locale
 /etc/ossxp
 
 %files server
