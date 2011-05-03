@@ -40,7 +40,7 @@ PKG_LIST='''
 	sharutils, ssh | openssh, sshfs | fuse-sshfs, star, sudo, sysstat, tcpdump,
 	memtester | sysutils, procinfo | sysutils,
 	tofrodos | dos2unix unix2dos,
-	udev, unison | unison227, vim-enhanced, vnstat, wget,
+	udev, unison | unison227, vim-enhanced, vnstat, wget, yum-priorities
 	'''
 ############################################################
 
