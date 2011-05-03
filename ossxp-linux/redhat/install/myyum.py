@@ -138,77 +138,6 @@ def get_list(cmd):
             package_list = "%s, %s" % (package_list, line)
     return package_list
 
-def get_pkg_status(pkg):
-    return myb.get_pkg_status(pkg)
-
-def check_package(pkg):
-    pkg = pkg.strip()
-    for items in alike_pkgs:
-        if pkg in items:
-            for item in items:
-                status = get_pkg_status(item) 
-                if status == VERSION_EQUAL or status == VERSION_DIFF:
-                    return (item, status)
-    status = get_pkg_status(pkg)
-    return (pkg,status)
-
-def pre_check(pset_list):
-    """
-    pset_list = "pset, pkg pkg | pkg, pset"
-    pset      = "pkg1 pkg2 | pkg3 | pkg4"
-    pgroup    = "pkg [pkg ...]"
-    """
-    uptodate_list=[]
-    upgrade_list=[]
-    notinst_list=[]
-    unknown_list=[]
-    for pset in pset_list.split(','):
-        pset = pset.strip()
-        if len(pset) == 0:
-            continue
-        # pkg_a | pkg_b means install one of them
-        has_installed = False
-        pset_notinst_list = []
-        for pgroup in pset.split('|'):
-            num_of_uninstalled = len(pset_notinst_list)
-            for pkg in pgroup.split():
-                pkg = pkg.strip()
-                if pkg.startswith("not_installed_"):
-                    status = VERSION_NOTINST
-                elif pkg.startswith("current_installed_"):
-                    status = VERSION_EQUAL
-                elif pkg.startswith("outofdate_installed_"):
-                    status = VERSION_DIFF
-                elif pkg.startswith("cannot_installed_"):
-                    status = VERSION_UNKNOWN
-                else:
-                    pkg, status = check_package(pkg) 
-
-                # test if pkg is uptodate
-                if status == VERSION_EQUAL:
-                    uptodate_list.append(pkg)
-                    has_installed = True
-                elif status == VERSION_DIFF:
-                    upgrade_list.append(pkg)
-                    has_installed = True
-                elif status == VERSION_NOTINST:
-                    if num_of_uninstalled == 0:
-                        pset_notinst_list.append(pkg)
-                else:
-                    unknown_list.append(pkg)
-        if not has_installed and pset_notinst_list:
-            notinst_list.extend( pset_notinst_list )
-
-    vprint ("unknown_list: %s" % unknown_list)
-    vprint ("upgrade_list: %s" % upgrade_list)
-    vprint ("uptodate_list: %s" % uptodate_list)
-    vprint ("notinst_list: %s" % notinst_list)
-    r = {   VERSION_EQUAL: uptodate_list,
-        VERSION_DIFF: upgrade_list,
-        VERSION_UNKNOWN: unknown_list,
-        VERSION_NOTINST: notinst_list }
-    return r
-
 def hack_config_file(conffile, options, must_exists=True):
     def lines_match(lines, needle, begin=None):
         found = False
@@ -504,7 +433,7 @@ class MyYumBase(cli.YumBaseCli):
         self.buildTransaction()
         self.processTransaction()
 
-    def get_pkg_list(self,pset_list):
+    def get_pkg_list(self, pset_list):
         pkg_list = []
         for pset in pset_list.split(','):
             pset = pset.strip()
@@ -517,24 +446,81 @@ class MyYumBase(cli.YumBaseCli):
                 pkg_list.extend(tmp_list)
         return pkg_list
 
-    def divide_package(self,pkg_list):
+    def divide_package(self, pkg_list):
         pl = self.doPackageLists(pkgnarrow='all',patterns=pkg_list)
-
-        #print [ pkg.name for pkg in pl.reinstall_available ]
-        #print [ pkg.name for pkg in  pl.old_available ]
-        #print [ pkg.name for pkg in pl.obsoletesTuples ]
-        #print [ pkg.name for pkg in pl.recent ]
-        #print [ pkg.name for pkg in pl.extras ]
-        #print [ pkg.name for pkg in pl.obsoletes ]
 
         pkg_sets = sets.Set(pkg_list)
         installed_sets = sets.Set( [ pkg.name for pkg in pl.installed ] )
         available_sets = sets.Set( [ pkg.name for pkg in pl.available ] )
 
-        uptodate_list = installed_sets - available_sets
-        upgrade_list = installed_sets & available_sets
-        notinst_list = available_sets - installed_sets
-        unknown_list = pkg_sets - installed_sets - available_sets
+        self.uptodate_set = installed_sets - available_sets
+        self.upgrade_set = installed_sets & available_sets
+        self.notinst_set = available_sets - installed_sets
+        self.unknown_set = pkg_sets - installed_sets - available_sets
+
+        vprint("unknown_set: %s" % self.unknown_set)
+        vprint ("upgrade_set: %s" % self.upgrade_set)
+        vprint ("uptodate_set: %s" % self.uptodate_set)
+        vprint ("notinst_set: %s" % self.notinst_set)
+
+    def check_package(self, pkg):
+        pkg = pkg.strip()
+        for items in alike_pkgs:
+            if pkg in items:
+                for item in items:
+                    status = self.get_pkg_status(item) 
+                    if status == VERSION_EQUAL or status == VERSION_DIFF:
+                        return (item, status)
+        status = self.get_pkg_status(pkg)
+        return (pkg,status)
+
+
+    def pre_check(self,pset_list):
+        """
+        pset_list = "pset, pkg pkg | pkg, pset"
+        pset      = "pkg1 pkg2 | pkg3 | pkg4"
+        pgroup    = "pkg [pkg ...]"
+        """
+        uptodate_list=[]
+        upgrade_list=[]
+        notinst_list=[]
+        unknown_list=[]
+        for pset in pset_list.split(','):
+            pset = pset.strip()
+            if len(pset) == 0:
+                continue
+            # pkg_a | pkg_b means install one of them
+            has_installed = False
+            pset_notinst_list = []
+            for pgroup in pset.split('|'):
+                num_of_uninstalled = len(pset_notinst_list)
+                for pkg in pgroup.split():
+                    pkg = pkg.strip()
+                    if pkg.startswith("not_installed_"):
+                        status = VERSION_NOTINST
+                    elif pkg.startswith("current_installed_"):
+                        status = VERSION_EQUAL
+                    elif pkg.startswith("outofdate_installed_"):
+                        status = VERSION_DIFF
+                    elif pkg.startswith("cannot_installed_"):
+                        status = VERSION_UNKNOWN
+                    else:
+                        pkg, status = self.check_package(pkg) 
+
+                    # test if pkg is uptodate
+                    if status == VERSION_EQUAL:
+                        uptodate_list.append(pkg)
+                        has_installed = True
+                    elif status == VERSION_DIFF:
+                        upgrade_list.append(pkg)
+                        has_installed = True
+                    elif status == VERSION_NOTINST:
+                        if num_of_uninstalled == 0:
+                            pset_notinst_list.append(pkg)
+                    else:
+                        unknown_list.append(pkg)
+            if not has_installed and pset_notinst_list:
+                notinst_list.extend( pset_notinst_list )
 
         vprint ("unknown_list: %s" % unknown_list)
         vprint ("upgrade_list: %s" % upgrade_list)
@@ -547,29 +533,25 @@ class MyYumBase(cli.YumBaseCli):
         return r
 
     def get_pkg_status(self,pkg):
-        if self.rpmdb.installed(pkg):
-            pl = self.doPackageLists('updates')
-            exactmatch, matched, unmatched = yum.packages.parsePackages(pl.updates, [pkg])
-            exactmatch = yum.misc.unique(exactmatch)
-            if exactmatch:
-                vprint ("Package %s should be upgrade." % pkg)
-                return VERSION_DIFF
-            else:
-                vprint ("Package %s already installed." % pkg)
-                return VERSION_EQUAL
-        self.pl = self.doPackageLists('available')
-        exactmatch, matched, unmatched = yum.packages.parsePackages(self.pl.available, [pkg])
-        exactmatch = yum.misc.unique(exactmatch)
-        if exactmatch:
+        if pkg in self.uptodate_set:
+            vprint ("Package %s already installed." % pkg)
+            return VERSION_EQUAL
+        elif pkg in self.upgrade_set:
+            vprint ("Package %s should be upgrade." % pkg)
+            return VERSION_DIFF
+        elif pkg in self.notinst_set:
             vprint ("Package %s has not yet installed!" % pkg)
             return VERSION_NOTINST
-        else:
+        elif pkg in self.unknown_set:
             vprint ("Package %s does not exist!" % pkg)
             return VERSION_UNKNOWN
+        else:
+            print "You must first get the pkg_list's status."
 
     def process_packages(self,package_list, install_mode=1, interactive=1, dryrun=1):
         pkg_list = self.get_pkg_list(package_list)
-        lists = self.divide_package(pkg_list)
+        self.divide_package(pkg_list)
+        lists = self.pre_check(package_list)
         if install_mode:
             if lists[VERSION_UNKNOWN]:
                 print "These packages are not found for this distrabution:"
