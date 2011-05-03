@@ -5,6 +5,7 @@ failovermethod=priority
 enabled=1
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OSSXP
+repority=15
 
 [ossxp-source]
 name=OSSXP Packages for Enterprise Linux 5 - $basearch - Source
