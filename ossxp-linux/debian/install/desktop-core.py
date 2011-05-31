@@ -29,13 +29,13 @@ Actions:
 '''
 
 ############################################################
+#	discover | discover1,
 PKG_LIST='''
 	xorg | x-window-system-core, xdg-utils, menu, 
 	ttf-arphic-uming, ttf-arphic-ukai, ttf-bitstream-vera, ttf-arphic-newsung,
 	xfonts-wqy | wqy-bitmapfont, ttf-wqy-zenhei,
 	ibus ibus-pinyin ibus-table-ziranma ibus-table-wubi | fcitx | scim scim-chinese scim-pinyin scim-tables-zh,
-  im-config | im-switch,
-	discover | discover1,
+	im-config | im-switch,
 	'''
 ############################################################
 

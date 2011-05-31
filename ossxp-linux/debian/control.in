@@ -54,10 +54,11 @@ Package: ossxp-linux-desktop-heavy
 Architecture: all
 Section: ossxp
 Priority: optional
-Depends: ossxp-linux-desktop-core, ossxp-linux-desktop-light
+Depends: ossxp-linux-desktop-core
 Recommends: ossxp-linux-fonts
-Description: Desktop Environment heavy (KDE)
- Desktop Environment KDE
+Suggests: ossxp-linux-desktop-light
+Description: Desktop Environment heavy (Gnome)
+ Gnome Desktop Environment
 
 Package: ossxp-linux-devel
 Architecture: all

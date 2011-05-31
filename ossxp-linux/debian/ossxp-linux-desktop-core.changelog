@@ -1,3 +1,9 @@
+ossxp-linux (1:1.41) unstable; urgency=low
+
+  * remove discover* package.
+
+ -- Jiang Xin <jiangxin@ossxp.com>  Tue, 31 May 2011 15:01:11 +0800
+
 ossxp-linux (1:1.40) unstable; urgency=low
 
   * Set default input method to ibus.

@@ -1,0 +1,5 @@
+ossxp-linux (1:1.41) unstable; urgency=low
+
+  * Use gnome as default UI.
+
+ -- Jiang Xin <jiangxin@ossxp.com>  Tue, 31 May 2011 15:02:28 +0800
