@@ -116,6 +116,9 @@ def add_me_to_group( group ):
 
 	## Add current user to group
 	userid=os.getenv("SUDO_USER", os.getenv("USER"))
+	if userid == 'root':
+		userid = os.popen("getent passwd 1000").read().strip().split(':')[0]
+
 	if userid and userid != 'root':
 		os.system("adduser %s %s" % (userid, group))
 
