@@ -1,3 +1,10 @@
+ossxp-linux (1:1.50~<DIST>) unstable; urgency=low
+
+  * update /etc/adduser.conf
+  * add user with uid 1000 to ssh and sudo, if current user is root
+
+ -- Jiang Xin <jiangxin@ossxp.com>  Fri, 02 Mar 2012 07:46:07 +0800
+
 ossxp-linux (1:1.47~<DIST>) unstable; urgency=low
 
   * New CA.sh is a wrapper for certtool.
