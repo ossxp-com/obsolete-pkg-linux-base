@@ -134,6 +134,7 @@ def do_config():
 	do_config_resolvconf()
 	do_config_locales()
 	do_config_git()
+	do_config_adduser_conf()
 
 
 def do_config_inputrc():
@@ -389,6 +390,26 @@ def do_config_git():
 		os.system("git config --system alias.br branch")
 		## ui.color
 		os.system('git config --system color.ui "auto"')
+
+
+def do_config_adduser_conf():
+	options = []
+	options.append(
+		('add', {'must-not': re.compile('^ADD_EXTRA_GROUPS='),
+				 'contents': 'ADD_EXTRA_GROUPS=1',
+				 'after': re.compile('^#ADD_EXTRA_GROUPS='),
+				},
+		) )
+
+	options.append(
+		('add', {'must-not': re.compile('^EXTRA_GROUPS='),
+				 'contents': 'EXTRA_GROUPS=cdrom floppy audio dip video plugdev ssh',
+				 'after': re.compile('^#EXTRA_GROUPS='),
+				},
+		) )
+
+	apt.hack_config_file( '/etc/adduser.conf', options )
+
 
 ##---------------------------------------------------------------------
 def main(argv=None):
