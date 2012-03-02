@@ -246,6 +246,20 @@ AllowGroups ssh sftp
 		) )
 
 	options.append(
+		('add', {'must-not': 'UseDNS',
+				 'contents': '''
+## Specifies whether sshd(8) should look up the remote host name and
+## check that the resolved host name for the remote IP address maps back
+## to the very same IP address.
+## If not disabled, SSHD will try to do a slow reverse lookup of the IP
+## address of the client causing for an unnecessary delay during authentication.
+UseDNS no
+''',
+				 'after': [ 'PermitRootLogin', '# Authentication' ],
+				},
+		) )
+
+	options.append(
 		('add', {'must-not': 'Match group sftp',
 				 'contents': '''
 ## People belong to sftp group, can not access ssh, only provide sftp service

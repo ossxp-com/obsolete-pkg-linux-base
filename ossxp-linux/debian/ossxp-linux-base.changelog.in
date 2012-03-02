@@ -1,3 +1,9 @@
+ossxp-linux (1:1.51~<DIST>) unstable; urgency=low
+
+  * Add UseDNS no in sshd_config
+
+ -- Jiang Xin <jiangxin@ossxp.com>  Fri, 02 Mar 2012 07:46:07 +0800
+
 ossxp-linux (1:1.50~<DIST>) unstable; urgency=low
 
   * update /etc/adduser.conf
