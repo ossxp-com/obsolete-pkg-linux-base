@@ -1,3 +1,9 @@
+ossxp-linux (1:1.52~<DIST>) unstable; urgency=low
+
+  * New options for ossxp_pkgadmin.py
+
+ -- Jiang Xin <jiangxin@ossxp.com>  Fri, 02 Mar 2012 07:46:07 +0800
+
 ossxp-linux (1:1.51~<DIST>) unstable; urgency=low
 
   * Add UseDNS no in sshd_config

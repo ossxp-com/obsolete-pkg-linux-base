@@ -17,6 +17,18 @@ options:
     --dryrun:
         Dryrun mode.
 
+    -y:
+    --yes:
+        Default YES when press enter.
+
+    -v:
+    --verbose:
+        Verbose
+
+    -d:
+    --debug:
+        Show debug info
+
     --package name:
     -p name:
         Set package name
@@ -209,7 +221,7 @@ class Package(object):
                                     if regex_replacement:
                                         continue
                                     if params:
-                                        if MACROS.get(params[0]) == None:
+                                        if MACROS.get(params[0]) == None and opt_verbose:
                                             print >> sys.stderr, "Error: not defined macro '%s' used as parameter in file '%s'" % (params[0], filename)
                                         if len(params)==1 or params[1].lower() in ('notnull', '1'):
                                             if MACROS.get(params[0]):
@@ -391,29 +403,37 @@ class PackageGroups(object):
         macros_with_blank_value = filter(lambda kv: not kv[1], self.pre_defined_macros.items())
         if macros_with_blank_value:
             print >> sys.stderr, "Info: These macros in '%s' do not have a value :" % MACROS_FILE
-            print "    * %s" % '\n    * '.join( [x[0] for x in macros_with_blank_value] )
+            print >> sys.stderr,  "    * %s" % '\n    * '.join( [x[0] for x in macros_with_blank_value] )
 
         if not_defined_macros:
             print >> sys.stderr, "Warning: Macros not defined in file %s:\n    * %s" % \
-                (MACROS_FILE, '\n    * '.join(not_defined_macros))
+                     (MACROS_FILE, '\n    * '.join(not_defined_macros))
        
     def _save_file(self, filename, contents):
-        import difflib
-        fp = open(filename, 'r')
-        old = fp.read()
-        fp.close()
-        for line in difflib.unified_diff(old.splitlines(), contents.splitlines(), 'old %s' % filename , 'new %s' % filename, lineterm=''):
-            print line
-        selection = ''
-        while selection not in ['y','n']:
-            prompt = "Overwrite file: %s? (y/n)"
-            if opt_dryrun:
-                prompt += " *dryrun*" 
-            selection = raw_input(prompt % filename).lower()
-        if selection == 'n':
-            print "ignored."
-            print
-            return
+        def show_diff():
+            import difflib
+            fp = open(filename, 'r')
+            old = fp.read()
+            fp.close()
+            for line in difflib.unified_diff(old.splitlines(), contents.splitlines(), 'old %s' % filename , 'new %s' % filename, lineterm=''):
+                print line
+            selection = ''
+            while selection not in ['y','n']:
+                if opt_yes:
+                    prompt = "Overwrite file: %s? (Y/n)"
+                else:
+                    prompt = "Overwrite file: %s? (y/n)"
+                if opt_dryrun:
+                    prompt += " *dryrun*" 
+                selection = raw_input(prompt % filename).lower()
+                if opt_yes and selection == '':
+                    selection = 'y'
+            if selection == 'n':
+                print "ignored."
+                print
+                return
+
+        show_diff()
         if not opt_dryrun:
             fp = open(filename, 'w')
             fp.write(contents)
@@ -430,7 +450,8 @@ class PackageGroups(object):
 
                 for filename in config_section.file_list:
                     if not os.path.isfile(filename):
-                        print >> sys.stderr, "Warning: file '%s' not exist!" % filename
+                        if opt_verbose:
+                            print >> sys.stderr, "Warning: file '%s' not exist!" % filename
                         continue
                     fp = open(filename)
                     for line in fp.readlines():
@@ -445,14 +466,16 @@ class PackageGroups(object):
                                     continue
                                 if m.group(macro):
                                     if line.count(m.group(macro)) > 1:
-                                        print >> sys.stderr, "Warning: find multiple '%s' for macro '%s' in line: %s.\n    >> Use conditional replacement for this pattern." % \
-                                            (m.group(macro), macro, line)
+                                        if opt_verbose:
+                                            print >> sys.stderr, "Warning: find multiple '%s' for macro '%s' in line: %s.\n    >> Use conditional replacement for this pattern." % \
+                                                (m.group(macro), macro, line)
                                     if macro in macros and m.group(macro):
                                         if not macros[macro]:
                                             macros[macro] = m.group(macro)
                                         elif macros[macro] and macros[macro] != m.group(macro):
-                                            print >> sys.stderr, "Error: macro %s already set to %s! set to %s failed!" % \
-                                                (macro, macros[macro], m.group(macro))
+                                            if opt_verbose:
+                                                print >> sys.stderr, "Error: macro %s already set to %s! set to %s failed!" % \
+                                                    (macro, macros[macro], m.group(macro))
                                     elif macro not in macros:
                                         macros[macro] = m.group(macro)
                                 else:
@@ -477,19 +500,22 @@ class PackageGroups(object):
          * Rules are defined in /etc/ossxp/packages/*.conf and /opt/ossxp/lib/packages/*.conf.
         """
         #Check whether macros are defined.
-        self._macros_precheck()
+        if opt_verbose or opt_debug:
+            self._macros_precheck()
         for package_file_name, package in self.packages.items():
             for config_section in package.config_sections:
                 if not config_section.pattern:
-                    if set(config_section.types) - set(IGNORE_TYPES):
-                        if config_section.desc:
-                            print >> sys.stderr, "Note: %s\n    >> %s (%s)" % (','.join(config_section.file_list), config_section.desc, package_file_name)
-                        else:
-                            print >> sys.stderr, "Note: %s\n    >> No pattern defined for this file in '%s'. Manual edit it please!" % (','.join(config_section.file_list), package_file_name)
+                    if opt_verbose:
+                        if set(config_section.types) - set(IGNORE_TYPES):
+                            if config_section.desc:
+                                print >> sys.stderr, "Note: %s\n    >> %s (%s)" % (','.join(config_section.file_list), config_section.desc, package_file_name)
+                            else:
+                                print >> sys.stderr, "Note: %s\n    >> No pattern defined for this file in '%s'. Manual edit it please!" % (','.join(config_section.file_list), package_file_name)
                     continue
                 for config_file_name in config_section.file_list:
                     if not os.path.isfile(config_file_name):
-                        print >> sys.stderr, "Warning: file '%s' not exist!" % config_file_name
+                        if  opt_verbose:
+                            print >> sys.stderr, "Warning: file '%s' not exist!" % config_file_name
                         continue
                     fp = open(config_file_name)
                     contents=""
@@ -522,6 +548,19 @@ class PackageGroups(object):
                                 except:
                                     raise Exception("Substitude pattern failed. r: %s, l: %s" % (replacement, line))
                                 if linesub != line:
+                                    if not config_section.pattern[idx].search(linesub):
+                                        raise Exception("Unrecoverable replacement:\n"
+                                                        "\tbefore:  %s\n"
+                                                        "\tafter : %s\n"
+                                                        "\tpattern: %s\n"
+                                                        "\treplace: %s\n"
+                                                        "\treplacement: %s\n"
+                                                        % ( line.strip(),
+                                                            linesub.strip(),
+                                                            config_section.regex[idx],
+                                                            config_section.regex_replacement[idx],
+                                                            replacement
+                                                          ))
                                     save = True
                                     line = linesub
 
@@ -535,8 +574,9 @@ class PackageGroups(object):
                                         raise Exception('Macro %s can not start with %s, if used as named pattern, define a replacement for pattern!' % (macro, PREFIX_NO_MACRO))
                                     if m.group(macro):
                                         if line.count(m.group(macro)) > 1:
-                                            print >> sys.stderr, "Error: find multiple '%s' for macro '%s' in line: %s" % \
-                                                (m.group(macro), macro, line)
+                                            if opt_verbose:
+                                                print >> sys.stderr, "Error: find multiple '%s' for macro '%s' in line: %s" % \
+                                                    (m.group(macro), macro, line)
                                             continue
                                         if macro not in self.pre_defined_macros:
                                             raise Exception("Error: not defined macro '%s' for file '%s'" % (macro, config_file_name))
@@ -544,7 +584,8 @@ class PackageGroups(object):
                                             line = line.replace(m.group(macro), self.pre_defined_macros[macro])
                                             save = True
                                     else:
-                                        print >> sys.stderr, "Warning: '%s' in re.match is blank, line: %s" % (macro, line)
+                                        if opt_verbose:
+                                            print >> sys.stderr, "Warning: '%s' in re.match is blank, line: %s" % (macro, line)
                         contents += line + lineending
                     fp.close()
                     if save:
@@ -566,40 +607,53 @@ def usage(code, msg=''):
     sys.exit(code)
 
 def main(argv=None):
-    global opt_type, opt_package, opt_dryrun, opt_debug
-    opt_type = ''
-    opt_package = ''
-    opt_dryrun = False
-    opt_debug = False
+    def parse_opts(argv=None):
+        global opt_type, opt_package, opt_dryrun, opt_debug, opt_yes, opt_verbose
+        opt_type = ''
+        opt_package = ''
+        opt_dryrun = False
+        opt_debug = False
+        opt_yes = False
+        opt_verbose = False
 
-    if argv is None:
-        argv = sys.argv
-    try:
-        opts, args = getopt.getopt(
-            argv[1:], "hvt:p:nd", 
-            ["help", "verbose", "type=", "package=", "dryrun", "debug"])
-    except getopt.error, msg:
-         return usage(1, msg)
+        if argv is None:
+            argv = sys.argv
+        try:
+            opts, args = getopt.getopt(
+                argv[1:], "hvt:p:ndy", 
+                ["help", "verbose", "type=", "package=", "dryrun", "debug", "yes"])
+        except getopt.error, msg:
+             return usage(1, msg)
 
-    for opt, arg in opts:
-        if opt in ('-h', '--help'):
-            return usage(0)
-        elif opt in ('-t', '--type'):
-            opt_type = arg.lower()
-            if opt_type not in VALID_TYPES:
-                return usage(1, 'Unknown type: %s' % opt_type)
-        elif opt in ('-p', '--package'):
-            opt_package = arg
-        elif opt in ('-n', '--dryrun'):
-            opt_dryrun = True
-        elif opt in ('-d', '--debug'):
-            opt_debug = True
-        else:
-            return usage(1, 'Unknown option: %s' % opt)
-        #elif opt in ('--more_options'):
+        for opt, arg in opts:
+            if opt in ('-h', '--help'):
+                return usage(0)
+            elif opt in ('-t', '--type'):
+                opt_type = arg.lower()
+                if opt_type not in VALID_TYPES:
+                    return usage(1, 'Unknown type: %s' % opt_type)
+            elif opt in ('-p', '--package'):
+                opt_package = arg
+            elif opt in ('-n', '--dryrun'):
+                opt_dryrun = True
+            elif opt in ('-d', '--debug'):
+                opt_debug = True
+                opt_verbose = True
+            elif opt in ('-y', '--yes'):
+                opt_yes = True
+            elif opt in ('-v', '--verbose'):
+                opt_verbose = True
+            else:
+                return usage(1, 'Unknown option: %s' % opt)
+            #elif opt in ('--more_options'):
+        return args
+
+    args = parse_opts()
 
     if not args:
         return usage(1)
+    elif len(args) > 1:
+        parse_opts(args)
 
     if opt_package:
         packages = PackageGroups(opt_package)
@@ -635,6 +689,10 @@ def main(argv=None):
 
         elif len(cmd)>=len('extract') and  'extract_macros'.startswith(cmd):
             packages.extract_macros()
+
+        elif cmd.startswith('-'):
+            # options alreay parsed
+            pass
 
         else:
             usage(1, 'Unknown cmd: %s' % cmd)
