@@ -1,3 +1,9 @@
+ossxp-linux (1:1.54~<DIST>) unstable; urgency=low
+
+  * New entry in /etc/hosts: mysql-client1
+
+ -- Jiang Xin <jiangxin@ossxp.com>  Sat, 24 Mar 2012 07:05:55 +0800
+
 ossxp-linux (1:1.52~<DIST>) unstable; urgency=low
 
   * New options for ossxp_pkgadmin.py
