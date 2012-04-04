@@ -410,36 +410,38 @@ class PackageGroups(object):
                      (MACROS_FILE, '\n    * '.join(not_defined_macros))
        
     def _save_file(self, filename, contents):
-        def show_diff():
+        def confirm_update():
             import difflib
             fp = open(filename, 'r')
             old = fp.read()
             fp.close()
+            print
             for line in difflib.unified_diff(old.splitlines(), contents.splitlines(), 'old %s' % filename , 'new %s' % filename, lineterm=''):
                 print line
             selection = ''
             while selection not in ['y','n']:
-                if opt_yes:
-                    prompt = "Overwrite file: %s? (Y/n)"
-                else:
-                    prompt = "Overwrite file: %s? (y/n)"
+                prompt = "Overwrite file: %s? (Y/n)"
                 if opt_dryrun:
                     prompt += " *dryrun*" 
                 selection = raw_input(prompt % filename).lower()
-                if opt_yes and selection == '':
+                if selection == '':
                     selection = 'y'
             if selection == 'n':
                 print "ignored."
                 print
-                return
+                return False
+            return True
 
-        show_diff()
+        if not opt_yes and not confirm_update():
+            return
+
         if not opt_dryrun:
             fp = open(filename, 'w')
             fp.write(contents)
             fp.close()
-        print "saved %s." % filename
-        print
+            print "saved %s." % filename
+        else:
+            print "dryrun, not saved %s." % filename
 
     def extract_macros(self):
         macros = {}
