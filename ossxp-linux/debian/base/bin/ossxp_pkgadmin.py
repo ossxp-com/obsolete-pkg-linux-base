@@ -550,12 +550,14 @@ class PackageGroups(object):
                                 if linesub != line:
                                     if not config_section.pattern[idx].search(linesub):
                                         raise Exception("Unrecoverable replacement:\n"
-                                                        "\tbefore:  %s\n"
-                                                        "\tafter : %s\n"
+                                                        "\tfile   : %s\n"
+                                                        "\tbefore : %s\n"
+                                                        "\tafter  : %s\n"
                                                         "\tpattern: %s\n"
                                                         "\treplace: %s\n"
                                                         "\treplacement: %s\n"
-                                                        % ( line.strip(),
+                                                        % ( config_file_name,
+                                                            line.strip(),
                                                             linesub.strip(),
                                                             config_section.regex[idx],
                                                             config_section.regex_replacement[idx],
