@@ -135,6 +135,7 @@ def do_config():
 	do_config_locales()
 	do_config_git()
 	do_config_adduser_conf()
+	do_config_udev_rules()
 
 
 def do_config_inputrc():
@@ -424,6 +425,13 @@ def do_config_adduser_conf():
 
 	apt.hack_config_file( '/etc/adduser.conf', options )
 
+def do_config_udev_rules():
+	print "[1m========== Note for updating udev rules file ==========[0m"
+	print "If this is a VM, it's better rewrite dev rules using this command:"
+	print ""
+	print "[1m        sh /opt/ossxp/bin/udev-rules.sh > \[0m"
+	print "[1m           /etc/udev/rules.d/70-persistent-net.rules[0m"
+	print ""
 
 ##---------------------------------------------------------------------
 def main(argv=None):
