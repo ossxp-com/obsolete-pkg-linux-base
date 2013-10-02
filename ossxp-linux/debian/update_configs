@@ -4,24 +4,27 @@ set -e
 
 BASEDIR=$(dirname $0)
 
-if lsb_release -i | grep -iq "debian$"; then
-  arch="debian"
-elif lsb_release -i | grep -iq "ubuntu$"; then
-  arch="ubuntu"
-else
+archname=$(lsb_release -i | sed -e 's/^.*:\s\+//' | tr [:upper:] [:lower:])
+codename=$(lsb_release -c | sed -e 's/^.*:\s\+//' | tr [:upper:] [:lower:])
+
+if [ $archname != "debian" ] && [ $archname != "ubuntu" ]; then
   echo "Unknown arch: $(lsb_release -i)"
   exit 1
 fi
 
-for from in ${BASEDIR}/*.${arch}; do
-  to=${from%.${arch}}
-  cp $from $to
+for from in ${BASEDIR}/*.${archname} ${BASEDIR}/*.${archname}-${codename}; do
+  if [ -f "$from" ]; then
+    to=${from%.${archname}*}
+    cp $from $to
+  fi
 done
 for from in ${BASEDIR}/*.in; do
   to=${from%.in}
-  if grep -q "<DIST>" $from; then
-    sed -e "s/<DIST>/${arch}/g" < $from > $to
-  else
-    cp $from $to
+  cp $from $to
+  if grep -q "<DIST>" $to; then
+    sed -e "s/<DIST>/${archname}/g" -i $to
+  fi
+  if grep -q "<CODENAME>" $to; then
+    sed -e "s/<CODENAME>/${codename}/g" -i $to
   fi
 done

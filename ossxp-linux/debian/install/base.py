@@ -30,15 +30,14 @@ Actions:
 
 ############################################################
 PKG_LIST='''
-	acl, apt-show-versions, ascii, autofs, bsdutils, bridge-utils, bzip2,
+	acl, apt-show-versions, arping, ascii, autofs, bsdutils, bridge-utils, bzip2,
 	curl, cabextract, coreutils | shellutils,
-	dstat, ethtool, file, fpdns, fping, fuse-utils,
-	git-core | git, gnupg, htop, ia32-libs, ia32-libs-gtk, indent, iproute,
+	dstat, emacs, ethtool, file, fpdns, fping, fuse-utils,
+	git | git-core, gnupg, htop, ia32-libs, ia32-libs-gtk, indent, iproute,
 	less, locales, lynx, lsb-release, make, ntfs-3g, ntp | ntpdate, nmap, ngrep,
 	openssl, p7zip-full, pciutils, perl, psmisc, preload,
-	gistore | etckeeper | rdiff-backup, rsync, rar, saidar,
-	byobu | screen screen-profiles screen-profiles-extras,
-	sharutils, ssh, sshfs, star, sudo, sysstat, tcpdump,
+	gistore | etckeeper | rdiff-backup, rsync, rar, ruby, saidar,
+	sharutils, ssh, sshfs, star, sudo, sysstat, tcpdump, tmux,
 	mercurial, memtester | sysutils, procinfo | sysutils, tofrodos | sysutils,
 	udev, unison, vim, vnstat, wget, zhcon,
 	'''

@@ -1,3 +1,9 @@
+ossxp-linux (1:1.58~<DIST>) unstable; urgency=low
+
+  * Install new package for base: arping, tmux, emacs...
+
+ -- Jiang Xin <jiangxin@ossxp.com>  Wed, 30 Oct 2013 12:50:30 +0800
+
 ossxp-linux (1:1.57~<DIST>) unstable; urgency=low
 
   * Using pci device mapping to generate a more stable udev rules.

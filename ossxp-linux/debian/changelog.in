@@ -1,4 +1,10 @@
-ossxp-linux (1:1.39+<DIST>) unstable; urgency=low
+ossxp-linux (1:1.40+<DIST>) unstable; urgency=low
+
+  * Include codename in version.
+
+ -- Jiang Xin <jiangxin@ossxp.com>  Wed, 30 Oct 2013 12:51:19 +0800
+
+ossxp-linux (1:1.39+<DIST>-<CODENAME>) unstable; urgency=low
 
   * add --force option.
 
