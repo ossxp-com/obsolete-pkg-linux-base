@@ -1,0 +1,10 @@
+Index: rpatch/etc/adduser.conf
+===================================================================
+--- rpatch.orig/etc/adduser.conf	2013-11-06 05:12:49.560424865 +0800
++++ rpatch/etc/adduser.conf	2013-11-06 05:14:57.991592545 +0800
+@@ EXTRA_GROUP
+/ #EXTRA_GROUPS=".*"
++EXTRA_GROUPS="cdrom floppy audio dip video plugdev ssh"
+@@ ADD_EXTRA_GROUPS
+/ #ADD_EXTRA_GROUPS=
++ADD_EXTRA_GROUPS=1

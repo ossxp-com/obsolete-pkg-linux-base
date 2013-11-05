@@ -1,0 +1,19 @@
+Index: rpatch/etc/ssh/sshd_config
+===================================================================
+--- rpatch.orig/etc/ssh/sshd_config	2013-11-06 04:17:23.561535232 +0800
++++ rpatch/etc/ssh/sshd_config	2013-11-06 04:46:29.111872783 +0800
+@@ AllowGroups
+?/ PermitRootLogin
+?/ StrictModes
+?+
+?+# Only allow login if users belong to these groups.
++AllowGroups ssh sftp
+@@ UseDNS no
+?/ AllowGroups
+?+
+?+# Specifies whether sshd(8) should look up the remote host name and
+?+# check that the resolved host name for the remote IP address maps back
+?+# to the very same IP address.
+?+# If not disabled, SSHD will try to do a slow reverse lookup of the IP
+?+# address of the client causing for an unnecessary delay during authentication.
++UseDNS no

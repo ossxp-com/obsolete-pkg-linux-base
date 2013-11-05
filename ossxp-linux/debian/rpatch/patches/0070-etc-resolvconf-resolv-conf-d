@@ -1,0 +1,9 @@
+Index: rpatch/etc/resolvconf/resolv.conf.d/tail
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ rpatch/etc/resolvconf/resolv.conf.d/tail	2013-11-06 05:09:28.391990820 +0800
+@@ -0,0 +1,4 @@
++# If you want custom nameservers than what DHCP get, edit this file:
++#     /etc/resolvconf/resolv.conf.d/base
++#     Add record such as: 'nameserver 127.0.0.1'...
++#     Then reload resolvconf: /etc/init.d/resolvconf reload

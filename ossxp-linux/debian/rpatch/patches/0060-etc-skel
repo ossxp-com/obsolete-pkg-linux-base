@@ -1,0 +1,8 @@
+Index: rpatch/etc/skel/.indent.pro
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ rpatch/etc/skel/.indent.pro	2013-11-06 05:06:40.690300246 +0800
+@@ -0,0 +1,3 @@
++-bad -babbo -nbc -bl -bli0 -bls -c33 -cd33 -ncdb -ncdw -nce
++-cli0 -c-d0 -nbfda -di2 -nfc1 -nfca -hnl -ip5 -l75 -lp -pcs -nprs
++-psl -sasaw -nsc -nsob -nss -i4 -ts4 -ut

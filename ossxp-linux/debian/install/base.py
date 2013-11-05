@@ -122,229 +122,17 @@ def add_me_to_group( group ):
 		os.system("adduser %s %s" % (userid, group))
 
 def do_config():
-	do_config_inputrc()
-	do_config_bash()
-	do_config_sudo()
-	do_config_ssh()
-	do_config_sshd()
-	do_config_screenrc()
-	do_config_indent_pro()
+	do_patch_config()
 	do_config_increase_loopdev()
-	do_config_resolvconf()
-	do_config_locales()
-	do_config_git()
-	do_config_adduser_conf()
 	do_config_udev_rules()
-
-
-def do_config_inputrc():
-	options = []
-	options.append(
-		('add', {'must-not': 'bell-style',
-				 'contents': 'set bell-style visible',
-				},
-		) )
-
-	options.append(
-		('add', {'must-not': 'completion-ignore-case',
-				 'contents': 'set completion-ignore-case on',
-				},
-		) )
-
-	options.append(
-		('add', {'must-not': 'editing-mode',
-				 'contents': 'set editing-mode vi',
-				},
-		) )
-
-	apt.hack_config_file( '/etc/inputrc', options )
-
-
-def do_config_bash():
-	options = []
-	options.append(
-		('add', {'must-not': 'bash_completion',
-				 'contents': '''
-if [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-fi
-''',
-				},
-		) )
-
-	options.append(
-		('add', {'must-not': re.compile('set\s+.*\s+vi'),
-				 'contents': 'set -o vi',
-				},
-		) )
-
-	options.append(
-		('add', {'must-not': 'svnclean',
-				 'contents': '''
-#alias svnclean='svn st | grep "^?" | sed -e "s/?//g" | xargs -I {} -i bash -c "echo delete {}; rm -rf {}"'
-''',
-				},
-		) )
-
-	options.append(
-		('add', {'must-not': 'alias ll',
-				 'contents': """alias ll='ls -al --color=auto'""",
-				},
-		) )
-
-	CONFFILE='/etc/bash.bashrc'
-	if not os.path.exists(CONFFILE):
-		CONFFILE='/etc/profile'
-	apt.hack_config_file( CONFFILE, options )
-
-
-def do_config_sudo():
-	options = []
-	options.append(
-		('add', {'must-not': re.compile('^%sudo'),
-				 'contents': '%sudo      ALL = NOPASSWD: ALL',
-				 'after': [ re.compile('#+\s*%sudo'), 
-				 			'# Uncomment to allow members of',
-							'# User privilege specification' ],
-				},
-		) )
-
-	options.append(
-		('add', {'must-not': re.compile('User_Alias\s+FULLTIMERS'),
-				 'contents': '#User_Alias	FULLTIMERS = admin1,admin2',
-				 'after': [ 'Host alias specification',
-							'User privilege specification' ],
-				},
-		) )
-
-	options.append(
-		('add', {'must-not': re.compile('FULLTIMERS\s+ALL\s*='),
-				 'contents': '#FULLTIMERS	ALL = NOPASSWD: ALL',
-				 'after': 'User privilege specification',
-				},
-		) )
-
-	apt.hack_config_file( '/etc/sudoers', options )
-
-	## Add group sudo if not exist
+	do_config_locales()
 	add_me_to_group("sudo")
-
-
-
-def do_config_sshd():
-	options = []
-	options.append(
-		('add', {'must-not': 'AllowGroups',
-				 'contents': '''
-## Only allow login if users belong to these groups.
-## User shouldn't be in both groups, or user can not login using ssh.
-## Person in sftp group can only use chroot sftp service.
-AllowGroups ssh sftp
-''',
-				 'after': [ 'PermitRootLogin', '# Authentication' ],
-				},
-		) )
-
-	options.append(
-		('add', {'must-not': 'UseDNS',
-				 'contents': '''
-## Specifies whether sshd(8) should look up the remote host name and
-## check that the resolved host name for the remote IP address maps back
-## to the very same IP address.
-## If not disabled, SSHD will try to do a slow reverse lookup of the IP
-## address of the client causing for an unnecessary delay during authentication.
-UseDNS no
-''',
-				 'after': [ 'PermitRootLogin', '# Authentication' ],
-				},
-		) )
-
-	options.append(
-		('add', {'must-not': 'Match group sftp',
-				 'contents': '''
-## People belong to sftp group, can not access ssh, only provide sftp service
-## People in this sftp group, can have a invaild shell: /bin/false,
-## and user homedir must owned by root user.
-#Match group sftp
-#    ChrootDirectory  %h
-#    X11Forwarding no
-#    AllowTcpForwarding no
-#    ForceCommand internal-sftp
-## END OF File or another Match conditional block
-'''
-				},
-		) )
-
-	apt.hack_config_file( '/etc/ssh/sshd_config', options )
-
-	## Add group ssh if not exist
 	add_me_to_group("ssh")
 
 
-def do_config_ssh():
-	options = []
-	options.append(
-		('add', {'must-not': 'Host *',
-				 'contents': '''
-Host *
-    CheckHostIP no
-    ForwardX11 yes
-    HashKnownHosts no
-    StrictHostKeyChecking no
-''',
-				},
-		) )
-	apt.hack_config_file( '/etc/ssh/ssh_config', options )
-
-
-def do_config_screenrc():
-	options = []
-	options.append(
-		('add', {'must-not': 'defscrollback',
-				 'contents': '#defscrollback 3000',
-				},
-		) )
-	options.append(
-		('add', {'must-not': 'vbell',
-				 'contents': '#vbell on',
-				},
-		) )
-	options.append(
-		('add', {'must-not': 'defscrollback',
-				 'contents': '#defscrollback 3000',
-				},
-		) )
-	options.append(
-		('add', {'must-not': 'startup_message',
-				 'contents': '#startup_message off',
-				},
-		) )
-	options.append(
-		('add', {'must-not': 'caption always',
-				 'contents': '''caption always "%{= kw}%-Lw%{= BW}%n %t%{-}%+w %-= @%H - %Y/%m/%d, %C"''',
-				},
-		) )
-
-	apt.hack_config_file( '/etc/screenrc', options )
-
-	#if os.path.isfile('/usr/bin/byobu-config'):
-	#	os.system('/usr/bin/byobu-config')
-	#	print "Run byobu instead of screen for the first time."
-	#elif os.path.isfile('/usr/bin/screen-profiles'):
-	#	os.system('/usr/bin/screen-profiles')
-
-
-def do_config_indent_pro():
-	CONFFILE='/etc/skel/.indent.pro'
-	if not os.path.exists(CONFFILE):
-		content = '''
--bad -babbo -nbc -bl -bli0 -bls -c33 -cd33 -ncdb -ncdw -nce
--cli0 -c-d0 -nbfda -di2 -nfc1 -nfca -hnl -ip5 -l75 -lp -pcs -nprs
--psl -sasaw -nsc -nsob -nss -i4 -ts4 -ut
-'''
-		file = open(CONFFILE, 'w')
-		file.write(content)
-		file.close()
+def do_patch_config():
+	quiltdir="/opt/ossxp/quilt/linux-base"
+	os.system("rpatch -p1 / %s" % quiltdir)
 
 
 def do_config_increase_loopdev():
@@ -356,21 +144,6 @@ def do_config_increase_loopdev():
 			os.system(cmd)
 			cmd = "chown root.disk /dev/loop%d" % i
 			os.system(cmd)
-
-
-def do_config_resolvconf():
-	CONFFILE='/etc/resolvconf/resolv.conf.d/tail'
-	if os.path.exists(os.path.dirname(CONFFILE)):
-		if not os.path.exists(CONFFILE) or os.path.getsize(CONFFILE)==0:
-			content = '''
-# If you want custom nameservers than what DHCP get, edit this file:
-#     /etc/resolvconf/resolv.conf.d/base
-#     Add record such as: 'nameserver 127.0.0.1'...
-#     Then reload resolvconf: /etc/init.d/resolvconf reload
-'''
-			file = open(CONFFILE, 'w')
-			file.write(content)
-			file.close()
 
 
 def do_config_locales():
@@ -394,35 +167,6 @@ def do_config_locales():
 	else:
 		print "[1mAll needed locale installed[0m"
 
-
-def do_config_git():
-	if os.path.isfile('/usr/bin/git'):
-		## aliases
-		os.system("git config --system alias.st status")
-		os.system("git config --system alias.ci commit")
-		os.system("git config --system alias.co checkout")
-		os.system("git config --system alias.br branch")
-		## ui.color
-		os.system('git config --system color.ui "auto"')
-
-
-def do_config_adduser_conf():
-	options = []
-	options.append(
-		('add', {'must-not': re.compile('^ADD_EXTRA_GROUPS='),
-				 'contents': 'ADD_EXTRA_GROUPS=1',
-				 'after': re.compile('^#ADD_EXTRA_GROUPS='),
-				},
-		) )
-
-	options.append(
-		('add', {'must-not': re.compile('^EXTRA_GROUPS='),
-				 'contents': 'EXTRA_GROUPS=cdrom floppy audio dip video plugdev ssh',
-				 'after': re.compile('^#EXTRA_GROUPS='),
-				},
-		) )
-
-	apt.hack_config_file( '/etc/adduser.conf', options )
 
 def do_config_udev_rules():
 	print "[1m========== Note for updating udev rules file ==========[0m"

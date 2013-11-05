@@ -1,0 +1,28 @@
+Index: rpatch/etc/gitconfig
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ rpatch/etc/gitconfig	2013-11-06 05:11:32.475329917 +0800
+@@ alias section
+>
++[alias]
+@@ alias.st
+? [alias]
++	st = status
+@@ alias.br
+? [alias]
++	br = branch
+@@ alias.co
+? [alias]
++	co = checkout
+@@ alias.ci
+? [alias]
++	ci = commit -s
+@@ alias.rb
+? [alias]
++	rb = rebase
+@@ color section
+>
++[color]
+@@ color.ui
+? [color]
++	ui = auto

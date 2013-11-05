@@ -1,0 +1,13 @@
+Index: rpatch/etc/sudoers
+===================================================================
+--- rpatch.orig/etc/sudoers	2013-11-06 01:59:05.981656683 +0800
++++ rpatch/etc/sudoers	2013-11-06 04:15:51.333026374 +0800
+@@ User alias example
+? # User alias specification
++#User_Alias   FULLTIMERS = admin1,admin2
+@@ user privilege example 
+? # User privilege specification
++#FULLTIMERS   ALL =(ALL:ALL) NOPASSWD: ALL
+@@ sudo user group permissions
+-%sudo	ALL=(ALL:ALL) ALL
++%sudo	ALL=(ALL:ALL) NOPASSWD: ALL

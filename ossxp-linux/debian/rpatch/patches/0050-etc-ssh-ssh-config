@@ -1,0 +1,16 @@
+Index: rpatch/etc/ssh/ssh_config
+===================================================================
+--- rpatch.orig/etc/ssh/ssh_config	2013-11-06 04:47:11.502280396 +0800
++++ rpatch/etc/ssh/ssh_config	2013-11-06 04:53:27.092143514 +0800
+@@ HashKnownHosts
+-    HashKnownHosts yes
++    HashKnownHosts no
+@@ CheckHostIP
+>
++    CheckHostIP no
+@@ ForwardX11
+>
++    ForwardX11 yes
+@@ StrictHostKeyChecking
+>
++    StrictHostKeyChecking no

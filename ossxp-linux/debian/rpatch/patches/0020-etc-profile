@@ -1,0 +1,14 @@
+Index: rpatch/etc/profile
+===================================================================
+--- rpatch.orig/etc/profile	2013-11-06 01:52:04.161525536 +0800
++++ rpatch/etc/profile	2013-11-06 01:56:39.131189775 +0800
+@@ set -o vi
+>
+?+
+?+# Use a vi-style command line editing interface.
++set -o vi
+@@ alias
+>
+?+
+?+# Aliases
++alias ll='ls -al --color=auto'

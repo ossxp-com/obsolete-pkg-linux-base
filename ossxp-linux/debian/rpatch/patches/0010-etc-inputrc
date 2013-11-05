@@ -1,0 +1,19 @@
+Index: rpatch/etc/inputrc
+===================================================================
+--- rpatch.orig/etc/inputrc	2013-11-06 01:32:38.885356422 +0800
++++ rpatch/etc/inputrc	2013-11-06 01:32:27.001804886 +0800
+@@ bell-stype
+>
+?+
+?+# what happens when readline wants to ring the terminal bell.
++set bell-style visible
+@@ editing-mode
+>
+?+
+?+# what style of key bindings, Emacs or vi.
++set editing-mode vi
+@@ completion-ignore-case
+>
+?+
+?+# filename matching and completion in a case-insensitive fashion.
++set completion-ignore-case on

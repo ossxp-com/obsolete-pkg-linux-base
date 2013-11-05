@@ -1,5 +1,5 @@
 Source: ossxp-linux
-Section: ossxp
+Section: admin
 Priority: optional
 Maintainer: Jiang Xin <worldhello.net@gmail.com>
 Build-Depends: debhelper (>= 5.0), cdbs (>= 0.4.43)
@@ -7,7 +7,7 @@ Standards-Version: 1.0.0
 
 Package: ossxp-keyring
 Architecture: all
-Section: ossxp
+Section: admin
 Priority: optional
 Suggests: ossxp-linux-base
 Description: OSSXP archive keyring
@@ -15,9 +15,10 @@ Description: OSSXP archive keyring
 
 Package: ossxp-linux-base
 Architecture: all
-Section: ossxp
+Section: admin
 Priority: optional
 Pre-Depends: ossxp-keyring, python
+Depends: ruby-rpatch
 Recommends: ossxp-stylesheet-lightbox, ossxp-javascript-lightbox, ossxp-linux-fonts
 Suggests: ossxp-linux-desktop-light, localepurge
 Description: basic linux tools.
@@ -25,7 +26,7 @@ Description: basic linux tools.
 
 Package: ossxp-linux-laptop
 Architecture: all
-Section: ossxp
+Section: admin
 Priority: optional
 Depends: ossxp-linux-base
 Suggests: ossxp-linux-desktop-light
@@ -34,7 +35,7 @@ Description: laptop utilis.
 
 Package: ossxp-linux-desktop-core
 Architecture: all
-Section: ossxp
+Section: admin
 Priority: optional
 Depends: ossxp-linux-base
 Suggests: ossxp-linux-desktop-light
@@ -43,7 +44,7 @@ Description: Desktop Environment Core (zh_CN support)
 
 Package: ossxp-linux-desktop-light
 Architecture: all
-Section: ossxp
+Section: admin
 Priority: optional
 Depends: ossxp-linux-desktop-core
 Suggests: ossxp-i18n (>= 4:3.4.3), ossxp-linux-fonts
@@ -52,7 +53,7 @@ Description: Desktop Environment lightweight (xfce4)
 
 Package: ossxp-linux-desktop-heavy
 Architecture: all
-Section: ossxp
+Section: admin
 Priority: optional
 Depends: ossxp-linux-desktop-core
 Recommends: ossxp-linux-fonts
@@ -62,7 +63,7 @@ Description: Desktop Environment heavy (Gnome)
 
 Package: ossxp-linux-devel
 Architecture: all
-Section: ossxp
+Section: admin
 Priority: optional
 Depends: ossxp-linux-base
 Suggests: 
@@ -71,7 +72,7 @@ Description: Developer packages
 
 Package: ossxp-linux-server
 Architecture: all
-Section: ossxp
+Section: admin
 Priority: optional
 Depends: ossxp-linux-base
 Suggests: 

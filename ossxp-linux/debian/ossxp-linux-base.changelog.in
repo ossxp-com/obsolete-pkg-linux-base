@@ -1,3 +1,9 @@
+ossxp-linux (1:1.59~<DIST>) unstable; urgency=low
+
+  * Patch system files using rpatch.
+
+ -- Jiang Xin <jiangxin@ossxp.com>  Thu, 07 Nov 2013 05:59:46 +0800
+
 ossxp-linux (1:1.58~<DIST>) unstable; urgency=low
 
   * Install new package for base: arping, tmux, emacs...

@@ -1,0 +1,9 @@
+0010-etc-inputrc
+0020-etc-profile
+0030-etc-sudoers
+0040-etc-ssh-sshd-config
+0050-etc-ssh-ssh-config
+0060-etc-skel
+0070-etc-resolvconf-resolv-conf-d
+0080-etc-gitconfig
+0090-etc-adduser-conf

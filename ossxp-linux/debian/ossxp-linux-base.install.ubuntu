@@ -8,3 +8,4 @@ debian/conf/etc/vim/*   etc/vim/
 debian/conf/etc/ossxp/* etc/ossxp/
 debian/conf/etc/apt/sources.list.d/*     etc/apt/sources.list.d/
 debian/conf/etc/apt/apt.conf.d/02proxy   etc/apt/apt.conf.d/
+debian/rpatch/patches/*   opt/ossxp/quilt/linux-base/
