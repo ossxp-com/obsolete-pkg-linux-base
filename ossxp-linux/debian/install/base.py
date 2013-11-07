@@ -131,7 +131,7 @@ def do_config():
 
 
 def do_patch_config():
-	quiltdir="/opt/ossxp/quilt/linux-base"
+	quiltdir="/opt/ossxp/rpatch/linux-base"
 	os.system("rpatch -p1 / %s" % quiltdir)
 
 
